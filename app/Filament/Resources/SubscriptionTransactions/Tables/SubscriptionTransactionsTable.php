@@ -43,6 +43,7 @@ class SubscriptionTransactionsTable
                     ->dateTime()
                     ->sortable(),
                 ImageColumn::make('proof_of_payment')
+                    ->url(fn ($record) => asset('storage/' . $record->proof_of_payment))
                     ->size(70),
                 TextColumn::make('created_at')
                     ->dateTime()
