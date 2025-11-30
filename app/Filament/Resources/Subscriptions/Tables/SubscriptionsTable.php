@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Subscriptions\Tables;
 
 use App\Models\CoachHandle;
+use App\Models\Subscription;
 use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -16,12 +17,19 @@ use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionsTable
 {
     public static function configure(Table $table): Table
     {
+        $query = Subscription::query();
+        if(Auth::user()->roles()->where('name', 'member')->exists())
+        {
+           $query->where('user_id', Auth::user()->id);
+        }
         return $table
+            ->query($query)
             ->columns([
                 TextColumn::make('user.name')
                     ->searchable(),

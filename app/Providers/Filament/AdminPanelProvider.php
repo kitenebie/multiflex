@@ -48,7 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
-                CommandRunnerPlugin::make(),
+                // CommandRunnerPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,

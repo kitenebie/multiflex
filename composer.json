@@ -10,6 +10,7 @@
         "andreia/filament-ui-switcher": "*",
         "bezhansalleh/filament-shield": "*",
         "binarybuilds/filament-command-runner": "*",
+        "daacreators/creators-ticketing": "*",
         "filament/filament": "~4.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",

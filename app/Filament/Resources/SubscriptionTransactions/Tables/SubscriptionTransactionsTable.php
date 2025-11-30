@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SubscriptionTransactions\Tables;
 
+use App\Models\SubscriptionTransaction;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -10,12 +11,22 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionTransactionsTable
 {
     public static function configure(Table $table): Table
     {
+        
+        $query = SubscriptionTransaction::query();
+        if(Auth::user()->roles()->where('name', 'member')->exists())
+        {
+            $query->whereHas('subscription', function($q) {
+                $q->where('user_id', Auth::user()->id);
+            });
+        }
         return $table
+            ->query($query)
             ->columns([
                 TextColumn::make('subscription.fitnessOffer.name')
                     ->searchable(),

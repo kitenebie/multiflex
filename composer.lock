@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04e9187d53f82000d8c6a8ff0bc04b12",
+    "content-hash": "c39316b050cfce41d7d63e777a8e1289",
     "packages": [
         {
             "name": "andreia/filament-ui-switcher",
@@ -871,6 +871,55 @@
                 }
             ],
             "time": "2024-07-16T11:13:48+00:00"
+        },
+        {
+            "name": "daacreators/creators-ticketing",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jabirmayar/creators-ticketing.git",
+                "reference": "1839f9c4943a8f5c0a0d8d5f9c23df537eee4339"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jabirmayar/creators-ticketing/zipball/1839f9c4943a8f5c0a0d8d5f9c23df537eee4339",
+                "reference": "1839f9c4943a8f5c0a0d8d5f9c23df537eee4339",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.1",
+                "illuminate/contracts": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "daacreators\\CreatorsTicketing\\TicketingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "daacreators\\CreatorsTicketing\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jabir Khan",
+                    "email": "hello@jabirkhan.com"
+                }
+            ],
+            "description": "A robust and dynamic ticketing system for Filament 4.",
+            "support": {
+                "issues": "https://github.com/jabirmayar/creators-ticketing/issues",
+                "source": "https://github.com/jabirmayar/creators-ticketing/tree/1.0.5"
+            },
+            "time": "2025-11-25T14:24:11+00:00"
         },
         {
             "name": "danharrin/date-format-converter",
