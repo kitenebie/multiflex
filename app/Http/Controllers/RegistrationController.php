@@ -25,15 +25,22 @@ class RegistrationController extends Controller
 
             $name = trim($request->firstname . ' ' . ($request->middlename ? $request->middlename . ' ' : '') . $request->lastname);
 
+            // Determine role based on member_type
+            $role = $request->member_type == 0 ? 'member' : 'coach';
+
             $user = \App\Models\User::create([
                 'name' => $name,
                 'email' => $request->email,
                 'password' => \Illuminate\Support\Facades\Hash::make($request->password),
-                'role' => 'member',
+                'role' => $role, // dynamically set
                 'status' => 'active',
                 'membership' => $request->member_type,
             ]);
 
+            // Assign Spatie role
+            $user->assignRole($role);
+
+            // Generate QR code
             $user->update([
                 'qr_code' => bcrypt($user->id),
             ]);
@@ -43,6 +50,7 @@ class RegistrationController extends Controller
             return redirect()->back()->with('error', 'Registration failed: ' . $e->getMessage())->withInput();
         }
     }
+
 
     public function login(Request $request)
     {
