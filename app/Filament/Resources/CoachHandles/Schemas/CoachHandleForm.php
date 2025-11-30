@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\CoachHandles\Schemas;
+namespace App\Filament\Resources\CoachHadles\Schemas;
 
 use Filament\Schemas\Schema;
 
-class CoachHandleForm
+class CoachHadleForm
 {
     public static function configure(Schema $schema): Schema
     {

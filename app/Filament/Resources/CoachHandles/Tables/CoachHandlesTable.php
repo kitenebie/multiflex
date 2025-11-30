@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\CoachHandles\Tables;
+namespace App\Filament\Resources\CoachHadles\Tables;
 
 use App\Models\FitnessOffer;
 use App\Models\User;
@@ -16,7 +16,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
-class CoachHandlesTable
+class CoachHadlesTable
 {
     public static function configure(Table $table): Table
     {

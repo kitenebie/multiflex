@@ -48,8 +48,8 @@ class Subscription extends Model
         return $this->hasMany(SubscriptionTransaction::class);
     }
 
-    public function coachHandle(): HasOne
+    public function CoachHadle(): HasOne
     {
-        return $this->hasOne(coachHandle::class, 'member_id', 'user_id')->where('fitnessOffer_id', $this->fitnessOffer_id);
+        return $this->hasOne(CoachHadle::class, 'member_id', 'user_id')->where('fitnessOffer_id', $this->fitnessOffer_id);
     }
 }
