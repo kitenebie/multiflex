@@ -33,7 +33,7 @@ class RegistrationController extends Controller
                 'email' => $request->email,
                 'password' => \Illuminate\Support\Facades\Hash::make($request->password),
                 'role' => $role, // dynamically set
-                'status' => 'active',
+                'status' => 'pending',
                 'membership' => $request->member_type,
             ]);
 
