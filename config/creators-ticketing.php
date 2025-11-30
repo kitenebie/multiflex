@@ -39,10 +39,9 @@ return [
     |
     */
     'navigation_visibility' => [
-        'field' => env('TICKETING_NAV_FIELD', 'email'),
-        'allowed' => array_filter(
-            array_map('trim', explode(',', env('TICKETING_NAV_ALLOWED', 'admin@demo.com')))
-        ),
+
+        'field' => 'email', // or any other field like role_id
+        'allowed' => ['admin-staff.support@multiflex.site']
     ],
 
     /*
