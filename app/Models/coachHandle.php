@@ -15,7 +15,7 @@ class CoachHandle extends Model
         'member_id',
         'fitnessOffer_id',
         'start_at',
-        'end_at',
+        'end_at', 
     ];
 
     public function coach(): BelongsTo
