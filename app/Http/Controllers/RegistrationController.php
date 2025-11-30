@@ -117,6 +117,7 @@ class RegistrationController extends Controller
                 'paid_at' => now(),
                 'proof_of_payment' => $proofPath,
             ]);
+            Auth::login($request->email);
             return redirect('/public/app/subscriptions');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Subscription failed: ' . $e->getMessage())->withInput();
