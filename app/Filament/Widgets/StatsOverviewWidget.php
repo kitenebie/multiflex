@@ -6,9 +6,20 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\User;
 use App\Models\Subscription;
+use Illuminate\Support\Facades\Auth;
 
 class StatsOverviewWidget extends BaseWidget
 {
+    public static function canAccess(): bool
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return false; // not logged in = no access
+        }
+
+        return $user->roles()->where('name', 'admin')->exists();
+    }
     protected function getStats(): array
     {
         return [
