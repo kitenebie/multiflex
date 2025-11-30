@@ -44,7 +44,7 @@ class RegistrationController extends Controller
             $user->update([
                 'qr_code' => bcrypt($user->id),
             ]);
-            Auth::login($request->email);
+            Auth::login($user);
             if (Auth::user()->role == 'admin') {
                 return redirect('/public/app');
             }
