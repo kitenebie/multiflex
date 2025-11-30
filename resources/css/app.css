@@ -1,0 +1,142 @@
+@import "tailwindcss";
+@import "tailwindcss";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../../vendor/andreia/filament-ui-switcher';
+@theme {
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+    /* Font Size Variables - Can be dynamically adjusted */
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-base: 16px;
+    --text-lg: 18px;
+    --text-xl: 20px;
+    --text-2xl: 24px;
+    --text-3xl: 30px;
+    --text-4xl: 36px;
+
+    /* Primary Color - Overridden by Filament panel config */
+    --color-primary: #6366f1;
+}
+
+/* UI Switcher Specific Styles */
+.ui-switcher-modal {
+    /* Custom styles for the switcher modal if needed */
+}
+
+/* Custom range slider styling for better UX */
+input[type="range"].ui-switcher-slider {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    height: 6px !important;
+    width: 100% !important;
+    border-radius: 9999px !important;
+    outline: none !important;
+    cursor: pointer !important;
+    position: relative !important;
+    display: block !important;
+    margin: 0.5rem 0 !important;
+    /* Fallback background - will be overridden by JavaScript */
+    background: #e5e7eb;
+}
+
+.dark input[type="range"].ui-switcher-slider {
+    /* Fallback for dark mode */
+    background: #374151;
+}
+
+/* Webkit (Chrome, Safari, Edge) Thumb */
+input[type="range"].ui-switcher-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgb(124, 58, 237);
+    border: 3px solid white;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.dark input[type="range"].ui-switcher-slider::-webkit-slider-thumb {
+    background: rgb(139, 92, 246);
+    border-color: rgb(31, 41, 55);
+}
+
+input[type="range"].ui-switcher-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+input[type="range"].ui-switcher-slider::-webkit-slider-thumb:active {
+    transform: scale(1.05);
+}
+
+/* Firefox Thumb */
+input[type="range"].ui-switcher-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgb(124, 58, 237);
+    border: 3px solid white;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.dark input[type="range"].ui-switcher-slider::-moz-range-thumb {
+    background: rgb(139, 92, 246);
+    border-color: rgb(31, 41, 55);
+}
+
+input[type="range"].ui-switcher-slider::-moz-range-thumb:hover {
+    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+input[type="range"].ui-switcher-slider::-moz-range-thumb:active {
+    transform: scale(1.05);
+}
+
+/* Firefox Track */
+input[type="range"].ui-switcher-slider::-moz-range-track {
+    height: 6px;
+    border-radius: 9999px;
+    background: #e5e7eb;
+}
+
+.dark input[type="range"].ui-switcher-slider::-moz-range-track {
+    background: #374151;
+}
+
+/* Smooth transitions for preference changes */
+.ui-switcher-transition {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Loading state for preference changes */
+@keyframes ui-switcher-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.ui-switcher-loading {
+    animation: ui-switcher-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
