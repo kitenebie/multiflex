@@ -10,19 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class StatsOverviewWidget extends BaseWidget
 {
-    public static function canAccess(): bool
+    protected function getStats(): array
     {
         $user = Auth::user();
 
         if (! $user) {
-            return false; // not logged in = no access
+            return []; // not logged in = no access
         }
 
-        return $user->roles()->where('name', 'admin')->exists();
-    }
-    protected function getStats(): array
-    {
-        return [
+        return !$user->roles()->where('name', 'admin')->exists() ? [] : [
             Stat::make('Total Pending Subscriptions', Subscription::where('status', 'pending')->count()),
             Stat::make('Total Active Subscriptions', Subscription::where('status', 'active')->count()),
             Stat::make('Pending Members', User::where('role', 'member')->where('status', 'pending')->count()),
