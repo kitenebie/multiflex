@@ -55,6 +55,10 @@
                                 <a href="/login" class="btn">Login</a>
                                 <a href="/register" class="btn">Be a member</a>
                             </div>
+                        @else
+                            <div class="header-btns d-none d-lg-block f-right">
+                                <a href="/app" class="btn">Dashboard</a>
+                            </div>
                         @endif
                         <!-- Mobile Menu -->
                         <div class="col-12">
