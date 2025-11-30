@@ -12,9 +12,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class AttendanceLogResource extends Resource
 {
+    protected static ?string $navigationLabel = 'Attendance Logs';
+    protected static ?string $slug = 'Attendance Logs';
+    protected static UnitEnum|string|null $navigationGroup = 'Attendance';
     protected static ?string $model = AttendanceLog::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocument;

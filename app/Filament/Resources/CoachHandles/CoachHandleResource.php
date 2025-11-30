@@ -17,14 +17,19 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class CoachHandleResource extends Resource
 {
+    
+    protected static ?string $navigationLabel = 'Instractor Handles';
+    protected static ?string $slug = 'Instractor Handles';
+    protected static UnitEnum|string|null $navigationGroup = 'Users';
     protected static ?string $model = CoachHandle::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Coach Handles';
+    protected static ?string $recordTitleAttribute = 'Instractor Handles';
 
     public static function form(Schema $schema): Schema
     {

@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class SystemLogResource extends Resource
 {
@@ -21,6 +22,7 @@ class SystemLogResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'System Logs';
 
+    protected static UnitEnum|string|null $navigationGroup = 'Management';
     public static function form(Schema $schema): Schema
     {
         return SystemLogForm::configure($schema);

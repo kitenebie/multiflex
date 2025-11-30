@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ReportResource extends Resource
 {
@@ -20,7 +21,7 @@ class ReportResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;
 
     protected static ?string $recordTitleAttribute = 'Report Analytics';
-
+    protected static UnitEnum|string|null $navigationGroup = 'Management';
     public static function form(Schema $schema): Schema
     {
         return ReportForm::configure($schema);

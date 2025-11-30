@@ -14,6 +14,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class SubscriptionResource extends Resource
 {
@@ -22,6 +23,7 @@ class SubscriptionResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCreditCard;
 
     protected static ?string $recordTitleAttribute = 'Subscriptions';
+    protected static UnitEnum|string|null $navigationGroup = 'Management';
 
     public static function form(Schema $schema): Schema
     {

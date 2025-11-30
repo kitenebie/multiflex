@@ -22,6 +22,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
 use Filament\Support\Enums\Width;
+use daacreators\CreatorsTicketing\TicketingPlugin; // Add this line
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -48,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
+                TicketingPlugin::make(),
                 // CommandRunnerPlugin::make(),
             ])
             ->middleware([

@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ScheduleResource extends Resource
 {
@@ -20,6 +21,7 @@ class ScheduleResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
 
     protected static ?string $recordTitleAttribute = 'Schedules';
+    protected static UnitEnum|string|null $navigationGroup = 'Management';
 
     public static function form(Schema $schema): Schema
     {
