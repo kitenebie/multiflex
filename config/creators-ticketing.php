@@ -11,7 +11,7 @@ return [
     | this name in the sidebar navigation.
     |
     */
-    'navigation_group' => env('TICKETING_NAV_GROUP', 'Developers     Support'),
+    'navigation_group' => 'Developers Support',
 
     /*
     |--------------------------------------------------------------------------
