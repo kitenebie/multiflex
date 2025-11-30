@@ -304,7 +304,8 @@
                                             </div>
                                         @empty
                                         @endforelse
-                                        @if (auth()->check())
+                                        @if (auth()->check() && auth()->user()->role == 'member')
+
                                             <a href="/subscription?offer_id={{ $offer->id }}"
                                                 class="border-btn border-btn2">Subscribe Now</a>
                                         @else
