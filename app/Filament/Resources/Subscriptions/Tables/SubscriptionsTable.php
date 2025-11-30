@@ -36,7 +36,7 @@ class SubscriptionsTable
                 TextColumn::make('fitnessOffer.name')
                     ->searchable(),
                 TextColumn::make('subscriptionTransactions.reference_no')
-                    ->url(fn ($state) => '/admin/subscription-transactions?search=' . $state)
+                    ->url(fn ($state) => '/app/subscription-transactions?search=' . $state)
                     ->color('primary')
                     ->searchable(),
                 SelectColumn::make('coach_id')

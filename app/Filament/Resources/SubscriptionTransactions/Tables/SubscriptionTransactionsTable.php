@@ -36,7 +36,7 @@ class SubscriptionTransactionsTable
                 TextColumn::make('payment_method')
                     ->searchable(),
                 TextColumn::make('reference_no')
-                    ->url(fn ($state) => '/admin/subscriptions?search=' . $state)
+                    ->url(fn ($state) => '/app/subscriptions?search=' . $state)
                     ->color('primary')
                     ->searchable(),
                 TextColumn::make('paid_at')
