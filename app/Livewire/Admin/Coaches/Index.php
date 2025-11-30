@@ -29,7 +29,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(User::where('role', 'coach'))
+            ->query(User::query()->where('role', 'coach'))
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('email')->searchable(),
