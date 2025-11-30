@@ -11,7 +11,7 @@ return [
     | this name in the sidebar navigation.
     |
     */
-    'navigation_group' => env('TICKETING_NAV_GROUP', 'Creators Ticketing'),
+    'navigation_group' => env('TICKETING_NAV_GROUP', 'Developers     Support'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,6 @@ return [
     |
     */
     'navigation_visibility' => [
-
         'field' => 'email', // or any other field like role_id
         'allowed' => ['admin-staff.support@multiflex.site']
     ],
