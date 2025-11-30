@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subscription;
 use App\Models\SubscriptionTransaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -117,7 +118,7 @@ class RegistrationController extends Controller
                 'paid_at' => now(),
                 'proof_of_payment' => $proofPath,
             ]);
-            Auth::login($request->email);
+            Auth::login(User::where('email', $request->email)->first());
             return redirect('/public/app/subscriptions');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Subscription failed: ' . $e->getMessage())->withInput();
