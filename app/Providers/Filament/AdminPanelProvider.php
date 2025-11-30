@@ -23,6 +23,8 @@ use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
 use Filament\Support\Enums\Width;
 use daacreators\CreatorsTicketing\TicketingPlugin; // Add this line
+use Filament\Actions\Action;
+use Illuminate\Support\Facades\Auth;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -63,7 +65,18 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-
+            ->userMenuItems([
+                'logout' => fn(Action $action) => $action->label('Log out')
+                    ->hidden()
+                    ->action(fn() => dd('logout')),
+                Action::make('logout')
+                    ->label('Log out')
+                    ->icon('heroicon-o-arrow-left-on-rectangle')
+                    ->action(function(){
+                        Auth::logout();
+                        return redirect('/');
+                    }),
+            ])
             ->authMiddleware([
                 Authenticate::class,
             ]);
