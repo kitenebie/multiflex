@@ -8,6 +8,17 @@ use Filament\Support\Icons\Heroicon;
 
 class Coach extends Page
 {
+    
+    public static function canAccess(): bool
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return false; // not logged in = no access
+        }
+
+        return !$user->roles()->where('name', 'coach')->exists();
+    }
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
     protected string $view = 'filament.pages.coach';
 }
