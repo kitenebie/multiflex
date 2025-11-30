@@ -10,9 +10,9 @@ use UnitEnum;
 
 class Coach extends Page
 {
-    protected static ?string $recordTitleAttribute = 'Instractors';
-    protected static ?string $navigationLabel = 'Instractors';
-    protected static ?string $slug = 'Instractors';
+    protected static ?string $recordTitleAttribute = 'Instructors';
+    protected static ?string $navigationLabel = 'Instructors';
+    protected static ?string $slug = 'Instructors';
     protected static UnitEnum|string|null $navigationGroup = 'Users';
     
     public static function canAccess(): bool
