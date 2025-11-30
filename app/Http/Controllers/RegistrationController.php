@@ -45,6 +45,9 @@ class RegistrationController extends Controller
                 'qr_code' => bcrypt($user->id),
             ]);
             Auth::login($user);
+            if (Auth::user()->role == 'admin') {
+                return redirect('/public/app');
+            }
             return redirect('/#pricingSection')->with('success', 'Registration successful!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Registration failed: ' . $e->getMessage())->withInput();
@@ -61,6 +64,9 @@ class RegistrationController extends Controller
             ]);
 
             if (\Illuminate\Support\Facades\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                if (Auth::user()->role == 'admin') {
+                    return redirect('/public/app');
+                }
                 return redirect('/#pricingSection')->with('success', 'Login successful!');
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials.')->withInput();
@@ -110,8 +116,7 @@ class RegistrationController extends Controller
                 'paid_at' => now(),
                 'proof_of_payment' => $proofPath,
             ]);
-
-            return redirect('/')->with('success', 'Subscription successful! Reference: ' . $request->reference);
+            return redirect('/public/app/subscriptions');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Subscription failed: ' . $e->getMessage())->withInput();
         }
