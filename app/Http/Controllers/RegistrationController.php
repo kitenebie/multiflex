@@ -64,6 +64,7 @@ class RegistrationController extends Controller
             ]);
 
             if (\Illuminate\Support\Facades\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                Auth::login($request->email);
                 if (Auth::user()->role == 'admin') {
                     return redirect('/public/app');
                 }
