@@ -21,3 +21,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+!/vendor/daacreators/creators-ticketing/config/creators-ticketing.php
