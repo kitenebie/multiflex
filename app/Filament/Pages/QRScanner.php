@@ -8,6 +8,6 @@ use Filament\Support\Icons\Heroicon;
 
 class QRScanner extends Page
 {
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Camera ;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCamera ;
     protected string $view = 'filament.pages.q-r-scanner';
 }
