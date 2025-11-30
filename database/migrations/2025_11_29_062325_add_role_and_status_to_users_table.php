@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->enum('role', ['admin', 'coach', 'member'])->default('member');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('status', ['rejected','pending','active', 'inactive'])->default('active');
         });
     }
 

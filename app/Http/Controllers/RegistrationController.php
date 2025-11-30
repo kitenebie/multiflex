@@ -44,7 +44,7 @@ class RegistrationController extends Controller
             $user->update([
                 'qr_code' => bcrypt($user->id),
             ]);
-
+            Auth::login($user);
             return redirect('/#pricingSection')->with('success', 'Registration successful!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Registration failed: ' . $e->getMessage())->withInput();
