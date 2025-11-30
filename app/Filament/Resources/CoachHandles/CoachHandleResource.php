@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\CoachHadles;
+namespace App\Filament\Resources\CoachHandles;
 
-use App\Filament\Resources\CoachHadles\Pages\CreateCoachHadle;
-use App\Filament\Resources\CoachHadles\Pages\EditCoachHadle;
-use App\Filament\Resources\CoachHadles\Pages\ListCoachHadles;
-use App\Filament\Resources\CoachHadles\Pages\ViewCoachHadle;
-use App\Filament\Resources\CoachHadles\Schemas\CoachHadleForm;
-use App\Filament\Resources\CoachHadles\Schemas\CoachHadleInfolist;
-use App\Filament\Resources\CoachHadles\Tables\CoachHadlesTable;
-use App\Models\CoachHadle;
+use App\Filament\Resources\CoachHandles\Pages\CreateCoachHandle;
+use App\Filament\Resources\CoachHandles\Pages\EditCoachHandle;
+use App\Filament\Resources\CoachHandles\Pages\ListCoachHandles;
+use App\Filament\Resources\CoachHandles\Pages\ViewCoachHandle;
+use App\Filament\Resources\CoachHandles\Schemas\CoachHandleForm;
+use App\Filament\Resources\CoachHandles\Schemas\CoachHandleInfolist;
+use App\Filament\Resources\CoachHandles\Tables\CoachHandlesTable;
+use App\Models\CoachHandle;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,9 +18,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CoachHadleResource extends Resource
+class CoachHandleResource extends Resource
 {
-    protected static ?string $model = CoachHadle::class;
+    protected static ?string $model = CoachHandle::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -28,17 +28,17 @@ class CoachHadleResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return CoachHadleForm::configure($schema);
+        return CoachHandleForm::configure($schema);
     }
 
     public static function infolist(Schema $schema): Schema
     {
-        return CoachHadleInfolist::configure($schema);
+        return CoachHandleInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return CoachHadlesTable::configure($table);
+        return CoachHandlesTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -51,10 +51,10 @@ class CoachHadleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListCoachHadles::route('/'),
-            'create' => CreateCoachHadle::route('/create'),
-            'view' => ViewCoachHadle::route('/{record}'),
-            'edit' => EditCoachHadle::route('/{record}/edit'),
+            'index' => ListCoachHandles::route('/'),
+            'create' => CreateCoachHandle::route('/create'),
+            'view' => ViewCoachHandle::route('/{record}'),
+            'edit' => EditCoachHandle::route('/{record}/edit'),
         ];
     }
 

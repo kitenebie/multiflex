@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\CoachHadles\Pages;
+namespace App\Filament\Resources\CoachHandles\Pages;
 
-use App\Filament\Resources\CoachHadles\CoachHadleResource;
+use App\Filament\Resources\CoachHandles\CoachHandleResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
-class ListCoachHadles extends ListRecords
+class ListCoachHandles extends ListRecords
 {
-    protected static string $resource = CoachHadleResource::class;
+    protected static string $resource = CoachHandleResource::class;
 
     protected function getHeaderActions(): array
     {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\CoachHadles\Pages;
+namespace App\Filament\Resources\CoachHandles\Pages;
 
-use App\Filament\Resources\CoachHadles\CoachHadleResource;
+use App\Filament\Resources\CoachHandles\CoachHandleResource;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateCoachHadle extends CreateRecord
+class CreateCoachHandle extends CreateRecord
 {
-    protected static string $resource = CoachHadleResource::class;
+    protected static string $resource = CoachHandleResource::class;
 }

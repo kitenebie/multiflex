@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Subscriptions\Tables;
 
-use App\Models\CoachHadle;
+use App\Models\CoachHandle;
 use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -41,7 +41,7 @@ class SubscriptionsTable
                             $record->update([
                                 'status' => 'active'
                             ]);
-                            CoachHadle::create([
+                            CoachHandle::create([
                                 'coach_id' => $state,
                                 'member_id' => $record->user_id,
                                 'fitnessOffer_id' => $record->fitness_offer_id,

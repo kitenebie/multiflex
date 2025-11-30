@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Filament\Resources\CoachHadles\Pages;
+namespace App\Filament\Resources\CoachHandles\Pages;
 
-use App\Filament\Resources\CoachHadles\CoachHadleResource;
+use App\Filament\Resources\CoachHandles\CoachHandleResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditCoachHadle extends EditRecord
+class EditCoachHandle extends EditRecord
 {
-    protected static string $resource = CoachHadleResource::class;
+    protected static string $resource = CoachHandleResource::class;
 
     protected function getHeaderActions(): array
     {

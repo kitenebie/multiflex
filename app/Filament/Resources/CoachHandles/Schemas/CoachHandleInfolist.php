@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\CoachHadles\Schemas;
+namespace App\Filament\Resources\CoachHandles\Schemas;
 
 use Filament\Schemas\Schema;
 
-class CoachHadleInfolist
+class CoachHandleInfolist
 {
     public static function configure(Schema $schema): Schema
     {
