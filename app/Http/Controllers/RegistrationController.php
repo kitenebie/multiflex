@@ -51,7 +51,7 @@ class RegistrationController extends Controller
                 'qr_code' => bcrypt($user->id),
             ]);
             Auth::login($user);
-            if (Auth::user()->role == 'admin') {
+            if (Auth::user()->role == 'admin' || Auth::user()->role == 'coach') {
                 return redirect('/public/app');
             }
             return redirect('/#pricingSection')->with('success', 'Registration successful!');
