@@ -24,6 +24,34 @@
     <link rel="stylesheet" href="assets/css/slick.css">
     <link rel="stylesheet" href="assets/css/nice-select.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        @media (max-width: 991.98px) {
+            .header-btns-mobile {
+                display: flex;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+                column-gap: 8px;
+                row-gap: 8px;
+            }
+
+            .header-btns-mobile .btn {
+                font-size: 0.85rem;
+                padding: 6px 16px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .header-btns-mobile {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .header-btns-mobile .btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
 <body class="black-bg">
@@ -55,16 +83,16 @@
                                 <a href="/login" class="btn">Login</a>
                                 <a href="/register" class="btn">Be a member</a>
                             </div>
-                            <div class="header-btns d-block d-lg-none w-100 mt-3">
-                                <a href="/login" class="btn w-100 mb-2">Login</a>
-                                <a href="/register" class="btn w-100">Be a member</a>
+                            <div class="header-btns header-btns-mobile d-lg-none mt-3">
+                                <a href="/login" class="btn btn-sm">Login</a>
+                                <a href="/register" class="btn btn-sm">Be a member</a>
                             </div>
                         @else
                             <div class="header-btns d-none d-lg-block f-right">
                                 <a href="/app" class="btn">Dashboard</a>
                             </div>
-                            <div class="header-btns d-block d-lg-none w-100 mt-3">
-                                <a href="/app" class="btn w-100">Dashboard</a>
+                            <div class="header-btns header-btns-mobile d-lg-none mt-3">
+                                <a href="/app" class="btn btn-sm">Dashboard</a>
                             </div>
                         @endif
                         <!-- Mobile Menu -->
