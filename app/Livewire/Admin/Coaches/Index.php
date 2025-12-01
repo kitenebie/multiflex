@@ -114,7 +114,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                             ->send();
                         $this->dispatch('refresh');
                     }),
-                    DeleteAction::make()
+                DeleteAction::make()
             ])
             ->toolbarActions([
                 Action::make('create_coach')
@@ -124,8 +124,10 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ->form([
                         TextInput::make('name')->required(),
                         TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
-                        TextInput::make('password')->password()->required()->confirmed()->minLength(8),
-                        TextInput::make('password_confirmation')->password()->required(),
+                        TextInput::make('password')->password()->required()->confirmed()->minLength(8)
+                            ->revealable(),
+                        TextInput::make('password_confirmation')->password()->required()
+                            ->revealable(),
                         Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->default('active'),
                         Textarea::make('address'),
                         TextInput::make('age')->numeric(),

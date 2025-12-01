@@ -35,7 +35,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
         $query = User::query()->where('role', 'member');
 
         if (Auth::user()->role == 'coach') {
-            $query->whereHas('subscriptions', function($q) {
+            $query->whereHas('subscriptions', function ($q) {
                 $q->where('coach_id', Auth::user()->id)->where('end_date', '>', now());
             });
         }
@@ -72,17 +72,17 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ->form([
                         Grid::make(2)
                             ->schema([
-                        TextInput::make('name')->disabled(),
-                        TextInput::make('email')->disabled(),
-                        Select::make('role')->options(['member' => 'Member', 'coach' => 'Coach', 'admin' => 'Admin'])->disabled(),
-                        Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->disabled(),
-                        Toggle::make('membership')->label('Has Membership')->disabled(),
-                        Textarea::make('address')->disabled(),
-                        TextInput::make('age')->numeric()->disabled(),
-                        Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
-                        Toggle::make('is_admin')->label('Is Admin')->disabled(),
-                        DateTimePicker::make('created_at')->disabled(),
-                        DateTimePicker::make('updated_at')->disabled(),
+                                TextInput::make('name')->disabled(),
+                                TextInput::make('email')->disabled(),
+                                Select::make('role')->options(['member' => 'Member', 'coach' => 'Coach', 'admin' => 'Admin'])->disabled(),
+                                Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->disabled(),
+                                Toggle::make('membership')->label('Has Membership')->disabled(),
+                                Textarea::make('address')->disabled(),
+                                TextInput::make('age')->numeric()->disabled(),
+                                Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
+                                Toggle::make('is_admin')->label('Is Admin')->disabled(),
+                                DateTimePicker::make('created_at')->disabled(),
+                                DateTimePicker::make('updated_at')->disabled(),
                             ])
                             ->columns(2)
                     ])
@@ -95,13 +95,13 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ->form([
                         Grid::make(2)
                             ->schema([
-                        TextInput::make('name')->required(),
-                        TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
-                        Select::make('role')->options(['member' => 'Member', 'coach' => 'Coach', 'admin' => 'Admin']),
-                        Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive']),
-                        Textarea::make('address'),
-                        TextInput::make('age')->numeric(),
-                        Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
+                                TextInput::make('name')->required(),
+                                TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
+                                Select::make('role')->options(['member' => 'Member', 'coach' => 'Coach', 'admin' => 'Admin']),
+                                Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive']),
+                                Textarea::make('address'),
+                                TextInput::make('age')->numeric(),
+                                Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
                             ])
                             ->columns(2)
                     ])
@@ -131,7 +131,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                             ->send();
                         $this->dispatch('refresh');
                     }),
-                    DeleteAction::make()
+                DeleteAction::make()
                     ->hidden(Auth::user()->role == 'coach')
             ])
             ->toolbarActions([
@@ -145,8 +145,10 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                             ->schema([
                                 TextInput::make('name')->required(),
                                 TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
-                                TextInput::make('password')->password()->required()->confirmed()->minLength(8),
-                                TextInput::make('password_confirmation')->password()->required(),
+                                TextInput::make('password')->password()->required()->confirmed()->minLength(8)
+                                    ->revealable(),
+                                TextInput::make('password_confirmation')->password()->required()
+                                    ->revealable(),
                                 Select::make('role')->options(['member' => 'Member'])->default('member')->disabled(),
                                 Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->default('active'),
                                 Textarea::make('address'),
@@ -161,7 +163,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $user->update(['qr_code' => bcrypt($user->id)]);
                         $this->dispatch('refresh');
                     }),
-                    
+
             ]);
     }
     public function render()
