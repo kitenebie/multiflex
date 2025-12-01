@@ -23,6 +23,7 @@ use App\Models\User;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
+use Illuminate\Support\Facades\Auth;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -31,8 +32,16 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
     use InteractsWithTable;
     public function table(Table $table): Table
     {
+        $query = User::query()->where('role', 'member');
+
+        if (Auth::user()->role == 'member') {
+            $query->whereHas('subscriptions', function ($q) {
+                $q->where('user_id', Auth::user()->id)->where('end_date', '>', now());
+            });
+        }
+
         return $table
-            ->query(User::query()->where('role', 'coach'))
+            ->query($query)
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('email')->searchable(),
@@ -64,6 +73,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
             ->recordActions([
 
                 Action::make('view')
+                    ->hidden(Auth::user()->role == 'member')
                     ->label('View')
                     ->icon('heroicon-o-eye')
                     ->color('gray')
@@ -78,6 +88,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ])
                     ->fillForm(fn(User $record) => $record->toArray()),
                 Action::make('edit')
+                    ->hidden(Auth::user()->role == 'member')
                     ->label('Edit')
                     ->icon('heroicon-o-pencil')
                     ->color('warning')
@@ -101,6 +112,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                 Action::make('approved')
+                    ->hidden(Auth::user()->role == 'member')
                     ->label('Approve')
                     ->color('success')
                     ->requiresConfirmation()
@@ -119,6 +131,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
             ])
             ->toolbarActions([
                 Action::make('create_coach')
+                    ->hidden(Auth::user()->role == 'member')
                     ->label('Create Coach')
                     ->icon('heroicon-o-plus')
                     ->color('primary')
