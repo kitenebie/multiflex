@@ -20,6 +20,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use App\Models\User;
+use Filament\Notifications\Notification;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -98,6 +99,19 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         }
                         $data['password'] = 'coach';
                         $record->update($data);
+                        $this->dispatch('refresh');
+                    }),
+                Action::make('approved')
+                    ->label('Approve')
+                    ->icon('heroicon-o-users')
+                    ->color('success')
+                    ->action(function (User $record) {
+                        $record->update(['status' => 'active']);
+                        Notification::make()
+                            ->title('Approved')
+                            ->body('The coach has been approved successfully.')
+                            ->success()
+                            ->send();
                         $this->dispatch('refresh');
                     }),
             ])

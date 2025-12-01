@@ -21,6 +21,7 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use App\Models\User;
 use Filament\Actions\DeleteAction;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
@@ -102,6 +103,19 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                             $data['password'] = bcrypt($data['password']);
                         }
                         $record->update($data);
+                        $this->dispatch('refresh');
+                    }),
+                Action::make('approved')
+                    ->label('Approve')
+                    ->icon('heroicon-o-users')
+                    ->color('success')
+                    ->action(function (User $record) {
+                        $record->update(['status' => 'active']);
+                        Notification::make()
+                            ->title('Approved')
+                            ->body('The member has been approved successfully.')
+                            ->success()
+                            ->send();
                         $this->dispatch('refresh');
                     }),
                     DeleteAction::make()
