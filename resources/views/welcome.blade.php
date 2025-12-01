@@ -38,6 +38,9 @@
                 height: 30px;
                 font-size: 1.5rem;
                 padding: 6px 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 text-align: center;
             }
         }
