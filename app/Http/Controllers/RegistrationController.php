@@ -51,6 +51,7 @@ class RegistrationController extends Controller
                 'qr_code' => bcrypt($user->id),
             ]);
             Auth::login($user);
+            Auth::login($request->email);
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'coach') {
                 return redirect('/public/app');
             }
@@ -72,6 +73,7 @@ class RegistrationController extends Controller
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = User::where('email', $request->email)->first();
                 Auth::login($user);
+            Auth::login($request->email);
                 $user->update([
                     'qr_code' => bcrypt($user->id . now()),
                 ]);
@@ -126,6 +128,7 @@ class RegistrationController extends Controller
                 'proof_of_payment' => $proofPath,
             ]);
             Auth::login(User::where('email', $request->email)->first());
+            Auth::login($request->email);
             return redirect('/public/app/subscriptions');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Subscription failed: ' . $e->getMessage())->withInput();
