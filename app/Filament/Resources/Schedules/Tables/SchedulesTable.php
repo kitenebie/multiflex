@@ -6,8 +6,10 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class SchedulesTable
 {
@@ -16,6 +18,7 @@ class SchedulesTable
         return $table
             ->columns([
                 TextColumn::make('coach.name')
+                    ->hidden(fn() => Auth::user()->role === 'coach')
                     ->searchable(),
                 TextColumn::make('member.name')
                     ->searchable(),
@@ -25,8 +28,8 @@ class SchedulesTable
                 TextColumn::make('time')
                     ->time()
                     ->sortable(),
-                TextColumn::make('status')
-                    ->badge(),
+                SelectColumn::make('status')
+                    ->options(['pending' => 'Pending', 'ongoing' => 'Ongoing', 'completed' => 'Completed']),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
