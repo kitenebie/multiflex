@@ -22,6 +22,7 @@ use Illuminate\Contracts\View\View;
 use App\Models\User;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Grid;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -122,6 +123,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ->icon('heroicon-o-plus')
                     ->color('primary')
                     ->form([
+                        Grid::make(2)
+                            ->schema([
                         TextInput::make('name')->required(),
                         TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
                         TextInput::make('password')->password()->required()->confirmed()->minLength(8)
@@ -132,6 +135,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         Textarea::make('address'),
                         TextInput::make('age')->numeric(),
                         Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
+                            ])
                     ])
                     ->action(function (array $data) {
                         $data['password'] = bcrypt($data['password']);
