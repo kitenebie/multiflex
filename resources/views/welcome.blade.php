@@ -313,7 +313,11 @@
                                                     class="border-btn border-btn2">Subscribe Now</a>
                                             @endif
                                         @else
+                                            @if(auth()->user()->status == 'pending')
+                                            <a href="#" class="border-btn border-btn2">Your accout is waiting for Approval</a>
+                                            @else
                                             <a href="/register" class="border-btn border-btn2">Join Now</a>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
