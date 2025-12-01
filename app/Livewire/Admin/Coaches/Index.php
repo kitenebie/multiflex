@@ -20,6 +20,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use App\Models\User;
+use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
@@ -60,6 +61,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ]),
             ])
             ->recordActions([
+
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-o-eye')
@@ -112,6 +114,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                             ->send();
                         $this->dispatch('refresh');
                     }),
+                    DeleteAction::make()
             ])
             ->toolbarActions([
                 Action::make('create_coach')
