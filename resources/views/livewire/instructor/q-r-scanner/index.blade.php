@@ -151,36 +151,54 @@
 
         // ---- START SCANNER ----
         async function startScanner() {
+            const scannerConfig = {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            };
+
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: true
+                    video: {
+                        facingMode: {
+                            ideal: "environment"
+                        }
+                    }
                 });
-                stream.getTracks().forEach(t => t.stop()); // release camera
+                stream.getTracks().forEach(track => track.stop()); // release camera after permission
 
                 html5QrCode = new Html5Qrcode("reader");
 
-                Html5Qrcode.getCameras().then(cameras => {
-                    if (cameras.length > 0) {
-                        // Find back camera (environment facing)
-                        let selectedCamera = cameras.find(camera => camera.facingMode === 'environment');
-                        if (!selectedCamera) {
-                            selectedCamera = cameras[0]; // fallback to first camera
-                        }
-                        html5QrCode.start(
-                            selectedCamera.id, {
-                                fps: 10,
-                                qrbox: {
-                                    width: 250,
-                                    height: 250
-                                }
-                            },
+                try {
+                    await html5QrCode.start({
+                        facingMode: "environment"
+                    }, scannerConfig, onScanSuccess, onScanFailure);
+                } catch (envError) {
+                    const cameras = await Html5Qrcode.getCameras();
+
+                    if (!cameras.length) {
+                        scannedResult.textContent = "No cameras found.";
+                        return;
+                    }
+
+                    let selectedCamera = cameras.find(camera => /back|rear|environment/i.test(camera.label));
+                    if (!selectedCamera) {
+                        selectedCamera = cameras[cameras.length - 1]; // fallback to last (often back) camera
+                    }
+
+                    try {
+                        await html5QrCode.start(
+                            selectedCamera.id,
+                            scannerConfig,
                             onScanSuccess,
                             onScanFailure
                         );
-                    } else {
-                        scannedResult.textContent = "No cameras found.";
+                    } catch (fallbackError) {
+                        scannedResult.textContent = "Unable to start camera: " + fallbackError;
                     }
-                });
+                }
             } catch (err) {
                 scannedResult.textContent = "Camera error: " + err;
             }
