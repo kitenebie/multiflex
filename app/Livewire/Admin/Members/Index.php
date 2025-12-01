@@ -107,6 +107,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     }),
                 Action::make('approved')
                     ->label('Approve')
+                    ->color('success')
+                    ->requiresConfirmation()
                     ->icon('heroicon-o-users')
                     ->color('success')
                     ->action(function (User $record) {
