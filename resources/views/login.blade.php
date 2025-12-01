@@ -117,7 +117,7 @@
                         </div>
                         <div class="form-group mt-3 d-flex justify-content-between">
                             <a href="{{ route('registration') }}" class="text-dark link-opacity-100 link-underline-primary w-100"><u>Create an accout?</u></a>
-                            <a href="/" class="text-dark link-opacity-100 link-underline-primary w-100"><u>Create an accout?</u></a>
+                            <a href="/app/password-reset/request" class="text-dark link-opacity-100 link-underline-primary w-100"><u>Forgot Password?</u></a>
                         </div>
                     </form>
                 </div>
