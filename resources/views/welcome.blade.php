@@ -306,7 +306,7 @@
                                         @endforelse
                                         @if (auth()->check() && auth()->user()->role == 'member' && auth()->user()->status == 'active')
                                             @if (auth()->user()->subscriptions()->where('end_date', '>', now())->exists())
-                                                <a href="#"
+                                                <a href="/app/subscriptions"
                                                     class="border-btn border-btn2">You already Subscribed</a>
                                             @else
                                                 <a href="/subscription?offer_id={{ $offer->id }}"
@@ -314,7 +314,7 @@
                                             @endif
                                         @else
                                             @if(auth()->user()->status == 'pending')
-                                            <a href="#" class="border-btn border-btn2">Your accout is waiting for Approval</a>
+                                            <a href="#pricingSection" class="border-btn border-btn2">Your accout is waiting for Approval</a>
                                             @else
                                             <a href="/register" class="border-btn border-btn2">Join Now</a>
                                             @endif
