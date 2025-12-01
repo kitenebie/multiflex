@@ -22,7 +22,10 @@ class ScheduleForm
                     ->required(Auth::user()->role === 'admin'),
                 Select::make('member_id')
                     ->relationship('member', 'name')
-                    ->options(User::where('role', 'member')->pluck('name', 'id'))
+                    ->options(User::where('role', 'member')->whereHas('subscriptions', function($query) {
+                        $query->where('coach_id', Auth::user()->id)
+                              ->where('end_date', '>=', now());
+                    })->pluck('name', 'id'))
                     ->required(),
                 DatePicker::make('date')
                     ->required(),
