@@ -35,6 +35,7 @@
             }
 
             .header-btns-mobile .btn {
+                height: 50px;
                 font-size: 2rem;
                 padding: 6px 16px;
             }
