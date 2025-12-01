@@ -24,6 +24,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CoachHandle;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -32,12 +33,15 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
     use InteractsWithTable;
     public function table(Table $table): Table
     {
-        $query = User::query()->where('role', 'coach');
+        $query = User::query();
 
         if (Auth::user()->role == 'member') {
-            $query->whereHas('subscriptions', function ($q) {
-                $q->where('user_id', Auth::user()->id)->where('end_date', '>', now());
-            });
+            $coachIds = CoachHandle::where('member_id', Auth::user()->id)
+                ->where('end_at', '>', now())
+                ->pluck('coach_id');
+            $query->whereIn('id', $coachIds);
+        } else {
+            $query->where('role', 'coach');
         }
 
         return $table

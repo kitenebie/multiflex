@@ -161,8 +161,13 @@
 
                 Html5Qrcode.getCameras().then(cameras => {
                     if (cameras.length > 0) {
+                        // Find back camera (environment facing)
+                        let selectedCamera = cameras.find(camera => camera.facingMode === 'environment');
+                        if (!selectedCamera) {
+                            selectedCamera = cameras[0]; // fallback to first camera
+                        }
                         html5QrCode.start(
-                            cameras[0].id, {
+                            selectedCamera.id, {
                                 fps: 10,
                                 qrbox: {
                                     width: 250,
