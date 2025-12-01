@@ -74,7 +74,7 @@
                 <div class="container-fluid">
                     <div class="menu-wrapper d-flex align-items-center mt-4 justify-content-between">
                         <!-- Logo -->
-                        <div class="logo">
+                        <div class="logo d-none d-md-block">
                             <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
                         </div>
                         <!-- Header-btn -->
