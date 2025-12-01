@@ -306,7 +306,7 @@
                                         @endforelse
                                         @if (auth()->check() && auth()->user()->role == 'member' && auth()->user()->status == 'active')
                                             @if (auth()->user()->subscriptions()->where('end_date', '>', now())->exists())
-                                                <a href="/subscription?offer_id={{ $offer->id }}"
+                                                <a href="#"
                                                     class="border-btn border-btn2">You already Subscribed</a>
                                             @else
                                                 <a href="/subscription?offer_id={{ $offer->id }}"
