@@ -128,6 +128,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                 DeleteAction::make()
+                    ->hidden(Auth::user()->role == 'member')
             ])
             ->toolbarActions([
                 Action::make('create_coach')
