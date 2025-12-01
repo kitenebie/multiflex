@@ -88,6 +88,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ])
                     ->fillForm(fn(User $record) => $record->toArray()),
                 Action::make('edit')
+                    ->hidden(Auth::user()->role == 'coach')
                     ->label('Edit')
                     ->icon('heroicon-o-pencil')
                     ->color('warning')
@@ -115,6 +116,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                 Action::make('approved')
+                    ->hidden(Auth::user()->role == 'coach')
                     ->label('Approve')
                     ->color('success')
                     ->requiresConfirmation()
@@ -130,10 +132,12 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                     DeleteAction::make()
+                    ->hidden(Auth::user()->role == 'coach')
             ])
             ->toolbarActions([
                 Action::make('create_member')
                     ->label('Create Member')
+                    ->hidden(Auth::user()->role == 'coach')
                     ->icon('heroicon-o-plus')
                     ->color('primary')
                     ->form([
