@@ -52,7 +52,7 @@ class RegistrationController extends Controller
             ]);
             Auth::login($user);
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'coach') {
-                return redirect('/public/app');
+                return redirect('/app');
             }
             return redirect('/#pricingSection')->with('success', 'Registration successful!');
         } catch (\Exception $e) {
@@ -76,7 +76,7 @@ class RegistrationController extends Controller
                     'qr_code' => bcrypt($user->id . now()),
                 ]);
                 $user->save();
-                return redirect('/public/app');
+                return redirect('/app');
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials.')->withInput();
             }
@@ -126,7 +126,7 @@ class RegistrationController extends Controller
                 'proof_of_payment' => $proofPath,
             ]);
             Auth::login(User::where('email', $request->email)->first());
-            return redirect('/public/app/subscriptions');
+            return redirect('/app/subscriptions');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Subscription failed: ' . $e->getMessage())->withInput();
         }
