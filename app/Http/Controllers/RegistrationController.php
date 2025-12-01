@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Subscription;
 use App\Models\SubscriptionTransaction;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -51,6 +52,7 @@ class RegistrationController extends Controller
                 'qr_code' => bcrypt($user->id),
             ]);
             Auth::login($user);
+            Filament::auth()->login($user);
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'coach') {
                 return redirect('/app');
             }
@@ -72,6 +74,7 @@ class RegistrationController extends Controller
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = User::where('email', $request->email)->first();
                 Auth::login($user);
+                Filament::auth()->login($user);
                 $user->update([
                     'qr_code' => bcrypt($user->id . now()),
                 ]);
@@ -126,6 +129,7 @@ class RegistrationController extends Controller
                 'proof_of_payment' => $proofPath,
             ]);
             Auth::login(User::where('email', $request->email)->first());
+            Filament::auth()->login(User::where('email', $request->email)->first());
             return redirect('/app/subscriptions');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Subscription failed: ' . $e->getMessage())->withInput();
