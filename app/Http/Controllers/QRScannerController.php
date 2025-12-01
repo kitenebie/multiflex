@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceLog;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class QRScannerController extends Controller
@@ -26,6 +28,19 @@ class QRScannerController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'User not found',
+            ]);
+        }
+
+        $subscription = Subscription::where('user_id', $user->id)
+            ->where('coach_id', Auth::user()->id)
+            ->where('status', 'active')
+            ->where('end_date', '>=', today())
+            ->first();
+
+        if (!$subscription) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User does not have a valid active subscription with this coach.',
             ]);
         }
 
