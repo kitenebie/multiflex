@@ -39,8 +39,6 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                 TextColumn::make('address')->searchable(),
                 TextColumn::make('age'),
                 TextColumn::make('gender'),
-                TextColumn::make('created_at')->dateTime(),
-                TextColumn::make('updated_at')->dateTime(),
             ])
             ->filters([
                 SelectFilter::make('gender')
@@ -74,8 +72,6 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         Textarea::make('address')->disabled(),
                         TextInput::make('age')->numeric()->disabled(),
                         Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
-                        DateTimePicker::make('created_at')->disabled(),
-                        DateTimePicker::make('updated_at')->disabled(),
                     ])
                     ->fillForm(fn(User $record) => $record->toArray()),
                 Action::make('edit')
