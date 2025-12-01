@@ -86,7 +86,6 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                             ->schema([
                         TextInput::make('name')->required(),
                         TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
-                        TextInput::make('password')->password()->nullable()->minLength(8),
                         Select::make('role')->options(['member' => 'Member', 'coach' => 'Coach', 'admin' => 'Admin']),
                         Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive']),
                         Textarea::make('address'),
