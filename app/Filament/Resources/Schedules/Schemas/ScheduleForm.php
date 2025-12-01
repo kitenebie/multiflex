@@ -18,7 +18,7 @@ class ScheduleForm
             ->components([
                 Select::make('coach_id')
                     ->options(User::where('role', 'coach')->pluck('name', 'id'))
-                    ->hidden(!Auth::user()->role === 'admin')
+                    ->hidden(Auth::user()->role === 'coach')
                     ->required(Auth::user()->role === 'admin'),
                 Select::make('member_id')
                     ->relationship('member', 'name')
