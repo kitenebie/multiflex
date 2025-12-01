@@ -8,7 +8,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Auth;
 
 class ScheduleForm
 {
@@ -16,28 +15,51 @@ class ScheduleForm
     {
         return $schema
             ->components([
+                // Coach selector - only for admin
                 Select::make('coach_id')
-                    ->options(User::where('role', 'coach')->pluck('name', 'id'))
-                    ->hidden(Auth::user()->role === 'coach')
-                    ->required(Auth::user()->role === 'admin'),
+                    ->label('Coach')
+                    ->options(function () {
+                        return User::where('role', 'coach')
+                            ->pluck('name', 'id');
+                    })
+                    ->hidden(fn() => auth()->user()->role === 'coach')
+                    ->required(fn() => auth()->user()->role === 'admin'),
+
+                // Member selector (for admin)
                 Select::make('member_id')
-                    ->relationship('member', 'name')
-                    ->options(User::where('role', 'member')->whereHas('subscriptions', function($query) {
-                        $query->where('coach_id', Auth::user()->id)
-                              ->where('end_date', '>=', now());
-                    })->pluck('name', 'id'))
-                    ->required(),
-                DatePicker::make('date')
-                    ->required(),
-                TimePicker::make('time')
-                    ->required(),
-                Textarea::make('workout_plan')
-                    ->required()
-                    ->columnSpanFull(),
+                    ->label('Member')
+                    ->options(function () {
+                        return User::where('role', 'member')
+                            ->pluck('name', 'id');
+                    })
+                    ->hidden(fn() => auth()->user()->role === 'coach'),
+
+                // Member selector (for coach)
+                Select::make('member_id')
+                    ->label('Member')
+                    ->options(function () {
+                        return User::where('role', 'member')
+                            ->whereHas('subscriptions', function ($query) {
+                                $query->where('coach_id', auth()->id())
+                                      ->where('end_date', '>=', now());
+                            })
+                            ->pluck('name', 'id');
+                    })
+                    ->hidden(fn() => auth()->user()->role === 'admin'),
+
+                DatePicker::make('date')->required(),
+                TimePicker::make('time')->required(),
+                Textarea::make('workout_plan')->required()->columnSpanFull(),
+
                 Select::make('status')
-                    ->options(['pending' => 'Pending', 'ongoing' => 'Ongoing', 'completed' => 'Completed'])
+                    ->options([
+                        'pending' => 'Pending',
+                        'ongoing' => 'Ongoing',
+                        'completed' => 'Completed',
+                    ])
                     ->default('pending')
                     ->required(),
+
                 Textarea::make('notes')
                     ->default(null)
                     ->columnSpanFull(),
