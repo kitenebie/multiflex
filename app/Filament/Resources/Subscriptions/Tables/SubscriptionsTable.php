@@ -41,7 +41,7 @@ class SubscriptionsTable
                     ->searchable(),
                 SelectColumn::make('coach_id')
                     ->label('Assigned Coach')
-                    ->options(User::where('role', 'coach')->pluck('name', 'id'))
+                    ->options(User::where('role', 'coach')->where('status', 'active')->pluck('name', 'id'))
                     ->searchable()
                     ->disabled(fn ($record) => ($record->status === 'active' || $record->status === 'rejected' || $record->status === 'expired' || $record->status === 'inactive'))
                     ->afterStateUpdated(function ($state, $record) {
