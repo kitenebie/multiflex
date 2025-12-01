@@ -55,9 +55,16 @@
                                 <a href="/login" class="btn">Login</a>
                                 <a href="/register" class="btn">Be a member</a>
                             </div>
+                            <div class="header-btns d-block d-lg-none w-100 mt-3">
+                                <a href="/login" class="btn w-100 mb-2">Login</a>
+                                <a href="/register" class="btn w-100">Be a member</a>
+                            </div>
                         @else
                             <div class="header-btns d-none d-lg-block f-right">
                                 <a href="/app" class="btn">Dashboard</a>
+                            </div>
+                            <div class="header-btns d-block d-lg-none w-100 mt-3">
+                                <a href="/app" class="btn w-100">Dashboard</a>
                             </div>
                         @endif
                         <!-- Mobile Menu -->
