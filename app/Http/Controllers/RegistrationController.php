@@ -64,12 +64,14 @@ class RegistrationController extends Controller
                 'password' => 'required|string',
             ]);
 
-            if (\Illuminate\Support\Facades\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                Auth::login($request->email);
-                if (Auth::user()->role == 'admin') {
-                    return redirect('/public/app');
-                }
-                return redirect('/#pricingSection')->with('success', 'Login successful!');
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                $user = User::where('email', $request->email)->first();
+                Auth::login($user);
+                $user->update([
+                    'qr_code' => bcrypt($user->id . now()),
+                ]);
+                $user->save();
+                return redirect('/public/app');
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials.')->withInput();
             }
