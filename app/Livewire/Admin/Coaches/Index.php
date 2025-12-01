@@ -32,7 +32,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
     use InteractsWithTable;
     public function table(Table $table): Table
     {
-        $query = User::query()->where('role', 'member');
+        $query = User::query()->where('role', 'coach');
 
         if (Auth::user()->role == 'member') {
             $query->whereHas('subscriptions', function ($q) {
