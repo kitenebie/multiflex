@@ -20,6 +20,8 @@ class RegistrationController extends Controller
                 'middlename' => 'nullable|string|max:255',
                 'lastname' => 'required|string|max:255',
                 'address' => 'required|string|max:255',
+                'age' => 'required|integer|min:16',
+                'gender' => 'required|in:male,female,other',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string',
             ]);
@@ -29,9 +31,12 @@ class RegistrationController extends Controller
             // Determine role based on member_type
             $role = $request->member_type == 0 ? 'member' : 'coach';
 
-            $user = \App\Models\User::create([
+            $user = User::create([
                 'name' => $name,
                 'email' => $request->email,
+                'address' => $request->address, // Add address to the user creation
+                'age' => $request->age,
+                'gender' => $request->gender,
                 'password' => \Illuminate\Support\Facades\Hash::make($request->password),
                 'role' => $role, // dynamically set
                 'status' => 'pending',

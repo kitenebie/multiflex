@@ -130,6 +130,25 @@
                                     id="address" type="text" placeholder="Enter Address" required>
                             </div>
 
+                            <!-- Age -->
+                            <div class="col-sm-6 mb-3">
+                                <label for="age" class="form-label fw-bold">Age</label>
+                                <input class="form-control border border-2 border-primary" name="age"
+                                    id="age" type="number" placeholder="Enter Age" required min="16">
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="col-sm-6 mb-3">
+                                <label for="gender" class="form-label fw-bold">Gender</label>
+                                <select class="form-select border border-2 border-primary" name="gender"
+                                    id="gender" required>
+                                    <option selected value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
                             <!-- Email -->
                             <div class="col-sm-6 mb-3">
                                 <label for="email" class="form-label fw-bold">Email</label>
