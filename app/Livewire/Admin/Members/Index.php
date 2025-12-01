@@ -19,6 +19,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
@@ -31,8 +32,16 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
     use InteractsWithTable;
     public function table(Table $table): Table
     {
+        $query = User::query()->where('role', 'member');
+
+        if (Auth::user()->role == 'coach') {
+            $query->whereHas('subscriptions', function($q) {
+                $q->where('coach_id', Auth::user()->id)->where('end_date', '>', now());
+            });
+        }
+
         return $table
-            ->query(User::query()->where('role', 'member'))
+            ->query($query)
             ->columns([
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('email')->searchable(),
