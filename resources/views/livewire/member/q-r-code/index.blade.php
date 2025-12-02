@@ -150,6 +150,8 @@
                     <p class="info-item"><strong>Role:</strong> {{ ucfirst(auth()->user()->role) }}</p>
                     <p class="info-item"><strong>Status:</strong> {{ ucfirst(auth()->user()->status) }}</p>
                 </div>
+                <br>
+                <br>
                 <h3 class="qr-title">Active Subscription</h3>
                 @if ($activeSubscription)
                     <div>
