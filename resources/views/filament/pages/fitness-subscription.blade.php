@@ -136,7 +136,7 @@
         .pricing-card.first {
             background-color: rgba(255, 255, 255, 0.6);
             border-color: rgba(55, 65, 81, 0.2);
-            color: #111827;
+            color: #D4D4D4FF;
         }
 
         .pricing-card.last {
