@@ -72,7 +72,7 @@
 
         <div class="message">
             <p>Hi {{ $full_name ?? 'unknown' }},</p>
-            <p>{{ $message ?? "Your payment and proof of payment have been successfully submitted. Our team will review it shortly. You’ll get an update once everything is verified." }}</p>
+            <p>{{ $message1 ?? "Your payment and proof of payment have been successfully submitted. Our team will review it shortly. You’ll get an update once everything is verified." }}</p>
 
             <div class="details">
                 <p><strong>Reference No:</strong> {{ $reference_no ?? 'unknown' }}</p>
@@ -81,10 +81,14 @@
                 <p><strong>Proof of Payment:</strong></p>
                 <img src="{{ $proof_img ?? 'unknown' }}" alt="Proof of Payment" class="proof-img">
             </div>
+
+            @if(isset($message2) && !empty($message2))
+            <p>{{ $message2 }}</p>
+            @endif
         </div>
 
         <div class="footer-text">
-            <p>Thank you! We appreciate your prompt payment.</p>
+            <p>{{ $message3 ?? 'Thank you! We appreciate your prompt payment.' }}</p>
         </div>
 
         <div class="header">

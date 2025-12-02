@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Subscription;
 use App\Models\SubscriptionTransaction;
 use App\Models\User;
+use App\Services\PaymentMailService;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Storage;
 
 class RegistrationController extends Controller
 {
+    protected PaymentMailService $paymentMailService;
+
+    public function __construct(PaymentMailService $paymentMailService)
+    {
+        $this->paymentMailService = $paymentMailService;
+    }
+
     public function store(Request $request)
     {
         try {
@@ -120,7 +128,7 @@ class RegistrationController extends Controller
             ]);
 
             // Create subscription transaction
-            SubscriptionTransaction::create([
+            $transaction = SubscriptionTransaction::create([
                 'subscription_id' => $subscription->id,
                 'amount' => $amount,
                 'payment_method' => 'upload', // or whatever
@@ -128,6 +136,10 @@ class RegistrationController extends Controller
                 'paid_at' => now(),
                 'proof_of_payment' => $proofPath,
             ]);
+
+            // Send payment submitted notification email to all admin users
+            $this->paymentMailService->sendPaymentSubmittedNotification($request->email, $transaction);
+
             Auth::login(User::where('email', $request->email)->first());
             Filament::auth()->login(User::where('email', $request->email)->first());
             return redirect('/app/subscriptions');
