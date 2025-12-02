@@ -144,6 +144,11 @@ class SubscriptionsTable
                     }),
             ])
             ->toolbarActions([
+                Action::make('sub')
+                    ->label('Add Subscription')
+                    ->icon('heroicon-o-plus')
+                    ->url('/#pricingSection'),
+
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make(),
