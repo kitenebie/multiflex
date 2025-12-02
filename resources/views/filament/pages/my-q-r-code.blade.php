@@ -313,7 +313,7 @@
         }
 
         .dark .pricing-card.first .price .amount {
-            color: #0F0F0FFF;
+            color: #D3D3D3FF;
         }
         .dark .pricing-card.first a {
             color: #818cf8;
