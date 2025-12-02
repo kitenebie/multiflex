@@ -13,7 +13,7 @@ class OverallSalesChartWidget extends ChartWidget
 {
     protected ?string $heading = 'Overall Total Sales';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 1;
 
     public ?string $startDate = null;
     public ?string $endDate = null;
