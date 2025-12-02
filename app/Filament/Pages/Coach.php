@@ -23,7 +23,7 @@ class Coach extends Page
             return false; // not logged in = no access
         }
 
-        return !$user->roles()->where('name', 'coach')->exists();
+        return $user->roles()->where('name', 'admin')->exists();
     }
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
     protected string $view = 'filament.pages.coach';
