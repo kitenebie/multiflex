@@ -40,7 +40,7 @@ return [
     */
     'navigation_visibility' => [
         'field' => 'email', // or any other field like role_id
-        'allowed' => ['admin-staff.support@multiflex.site']
+        'allowed' => ['admin-staff.support@multiflex.site', 'ironflex54@gmail.com']
     ],
 
     /*
