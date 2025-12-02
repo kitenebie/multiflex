@@ -96,6 +96,10 @@ class RegistrationController extends Controller
                 if (Auth::user()->role === 'coach') {
                     return redirect('/app/QR%20Code%20Scanner');
                 }
+                if (Auth::user()->role === 'member') {
+                    return redirect('/app/My%20QR%20Code');
+                }
+                
                 return redirect('/app');
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials.')->withInput();
