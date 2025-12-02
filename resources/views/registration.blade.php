@@ -134,7 +134,7 @@
                             <div class="col-sm-6 mb-3">
                                 <label for="age" class="form-label fw-bold">Age</label>
                                 <input class="form-control border border-2 border-primary" name="age"
-                                    id="age" type="number" placeholder="Enter Age" required min="16">
+                                    id="age" type="number" placeholder="Enter Age" required min="18" max="90">
                             </div>
 
                             <!-- Gender -->
