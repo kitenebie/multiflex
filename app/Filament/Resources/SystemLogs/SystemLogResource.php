@@ -51,4 +51,8 @@ class SystemLogResource extends Resource
             'index' => ListSystemLogs::route('/'),
         ];
     }
+    public static function canAccess(): bool
+    {
+        return false;
+    }
 }
