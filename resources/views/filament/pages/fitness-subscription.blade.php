@@ -8,9 +8,8 @@
             display: none !important;
         }
     </style>
-
 <style>
-  /* Container */
+    /* Container */
 .pricing-section {
   position: relative;
   isolation: isolate;
@@ -47,7 +46,11 @@
   width: 72rem;
   background: linear-gradient(to top right, #f9a8d4, #818cf8); /* pink-300 to indigo-400 */
   opacity: 0.3;
-  clip-path: polygon(74.1% 44.1%,100% 61.6%,97.5% 26.9%,85.5% 0.1%,80.7% 2%,72.5% 32.5%,60.2% 62.4%,52.4% 68.1%,47.5% 58.3%,45.2% 34.5%,27.5% 76.7%,0.1% 64.9%,17.9% 100%,27.6% 76.8%,76.1% 97.7%,74.1% 44.1%);
+  clip-path: polygon(
+    74.1% 44.1%,100% 61.6%,97.5% 26.9%,85.5% 0.1%,80.7% 2%,
+    72.5% 32.5%,60.2% 62.4%,52.4% 68.1%,47.5% 58.3%,45.2% 34.5%,
+    27.5% 76.7%,0.1% 64.9%,17.9% 100%,27.6% 76.8%,76.1% 97.7%,74.1% 44.1%
+  );
 }
 
 /* Text Centering */
@@ -113,10 +116,13 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  background-color: #111827; /* default dark card */
+  color: #fff;
 }
 .pricing-card.first {
   background-color: rgba(255, 255, 255, 0.6);
   border-color: rgba(55, 65, 81, 0.2);
+  color: #111827;
 }
 .pricing-card.last {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -126,7 +132,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
-  color: #818cf8; /* default indigo-400 */
+  color: #818cf8; /* indigo-400 */
 }
 .pricing-card.first h3 {
   color: #4f46e5; /* indigo-600 */
@@ -149,17 +155,17 @@
 }
 .price .duration {
   font-size: 1rem;
-  color: #6b7280;
+  color: #9ca3af; /* gray-400 */
 }
 
 /* Summary */
 .pricing-card .summary {
   margin-top: 1.5rem;
   font-size: 1rem;
-  color: #6b7280;
+  color: #d1d5db; /* gray-300 */
 }
 .pricing-card.first .summary {
-  color: #4b5563;
+  color: #4b5563; /* gray-600 */
 }
 
 /* Features List */
@@ -171,10 +177,10 @@
   flex-direction: column;
   gap: 0.75rem;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #d1d5db; /* gray-300 */
 }
 .pricing-card.first ul {
-  color: #4b5563;
+  color: #4b5563; /* gray-600 */
 }
 .pricing-card ul li {
   display: flex;
@@ -218,5 +224,58 @@
   background-color: #818cf8;
 }
 
-</style>sd
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .pricing-section {
+    background-color: #111827;
+  }
+  .pricing-title h2 {
+    color: #818cf8;
+  }
+  .pricing-title p {
+    color: #fff;
+  }
+  .pricing-subtitle {
+    color: #d1d5db;
+  }
+  .pricing-card.first {
+    background-color: rgba(55, 65, 81, 0.6);
+    color: #fff;
+  }
+  .pricing-card {
+    background-color: #1f2937;
+    color: #fff;
+    border-color: rgba(55, 65, 81, 0.2);
+  }
+  .pricing-card.first h3 {
+    color: #818cf8;
+  }
+  .pricing-card h3 {
+    color: #818cf8;
+  }
+  .pricing-card.first .summary {
+    color: #d1d5db;
+  }
+  .pricing-card .summary {
+    color: #d1d5db;
+  }
+  .pricing-card ul {
+    color: #d1d5db;
+  }
+  .pricing-card.first ul {
+    color: #d1d5db;
+  }
+  .pricing-card ul li svg {
+    color: #818cf8;
+  }
+  .pricing-card.first ul li svg {
+    color: #818cf8;
+  }
+  .pricing-card.first a {
+    color: #818cf8;
+    border-color: rgba(147, 197, 253, 0.4);
+  }
+}
+
+</style>
 </x-filament-panels::page>
