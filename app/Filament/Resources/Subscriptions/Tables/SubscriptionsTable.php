@@ -107,6 +107,7 @@ class SubscriptionsTable
                 Action::make('approve')
                     ->label('Approve')
                     ->icon('heroicon-o-check-circle')
+                    ->hidden(fn ($record) => ($record->status === 'active' || $record->status === 'rejected' || $record->status === 'expired' || $record->status === 'inactive'))
                     ->color('success')
                     ->requiresConfirmation()
                     ->schema([
