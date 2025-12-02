@@ -134,7 +134,6 @@
         }
 
         .pricing-card.last {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             position: relative;
         }
 
@@ -247,7 +246,6 @@
         .pricing-card:not(.first) a {
             background-color: #6366f1;
             color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .pricing-card:not(.first) a:hover {
