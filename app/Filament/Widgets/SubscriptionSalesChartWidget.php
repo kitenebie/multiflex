@@ -13,17 +13,111 @@ use Carbon\CarbonImmutable;
 
 class SubscriptionSalesChartWidget extends ChartWidget
 {
+    use HasFiltersSchema;
+
     protected ?string $heading = 'Subscription Sales by Fitness Offer';
 
-    protected int | string | array $columnSpan = 1;
+    protected int | string | array $columnSpan = 'full';
 
-    public ?string $startDate = null;
-    public ?string $endDate = null;
+    public ?array $filters = null;
+
+    public ?CarbonImmutable $startDate = null;
+    public ?CarbonImmutable $endDate = null;
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        if (blank($this->filters)) {
+            $this->filters = $this->getDefaultFiltersState();
+        }
+
+        $this->applyFilters(shouldRefresh: false);
+    }
+
+    /**
+     * Define the chart filters schema
+     */
+    public function filtersSchema($schema)
+    {
+        return $schema->components([
+            DatePicker::make('startDate')
+                ->label('From Date')
+                ->maxDate(fn () => data_get($this->filters, 'endDate'))
+                ->default($this->getDefaultFiltersState()['startDate'])
+                ->native(false),
+
+            DatePicker::make('endDate')
+                ->label('To Date')
+                ->minDate(fn () => data_get($this->filters, 'startDate'))
+                ->default($this->getDefaultFiltersState()['endDate'])
+                ->native(false),
+
+            Actions::make([
+                Action::make('applyFilters')
+                    ->label('Apply')
+                    ->action('applyFilters')
+                    ->icon('heroicon-o-funnel')
+                    ->color('primary'),
+                Action::make('resetFilters')
+                    ->label('Reset')
+                    ->color('danger')
+                    ->action('resetFilters')
+                    ->icon('heroicon-o-arrow-path'),
+            ])->fullWidth(),
+        ]);
+    }
+
+    public function applyFilters(bool $shouldRefresh = true): void
+    {
+        $filters = $this->filters ?? [];
+
+        $start = $this->resolveDate(data_get($filters, 'startDate'), true)
+            ?? CarbonImmutable::now()->startOfMonth()->startOfDay();
+        $end = $this->resolveDate(data_get($filters, 'endDate'), false)
+            ?? CarbonImmutable::now()->endOfMonth()->endOfDay();
+
+        if ($start->greaterThan($end)) {
+            [$start, $end] = [$end->startOfDay(), $start->endOfDay()];
+        }
+
+        $this->startDate = $start;
+        $this->endDate = $end;
+
+        if ($shouldRefresh) {
+            $this->dispatch('$refresh');
+        }
+    }
+
+    public function resetFilters(): void
+    {
+        $this->filters = $this->getDefaultFiltersState();
+        $this->applyFilters();
+    }
+
+    protected function getDefaultFiltersState(): array
+    {
+        return [
+            'startDate' => CarbonImmutable::now()->startOfMonth()->toDateString(),
+            'endDate' => CarbonImmutable::now()->endOfMonth()->toDateString(),
+        ];
+    }
+
+    protected function resolveDate(null|string $value, bool $isStart): ?CarbonImmutable
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        $date = CarbonImmutable::parse($value);
+
+        return $isStart ? $date->startOfDay() : $date->endOfDay();
+    }
 
     protected function getData(): array
     {
-        $startDate = $this->startDate ?: now()->startOfMonth()->format('Y-m-d');
-        $endDate = $this->endDate ?: now()->endOfMonth()->format('Y-m-d');
+        $startDate = $this->startDate?->format('Y-m-d') ?: now()->startOfMonth()->format('Y-m-d');
+        $endDate = $this->endDate?->format('Y-m-d') ?: now()->endOfMonth()->format('Y-m-d');
 
         $query = SubscriptionTransaction::query()
             ->join('subscriptions', 'subscription_transactions.subscription_id', '=', 'subscriptions.id')
