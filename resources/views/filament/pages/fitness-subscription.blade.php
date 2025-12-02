@@ -1,6 +1,6 @@
 <x-filament-panels::page>
     {{-- Page content --}}
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
     @livewire('member.pricing')
     @livewireScripts()
     <style>
