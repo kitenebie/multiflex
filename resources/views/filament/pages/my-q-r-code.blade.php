@@ -319,5 +319,8 @@
             color: #818cf8;
             border-color: rgba(147, 197, 253, 0.4);
         }
+        .fi-loading-indicator{
+            display: none !important;
+        }
     </style>
 </x-filament-panels::page>

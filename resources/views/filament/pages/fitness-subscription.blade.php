@@ -1,10 +1,8 @@
 <x-filament-panels::page>
     {{-- Page content --}}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     @livewire('member.pricing')
     @livewireScripts()
-    @script
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    @endscript
     <style>
         .fi-header {
             display: none !important;
@@ -329,6 +327,9 @@
         .dark .pricing-card.first a {
             color: #818cf8;
             border-color: rgba(147, 197, 253, 0.4);
+        }
+        .fi-loading-indicator{
+            display: none !important;
         }
     </style>
 </x-filament-panels::page>
