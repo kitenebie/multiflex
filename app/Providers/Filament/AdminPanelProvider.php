@@ -74,7 +74,7 @@ class AdminPanelProvider extends PanelProvider
                         return redirect('/');
                     }),
             ])
-            ->brandLogo('/assets/img/logo/logo1.png')
+            ->brandLogo(asset('assets/img/logo/logo.png'))
             ->brandLogoHeight('2rem')
             ->globalSearch(false)
             ->authMiddleware([
