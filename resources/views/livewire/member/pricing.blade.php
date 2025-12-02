@@ -36,7 +36,14 @@
                     @empty
                     @endforelse
                 </ul>
-                <a href="/subscription?offer_id={{ $offer->id }}">Get started today</a>
+                @if (auth()->check() && auth()->user()->role == 'member' && auth()->user()->status == 'active')
+                    @if (auth()->user()->subscriptions()->where('end_date', '>', now())->exists())
+                        <a href="#">You're
+                            already Subscribed</a>
+                    @else
+                        <a href="/subscription?offer_id={{ $offer->id }}">Get started today</a>
+                    @endif
+                @endif
             </div>
         @endforeach
     </div>
