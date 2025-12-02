@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StatsOverviewWidget extends BaseWidget
 {
+    protected int $navigationSort = 0;
     protected int | string | array $columnSpan = 1;
     protected function getStats(): array
     {
