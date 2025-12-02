@@ -16,33 +16,18 @@ class SubscriptionSalesChartWidget extends ChartWidget
     public ?string $startDate = null;
     public ?string $endDate = null;
 
-    protected function getFilters(): ?array
-    {
-        return [
-            DatePicker::make('startDate')
-                ->label('Start Date')
-                ->default(now()->startOfMonth()),
-            DatePicker::make('endDate')
-                ->label('End Date')
-                ->default(now()->endOfMonth()),
-        ];
-    }
-
     protected function getData(): array
     {
+        $startDate = $this->startDate ?: now()->startOfMonth()->format('Y-m-d');
+        $endDate = $this->endDate ?: now()->endOfMonth()->format('Y-m-d');
+
         $query = SubscriptionTransaction::query()
             ->join('subscriptions', 'subscription_transactions.subscription_id', '=', 'subscriptions.id')
             ->join('fitness_offers', 'subscriptions.fitness_offer_id', '=', 'fitness_offers.id')
             ->select('fitness_offers.name', DB::raw('SUM(subscription_transactions.amount) as total_sales'))
+            ->where('subscription_transactions.paid_at', '>=', $startDate)
+            ->where('subscription_transactions.paid_at', '<=', $endDate . ' 23:59:59')
             ->groupBy('fitness_offers.id', 'fitness_offers.name');
-
-        if ($this->startDate) {
-            $query->where('subscription_transactions.paid_at', '>=', $this->startDate);
-        }
-
-        if ($this->endDate) {
-            $query->where('subscription_transactions.paid_at', '<=', $this->endDate . ' 23:59:59');
-        }
 
         $data = $query->get();
 

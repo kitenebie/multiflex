@@ -93,27 +93,28 @@
                                 <a href="/register" class="btn btn-sm">Be a member</a>
                             </div>
                         @else
-                        @if(auth()->user()->role == 'coach')
-                            <div class="header-btns d-none d-lg-block f-right">
-                                <a href="/app/QR%20Code%20Scanner" class="btn">Dashboard</a>
-                            </div>
-                            <div class="header-btns header-btns-mobile d-lg-none mt-3">
-                                <a href="/app/QR%20Code%20Scanner" class="btn btn-sm">Dashboard</a>
-                            </div>
-                        @elseif(auth()->user()->role == 'member')
-                            <div class="header-btns d-none d-lg-block f-right">
-                                <a href="/app/My%20QR%20Code" class="btn">Dashboard</a>
-                            </div>
-                            <div class="header-btns header-btns-mobile d-lg-none mt-3">
-                                <a href="/app/My%20QR%20Code" class="btn btn-sm">Dashboard</a>
-                            </div>
-                        @else
-                            <div class="header-btns d-none d-lg-block f-right">
-                                <a href="/app" class="btn">Dashboard</a>
-                            </div>
-                            <div class="header-btns header-btns-mobile d-lg-none mt-3">
-                                <a href="/app" class="btn btn-sm">Dashboard</a>
-                            </div>
+                            @if (auth()->user()->role == 'coach')
+                                <div class="header-btns d-none d-lg-block f-right">
+                                    <a href="/app/QR%20Code%20Scanner" class="btn">Dashboard</a>
+                                </div>
+                                <div class="header-btns header-btns-mobile d-lg-none mt-3">
+                                    <a href="/app/QR%20Code%20Scanner" class="btn btn-sm">Dashboard</a>
+                                </div>
+                            @elseif(auth()->user()->role == 'member')
+                                <div class="header-btns d-none d-lg-block f-right">
+                                    <a href="/app/My%20QR%20Code" class="btn">Dashboard</a>
+                                </div>
+                                <div class="header-btns header-btns-mobile d-lg-none mt-3">
+                                    <a href="/app/My%20QR%20Code" class="btn btn-sm">Dashboard</a>
+                                </div>
+                            @else
+                                <div class="header-btns d-none d-lg-block f-right">
+                                    <a href="/app" class="btn">Dashboard</a>
+                                </div>
+                                <div class="header-btns header-btns-mobile d-lg-none mt-3">
+                                    <a href="/app" class="btn btn-sm">Dashboard</a>
+                                </div>
+                            @endif
                         @endif
                         <!-- Mobile Menu -->
                         <div class="col-12">
@@ -361,17 +362,18 @@
                                         @endforelse
                                         @if (auth()->check() && auth()->user()->role == 'member' && auth()->user()->status == 'active')
                                             @if (auth()->user()->subscriptions()->where('end_date', '>', now())->exists())
-                                                <a href="/app/subscriptions"
-                                                    class="border-btn border-btn2">You already Subscribed</a>
+                                                <a href="/app/subscriptions" class="border-btn border-btn2">You
+                                                    already Subscribed</a>
                                             @else
                                                 <a href="/subscription?offer_id={{ $offer->id }}"
                                                     class="border-btn border-btn2">Subscribe Now</a>
                                             @endif
                                         @else
-                                            @if(auth()->check() && auth()->user()->status == 'pending')
-                                            <a href="#pricingSection" class="border-btn border-btn2">Your accout is waiting for Approval</a>
+                                            @if (auth()->check() && auth()->user()->status == 'pending')
+                                                <a href="#pricingSection" class="border-btn border-btn2">Your accout
+                                                    is waiting for Approval</a>
                                             @else
-                                            <a href="/register" class="border-btn border-btn2">Join Now</a>
+                                                <a href="/register" class="border-btn border-btn2">Join Now</a>
                                             @endif
                                         @endif
                                     </div>
