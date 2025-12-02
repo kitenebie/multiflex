@@ -60,7 +60,6 @@ class SubscriptionTransactionsTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
                 Action::make('view_proof')
                     ->label('View Proof')
                     ->icon('heroicon-o-eye')
