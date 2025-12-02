@@ -15,6 +15,8 @@ class FitnessSubscription extends Page
     protected static ?string $navigationLabel = 'Fitness Offers Pricing';
     protected static ?string $slug = 'Fitness Offers Pricing';
     protected static UnitEnum|string|null $navigationGroup = 'Management';
+
+    protected static ?int $navigationSort = -20;
     public static function canAccess(): bool
     {
         $user = Auth::user();
