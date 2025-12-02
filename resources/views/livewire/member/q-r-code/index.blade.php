@@ -36,10 +36,11 @@
         height: 100%;
     }
 
-    .qr-code-container svg{
+    .qr-code-container svg {
         width: 100%;
         height: 100%;
     }
+
     .info-section h3 {
         font-size: 18px;
         font-weight: 600;
@@ -84,11 +85,18 @@
 
 <div class="qr-container">
     @if (auth()->check() && auth()->user()->qr_code)
+        @php
+            $activeSubscription = auth()->user()->subscriptions()->where('status', 'active')->first();
+        @endphp
         <div class="qr-grid">
             <div class="qr-column qr-code-section">
                 {{-- <h2 class="qr-title">Your QR Code</h2> --}}
                 <div class="qr-code-container">
+                    @if($activeSubscription)
                     {!! QrCode::size(250)->generate(auth()->user()->qr_code) !!}
+                    @else
+                    {!! QrCode::size(250)->generate("This member has no active subscription") !!}
+                    @endif
                 </div>
             </div>
 
@@ -104,9 +112,6 @@
 
             <div class="qr-column">
                 <h3 class="qr-title">Active Subscription</h3>
-                @php
-                    $activeSubscription = auth()->user()->subscriptions()->where('status', 'active')->first();
-                @endphp
                 @if ($activeSubscription)
                     <div>
                         <p class="info-item"><strong>Fitness Offer:</strong>
