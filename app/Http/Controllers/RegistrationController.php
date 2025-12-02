@@ -164,7 +164,7 @@ class RegistrationController extends Controller
             Auth::login(User::where('email', $request->email)->first());
             Filament::auth()->login(User::where('email', $request->email)->first());
 
-            return redirect('/app/subscriptions');
+            return redirect('/app/subscription-transactions');
         } catch (\Exception $e) {
 
             // Rollback = automatically deletes subscription + transaction
