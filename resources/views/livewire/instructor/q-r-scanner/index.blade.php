@@ -101,6 +101,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script>
+    const qrSecret = '{{ env("QR_SECRET", "gms_secret_key_2024") }}';
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -152,8 +155,7 @@
 
             try {
                 const payload = JSON.parse(atob(decodedText));
-                const secret = 'gms_secret_key_2024';
-                const expectedSignature = CryptoJS.SHA256(payload.data + secret).toString();
+                const expectedSignature = CryptoJS.SHA256(payload.data + qrSecret).toString();
                 if (payload.signature !== expectedSignature) {
                     return; // invalid signature
                 }

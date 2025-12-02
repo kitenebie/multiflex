@@ -94,7 +94,7 @@
                 <div class="qr-code-container">
                     @if($activeSubscription)
                     @php
-                        $secret = 'gms_secret_key_2024';
+                        $secret = env('QR_SECRET', 'gms_secret_key_2024');
                         $data = [
                             'qr_code' => auth()->user()->qr_code,
                             'timestamp' => time()
