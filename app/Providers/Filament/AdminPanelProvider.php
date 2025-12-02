@@ -18,7 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Enums\Width;
-use daacreators\CreatorsTicketing\TicketingPlugin; 
+use daacreators\CreatorsTicketing\TicketingPlugin; // Add this line
 use Filament\Actions\Action;
 use Illuminate\Support\Facades\Auth;
 
