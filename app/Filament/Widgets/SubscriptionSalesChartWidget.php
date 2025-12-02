@@ -19,8 +19,6 @@ class SubscriptionSalesChartWidget extends ChartWidget
 
     protected int | string | array $columnSpan = 'full';
 
-    public ?array $filters = null;
-
     public ?CarbonImmutable $startDate = null;
     public ?CarbonImmutable $endDate = null;
 
