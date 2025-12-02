@@ -70,4 +70,8 @@ class CoachHandleResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+    public static function canAccess(): bool
+    {
+        return false;
+    }
 }
