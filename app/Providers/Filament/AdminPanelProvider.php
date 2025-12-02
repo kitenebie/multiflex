@@ -25,6 +25,7 @@ use Filament\Support\Enums\Width;
 use daacreators\CreatorsTicketing\TicketingPlugin; // Add this line
 use Filament\Actions\Action;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\AdminRoleMiddleware;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -81,6 +82,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                AdminRoleMiddleware::class,
             ]);
     }
 }
