@@ -41,6 +41,9 @@ class PaymentMailService
             Mail::to($email)->send(new PaymentSubmitted($transaction, $admin, $message1, $message2, $message3));
         }
         // Send email to member
-        Mail::to($member_email)->queue(new PaymentSubmitted($transaction,$member_email, $message1, $message2, $message3));
+        $memberUser = User::where('email', $member_email)->first();
+        if ($memberUser) {
+            Mail::to($member_email)->queue(new PaymentSubmitted($transaction, $memberUser, $message1, $message2, $message3));
+        }
     }
 }
