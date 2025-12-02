@@ -170,9 +170,9 @@
                             {{ $activeSubscription->fitnessOffer->name ?? 'N/A' }}</p>
                         <p class="info-item"><strong>Coach:</strong> {{ $activeSubscription->coach->name ?? 'N/A' }}</p>
                         <p class="info-item"><strong>Registered Date:</strong>
-                            {{ $activeSubscription->start_date->format('M d, Y') ??'N/A' }}</p>
+                            {{ 'N/A' }}</p>
                         <p class="info-item"><strong>Expire On:</strong>
-                            {{ $activeSubscription->end_date->format('M d, Y') ??'N/A' }}</p>
+                            {{ 'N/A' }}</p>
                     </div>
                 @endif
             </div>
