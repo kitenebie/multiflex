@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Subscriptions\Schemas;
 
+use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
@@ -23,7 +24,7 @@ class SubscriptionForm
                     ->relationship('fitnessOffer', 'name')
                     ->required(),
                 Select::make('coach_id')
-                    ->relationship('coach', 'name')
+                    ->options(User::query()->where('role', 'coach')->pluck('name', 'id'))
                     ->default(null),
                 Select::make('status')
                     ->options(['pending' => 'Pending', 'active' => 'Active', 'rejected' => 'Rejected', 'inactive' => 'Inactive', 'expired' => 'Expired'])
