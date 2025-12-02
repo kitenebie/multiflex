@@ -145,6 +145,7 @@ class SubscriptionsTable
             ])
             ->toolbarActions([
                 Action::make('sub')
+                    ->hidden(fn () => Auth::user()->role != 'member')
                     ->label('Add Subscription')
                     ->icon('heroicon-o-plus')
                     ->url('/#pricingSection'),
