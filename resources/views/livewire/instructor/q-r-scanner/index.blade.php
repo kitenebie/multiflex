@@ -70,6 +70,65 @@
         border-color: #007bff;
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
+
+    /* Default (light mode) styles can stay the same as your original CSS */
+
+    .dark {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    .dark .qr-container {
+        gap: 20px;
+    }
+
+    .dark .qr-scanner-container,
+    .dark .user-info-card {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 16px;
+        color: #e0e0e0;
+    }
+
+    .dark .scanner-title,
+    .dark .user-info-title {
+        color: #fff;
+    }
+
+    .dark .user-info p {
+        color: #e0e0e0;
+    }
+
+    .dark #reader {
+        background-color: #000;
+        border-radius: 8px;
+    }
+
+    .dark #scanned-result,
+    .dark #scanned-invalid-result {
+        color: #ff6b6b;
+    }
+
+    .dark select {
+        background-color: #2c2c2c;
+        color: #fff;
+        border: 1px solid #555;
+    }
+
+    .dark select:focus {
+        border-color: #1a73e8;
+        box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+    }
+
+    .dark option {
+        background-color: #2c2c2c;
+        color: #fff;
+    }
+
+    .dark label {
+        color: #fff;
+    }
 </style>
 <div class="qr-container">
     <div class="qr-scanner-container">

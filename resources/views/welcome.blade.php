@@ -93,6 +93,21 @@
                                 <a href="/register" class="btn btn-sm">Be a member</a>
                             </div>
                         @else
+                        @if(auth()->user()->role == 'coach')
+                            <div class="header-btns d-none d-lg-block f-right">
+                                <a href="/app/QR%20Code%20Scanner" class="btn">Dashboard</a>
+                            </div>
+                            <div class="header-btns header-btns-mobile d-lg-none mt-3">
+                                <a href="/app/QR%20Code%20Scanner" class="btn btn-sm">Dashboard</a>
+                            </div>
+                        @elseif(auth()->user()->role == 'member')
+                            <div class="header-btns d-none d-lg-block f-right">
+                                <a href="/app/My%20QR%20Code" class="btn">Dashboard</a>
+                            </div>
+                            <div class="header-btns header-btns-mobile d-lg-none mt-3">
+                                <a href="/app/My%20QR%20Code" class="btn btn-sm">Dashboard</a>
+                            </div>
+                        @else
                             <div class="header-btns d-none d-lg-block f-right">
                                 <a href="/app" class="btn">Dashboard</a>
                             </div>
