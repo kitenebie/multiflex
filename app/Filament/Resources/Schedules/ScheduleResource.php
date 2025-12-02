@@ -51,4 +51,8 @@ class ScheduleResource extends Resource
             'index' => ListSchedules::route('/'),
         ];
     }
+    public static function canAccess(): bool
+    {
+        return false;
+    }
 }
