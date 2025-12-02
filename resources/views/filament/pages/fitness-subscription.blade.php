@@ -128,7 +128,7 @@
             border: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            background-color: #111827;
+            background-color: #09090B;
             /* default dark card */
             color: #fff;
         }
