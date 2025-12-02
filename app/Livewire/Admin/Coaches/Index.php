@@ -26,6 +26,7 @@ use Filament\Schemas\Components\Grid;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CoachHandle;
 use App\Services\UserApprovalMailService;
+use PhpParser\Node\Stmt\Label;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -117,7 +118,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                 Action::make('approved')
-                    ->hidden(Auth::user()->role == 'member')
+                    ->hidden(fn($record) => Auth::user()->role == 'member' || $record->status !== 'pending')
                     ->label('Approve')
                     ->color('success')
                     ->requiresConfirmation()
@@ -135,6 +136,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                 DeleteAction::make()
+                    ->label('Decline')
+                    ->icon('heroicon-o-x-mark')
                     ->hidden(Auth::user()->role == 'member')
             ])
             ->toolbarActions([
