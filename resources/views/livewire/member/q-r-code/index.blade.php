@@ -159,13 +159,21 @@
                         <p class="info-item"><strong>Fitness Offer:</strong>
                             {{ $activeSubscription->fitnessOffer->name ?? 'N/A' }}</p>
                         <p class="info-item"><strong>Coach:</strong> {{ $activeSubscription->coach->name ?? 'N/A' }}</p>
-                        <p class="info-item"><strong>Start Date:</strong>
+                        <p class="info-item"><strong>Registered Date:</strong>
                             {{ $activeSubscription->start_date->format('M d, Y') }}</p>
-                        <p class="info-item"><strong>End Date:</strong>
+                        <p class="info-item"><strong>Expire On:</strong>
                             {{ $activeSubscription->end_date->format('M d, Y') }}</p>
                     </div>
                 @else
-                    <p class="no-data">No active subscription</p>
+                    <div>
+                        <p class="info-item"><strong>Fitness Offer:</strong>
+                            {{ $activeSubscription->fitnessOffer->name ?? 'N/A' }}</p>
+                        <p class="info-item"><strong>Coach:</strong> {{ $activeSubscription->coach->name ?? 'N/A' }}</p>
+                        <p class="info-item"><strong>Registered Date:</strong>
+                            {{ $activeSubscription->start_date->format('M d, Y') ??'N/A' }}</p>
+                        <p class="info-item"><strong>Expire On:</strong>
+                            {{ $activeSubscription->end_date->format('M d, Y') ??'N/A' }}</p>
+                    </div>
                 @endif
             </div>
         </div>
