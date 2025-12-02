@@ -11,7 +11,7 @@ class SubscriptionTransactionInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('subscription.id')
+                TextEntry::make('subscription.name')
                     ->label('Subscription'),
                 TextEntry::make('amount')
                     ->numeric(),
