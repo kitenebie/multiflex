@@ -3,7 +3,10 @@
 namespace App\Filament\Resources\Subscriptions\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
@@ -29,9 +32,18 @@ class SubscriptionForm
                 DatePicker::make('start_date')
                     ->required(),
                 DatePicker::make('end_date')
+                    ->after('start_date')
                     ->required(),
-                Toggle::make('is_extendable')
+                TextInput::make('amount')
+                    ->numeric()
                     ->required(),
+                TextInput::make('payment_method')
+                    ->required(),
+                TextInput::make('reference_no'),
+                DateTimePicker::make('paid_at'),
+                FileUpload::make('proof_of_payment')
+                    ->image()
+                    ->directory('proofs'),
             ]);
     }
 }

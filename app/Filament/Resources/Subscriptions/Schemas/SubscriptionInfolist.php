@@ -28,6 +28,14 @@ class SubscriptionInfolist
                     ->date(),
                 IconEntry::make('is_extendable')
                     ->boolean(),
+                TextEntry::make('amount')
+                    ->money('PHP'),
+                TextEntry::make('payment_method'),
+                TextEntry::make('reference_no'),
+                TextEntry::make('paid_at')
+                    ->dateTime(),
+                TextEntry::make('proof_of_payment')
+                    ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
