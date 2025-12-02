@@ -30,19 +30,22 @@ class Logs extends Component implements HasActions, HasSchemas, HasTable
 
         if ($lastUserId = Cache::get('last_scanned_user')) {
             $query->where('user_id', $lastUserId);
-        }else{
-             $query->where('status', null);
+        } else {
+            $query->where('status', null);
         }
 
         return $table
-            ->query($query)
+            ->query($query->orderBy('id', 'desc'))
             ->columns([
                 TextColumn::make('user.name')
                     ->label('User'),
-                    TextColumn::make('time_in'),
-                    TextColumn::make('time_out'),
-                    TextColumn::make('date'),
-                ])
+                TextColumn::make('time_in')
+                    ->time(),
+                TextColumn::make('time_out')
+                    ->time(),
+                TextColumn::make('date')
+                    ->date('M j, Y'),
+            ])
             ->filters([
                 // ...
             ])
