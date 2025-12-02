@@ -16,7 +16,7 @@
     }
 
     .dark .qr-grid {
-        background-color: #1f2937;
+        background-color: #18181B;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
 
@@ -31,7 +31,7 @@
     .qr-title {
         font-size: 24px;
         font-weight: bold;
-        color: #1f2937;
+        color: #18181B;
         margin-bottom: 16px;
     }
 
