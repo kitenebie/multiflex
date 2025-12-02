@@ -150,9 +150,6 @@
                     <p class="info-item"><strong>Role:</strong> {{ ucfirst(auth()->user()->role) }}</p>
                     <p class="info-item"><strong>Status:</strong> {{ ucfirst(auth()->user()->status) }}</p>
                 </div>
-            </div>
-
-            <div class="qr-column">
                 <h3 class="qr-title">Active Subscription</h3>
                 @if ($activeSubscription)
                     <div>
@@ -175,6 +172,10 @@
                             {{ 'N/A' }}</p>
                     </div>
                 @endif
+            </div>
+
+            <div class="qr-column">
+
             </div>
         </div>
     @else
