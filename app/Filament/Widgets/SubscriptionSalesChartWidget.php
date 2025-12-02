@@ -26,6 +26,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
             ->join('fitness_offers', 'subscriptions.fitness_offer_id', '=', 'fitness_offers.id')
             ->select('fitness_offers.name', DB::raw('SUM(subscription_transactions.amount) as total_sales'))
             ->where('subscription_transactions.paid_at', '>=', $startDate)
+            ->where('subscriptions.status', 'active')
             ->where('subscription_transactions.paid_at', '<=', $endDate . ' 23:59:59')
             ->groupBy('fitness_offers.id', 'fitness_offers.name');
 

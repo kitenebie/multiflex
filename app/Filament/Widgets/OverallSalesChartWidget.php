@@ -6,6 +6,8 @@ use Filament\Widgets\ChartWidget;
 use App\Models\SubscriptionTransaction;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\DatePicker;
+use Filament\Actions\Action;
+use Filament\Forms\Form;
 
 class OverallSalesChartWidget extends ChartWidget
 {
@@ -48,15 +50,25 @@ class OverallSalesChartWidget extends ChartWidget
         ];
     }
 
-    protected function getFilters(): ?array
+
+    protected function getHeaderActions(): array
     {
         return [
-            DatePicker::make('startDate')
-                ->label('Start Date')
-                ->default(now()->startOfYear()->format('Y-m-d')),
-            DatePicker::make('endDate')
-                ->label('End Date')
-                ->default(now()->endOfYear()->format('Y-m-d')),
+            Action::make('filter')
+                ->label('Filter Date Range')
+                ->icon('heroicon-o-calendar')
+                ->form([
+                    DatePicker::make('startDate')
+                        ->label('Start Date')
+                        ->default($this->startDate ?: now()->startOfYear()->format('Y-m-d')),
+                    DatePicker::make('endDate')
+                        ->label('End Date')
+                        ->default($this->endDate ?: now()->endOfYear()->format('Y-m-d')),
+                ])
+                ->action(function (array $data): void {
+                    $this->startDate = $data['startDate'];
+                    $this->endDate = $data['endDate'];
+                }),
         ];
     }
 
