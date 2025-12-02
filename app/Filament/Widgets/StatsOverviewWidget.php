@@ -12,7 +12,7 @@ class StatsOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = -2;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 1;
     protected function getStats(): array
     {
         $user = Auth::user();

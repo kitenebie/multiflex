@@ -17,7 +17,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
 
     protected ?string $heading = 'Subscription Sales by Fitness Offer';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 1;
 
     public ?CarbonImmutable $startDate = null;
     public ?CarbonImmutable $endDate = null;
