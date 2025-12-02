@@ -172,7 +172,7 @@
         }
 
         .pricing-card.first .price .amount {
-            color: #DDDDDDFF;
+            color: #0F0F0FFF;
         }
 
         .price .duration {
