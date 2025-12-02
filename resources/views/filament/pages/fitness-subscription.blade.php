@@ -23,5 +23,29 @@
             }
         }, 1000); // 1000ms = 1 sec
     </script>
+<script>
+  // Target HTML element
+  const html = document.documentElement;
+
+  // Poll every 1 second
+  setInterval(() => {
+    const elem = document.querySelector(".fi"); // Your element
+
+    if (!elem) return; // Exit if element not yet loaded
+
+    // If element has "dark" class, enable Tailwind dark mode
+    if (elem.classList.contains("dark")) {
+      if (!html.classList.contains("dark")) {
+        html.classList.add("dark");
+        console.log("Dark mode activated");
+      }
+    } else {
+      if (html.classList.contains("dark")) {
+        html.classList.remove("dark");
+        console.log("Dark mode deactivated");
+      }
+    }
+  }, 1000);
+</script>
 
 </x-filament-panels::page>
