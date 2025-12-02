@@ -117,7 +117,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                 Action::make('approved')
-                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status !== 'pending')
+                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
                     ->label('Approve')
                     ->color('success')
                     ->requiresConfirmation()
@@ -136,7 +136,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     }),
                 DeleteAction::make()
                     ->label('Decline')
-                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status !== 'pending')
+                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
                     ->icon('heroicon-o-x-mark')
             ])
             ->toolbarActions([
