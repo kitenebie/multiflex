@@ -262,7 +262,7 @@
 
         /* Dark Mode */
         .dark .pricing-section {
-            background-color: #111827;
+            background-color: #18181B;
         }
 
         .dark .pricing-title h2 {
@@ -283,7 +283,7 @@
         }
 
         .dark .pricing-card {
-            background-color: #1f2937;
+            background-color: #09090B;
             color: #fff;
             border-color: rgba(55, 65, 81, 0.2);
         }
