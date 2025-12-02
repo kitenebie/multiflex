@@ -39,19 +39,27 @@
 
         .details {
             margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #eeeeee;
+            padding: 12px;
+            background-color: #fafafa;
+            border: 1px solid #e5e5e5;
         }
 
         .details p {
-            margin: 5px 0;
+            margin: 6px 0;
         }
 
         .proof-img {
             max-width: 100%;
             height: auto;
-            margin-top: 10px;
+            margin-top: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -61,9 +69,11 @@
         <div class="header">
             <img src="{{ asset('mail-logo.png') }}" alt="Header Image">
         </div>
+
         <div class="message">
-            <p>Dear {{ $full_name ?? 'unknown' }},</p>
-            <p>Your payment with proof has been submitted successfully.</p>
+            <p>Hi {{ $full_name ?? 'unknown' }},</p>
+            <p>{{ $message ?? "Your payment and proof of payment have been successfully submitted. Our team will review it shortly. You’ll get an update once everything is verified." }}</p>
+
             <div class="details">
                 <p><strong>Reference No:</strong> {{ $reference_no ?? 'unknown' }}</p>
                 <p><strong>Address:</strong> {{ $address ?? 'unknown' }}</p>
@@ -72,8 +82,13 @@
                 <img src="{{ $proof_img ?? 'unknown' }}" alt="Proof of Payment" class="proof-img">
             </div>
         </div>
+
+        <div class="footer-text">
+            <p>Thank you! We appreciate your prompt payment.</p>
+        </div>
+
         <div class="header">
-            <img src="{{ asset('mail-footer.png') }}" alt="Header Image">
+            <img src="{{ asset('mail-footer.png') }}" alt="Footer Image">
         </div>
     </div>
 </body>
