@@ -75,7 +75,7 @@ class AdminPanelProvider extends PanelProvider
                     }),
             ])
             ->brandLogo(asset('assets/img/logo/logo1.png'))
-            ->brandLogoHeight('5rem')
+            ->brandLogoHeight('4rem')
             ->globalSearch(false)
             ->authMiddleware([
                 Authenticate::class,
