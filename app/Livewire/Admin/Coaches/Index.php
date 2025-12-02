@@ -118,8 +118,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         $this->dispatch('refresh');
                     }),
                 Action::make('approved')
-                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status === 'active' || $record->status == 'inactive')
+                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status !== 'pending')
                     ->label('Approve')
+                    ->color('success')
                     ->requiresConfirmation()
                     ->icon('heroicon-o-users')
                     ->color('success')
