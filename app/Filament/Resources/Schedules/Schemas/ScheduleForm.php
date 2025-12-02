@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleForm
 {
@@ -22,8 +23,8 @@ class ScheduleForm
                         return User::where('role', 'coach')
                             ->pluck('name', 'id');
                     })
-                    ->hidden(fn() => auth()->user()->role === 'coach')
-                    ->required(fn() => auth()->user()->role === 'admin'),
+                    ->hidden(fn() => Auth::user()->role === 'coach')
+                    ->required(fn() => Auth::user()->role === 'admin'),
 
                 // Member selector (for admin)
                 Select::make('member_id')
@@ -32,7 +33,7 @@ class ScheduleForm
                         return User::where('role', 'member')
                             ->pluck('name', 'id');
                     })
-                    ->hidden(fn() => auth()->user()->role === 'coach'),
+                    ->hidden(fn() => Auth::user()->role === 'coach'),
 
                 // Member selector (for coach)
                 Select::make('member_id')
@@ -40,12 +41,12 @@ class ScheduleForm
                     ->options(function () {
                         return User::where('role', 'member')
                             ->whereHas('subscriptions', function ($query) {
-                                $query->where('coach_id', auth()->id())
+                                $query->where('coach_id', Auth::user()->id)
                                       ->where('end_date', '>=', now());
                             })
                             ->pluck('name', 'id');
                     })
-                    ->hidden(fn() => auth()->user()->role === 'admin'),
+                    ->hidden(fn() => Auth::user()->role === 'admin'),
 
                 DatePicker::make('date')->required(),
                 TimePicker::make('time')->required(),

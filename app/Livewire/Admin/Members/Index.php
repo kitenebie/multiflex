@@ -24,6 +24,7 @@ use App\Models\User;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
+use App\Services\UserApprovalMailService;
 
 class Index extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -124,6 +125,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ->color('success')
                     ->action(function (User $record) {
                         $record->update(['status' => 'active']);
+                        $mailService = new UserApprovalMailService();
+                        $mailService->sendApprovalNotification($record);
                         Notification::make()
                             ->title('Approved')
                             ->body('The member has been approved successfully.')
