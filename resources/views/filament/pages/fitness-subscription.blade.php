@@ -218,5 +218,5 @@
   background-color: #818cf8;
 }
 
-</style>
+</style>sd
 </x-filament-panels::page>
