@@ -16,6 +16,12 @@ class SchedulesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                if (Auth::user()->role === 'coach') {
+                    $query->where('coach_id', Auth::user()->id);
+                }
+                return $query;
+            })
             ->columns([
                 TextColumn::make('coach.name')
                     ->hidden(fn() => Auth::user()->role === 'coach')
