@@ -36,7 +36,7 @@
                     @empty
                     @endforelse
                 </ul>
-                <a href="#">Get started today</a>
+                <a href="/subscription?offer_id={{ $offer->id }}">Get started today</a>
             </div>
         @endforeach
     </div>

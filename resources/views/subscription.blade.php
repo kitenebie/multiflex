@@ -46,7 +46,8 @@
                     </div>
                     <!-- Header-btn -->
                     <div class="header-btns d-none d-lg-block f-right">
-                        <a href="/" class="btn">Return Home</a>
+                        <a href="#" onclick="event.preventDefault(); window.history.back();" class="btn">Return
+                            Home</a>
                     </div>
                     <!-- Mobile Menu -->
                     <div class="col-12">
@@ -99,7 +100,7 @@
                                         style="background: red; width: fit-content; padding: 1rem; border-radius: 50%;">
                                         <img src="assets/img/icon/price.svg" alt="">
                                     </div>
-                                </center> 
+                                </center>
                                 <br>
                                 <center>
                                     <div class="properties__caption pl-4">
