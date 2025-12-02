@@ -72,9 +72,9 @@
                 <img src="{{ $proof_img ?? 'unknown' }}" alt="Proof of Payment" class="proof-img">
             </div>
         </div>
-    </div>
-    <div class="header">
-        <img src="{{ asset('mail-footer.png') }}" alt="Header Image">
+        <div class="header">
+            <img src="{{ asset('mail-footer.png') }}" alt="Header Image">
+        </div>
     </div>
 </body>
 
