@@ -76,12 +76,15 @@
         <div class="qr-scanner-container">
             <div id="reader"></div>
             <div hidden id="scanned-result"></div>
+            <div id="scanned-invalid-result"></div>
             <br>
             <label for="attendance_type"> Select Attendance Type</label>
             <select name="attendance_type" id="attendance_type">
                 <option value="0">Time In</option>
                 <option value="1">Time Out</option>
             </select>
+            <br>
+            <p id="scanned-invalid-result"></p>
         </div>
         <div class="user-info-card">
             <h5 class="user-info-title">Scanned User Info</h5>
@@ -97,7 +100,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -142,7 +145,24 @@
             scanCooldown = true;
             setTimeout(() => scanCooldown = false, 1500);
 
-            sendScan(decodedText);
+            if (decodedText === "This member has no active subscription") {
+                document.getElementById('scanned-invalid-result').textContent = decodedText;
+                return;
+            }
+
+            try {
+                const payload = JSON.parse(atob(decodedText));
+                const secret = 'gms_secret_key_2024';
+                const expectedSignature = CryptoJS.SHA256(payload.data + secret).toString();
+                if (payload.signature !== expectedSignature) {
+                    return; // invalid signature
+                }
+                const data = JSON.parse(payload.data);
+                sendScan(data.qr_code);
+            } catch (e) {
+                // invalid QR code
+                return;
+            }
         }
 
 
