@@ -6,13 +6,13 @@
     <h2 class="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">Pricing</h2>
     <p class="mt-2 text-5xl font-semibold tracking-tight text-balance text-gray-900 dark:text-white sm:text-6xl">Choose the right plan for you</p>
   </div>
-  <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 dark:text-gray-300 sm:text-xl/8">Choose an affordable plan that's packed with the best features for engaging your audience, creating customer loyalty, and driving sales.</p>
+  <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 dark:text-gray-300 sm:text-xl/8">Choose an affordable fitness plan that's packed with the best training programs, expert coaching, and facilities to help you achieve your health goals.</p>
   <div class="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-{{ count($fitnessOffers) }}">
     @foreach($fitnessOffers as $index => $offer)
     <div class="rounded-3xl {{ $index === 0 ? 'rounded-t-3xl bg-white/60 dark:bg-gray-800/60' : 'bg-gray-900 dark:bg-gray-800' }} p-8 ring-1 ring-gray-900/10 dark:ring-gray-700/20 sm:mx-8 sm:rounded-b-none sm:p-10 {{ $index === 0 ? 'lg:mx-0 lg:rounded-tr-none lg:rounded-bl-3xl' : '' }} {{ $index === count($fitnessOffers) - 1 ? 'relative shadow-2xl' : '' }}">
       <h3 id="tier-{{ $offer->id }}" class="text-base/7 font-semibold {{ $index === 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-400' }}">{{ $offer->name }}</h3>
       <p class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-semibold tracking-tight {{ $index === 0 ? 'text-gray-900 dark:text-white' : 'text-white' }}">${{ $offer->price }}</span>
+        <span class="text-5xl font-semibold tracking-tight {{ $index === 0 ? 'text-gray-900 dark:text-white' : 'text-white' }}">₱{{ $offer->price }}</span>
         <span class="text-base {{ $index === 0 ? 'text-gray-500 dark:text-gray-400' : 'text-gray-400' }}">/{{ $offer->duration_days }} days</span>
       </p>
       <p class="mt-6 text-base/7 {{ $index === 0 ? 'text-gray-600 dark:text-gray-300' : 'text-gray-300' }}">{{ $offer->description['summary'] ?? 'A great plan for your fitness journey.' }}</p>
