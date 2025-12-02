@@ -218,14 +218,14 @@
             align-items: center;
         }
 
-        .pricing-card ul li svg {
+        .pricing-card ul li .cfry {
             flex-shrink: 0;
             width: 1.25rem;
             height: 1.5rem;
             color: #818cf8;
         }
 
-        .pricing-card.first ul li svg {
+        .pricing-card.first ul li .cfry {
             color: #4f46e5;
         }
 
@@ -316,11 +316,11 @@
             color: #d1d5db;
         }
 
-        .dark .pricing-card ul li svg {
+        .dark .pricing-card ul li .cfry {
             color: #818cf8;
         }
 
-        .dark .pricing-card.first ul li svg {
+        .dark .pricing-card.first ul li .cfry {
             color: #818cf8;
         }
 
