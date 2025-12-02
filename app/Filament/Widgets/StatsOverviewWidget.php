@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StatsOverviewWidget extends BaseWidget
 {
+    protected int | string | array $columnSpan = 1;
     protected function getStats(): array
     {
         $user = Auth::user();
