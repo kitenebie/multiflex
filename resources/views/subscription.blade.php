@@ -172,14 +172,6 @@
                                     </select>
                                 </div>
 
-                                <!-- Start Date -->
-                                <div class="col-sm-6 mb-3">
-                                    <label for="start_date" class="form-label fw-bold">Start Date</label>
-                                    <input class="form-control border border-2 border-primary" name="start_date"
-                                        id="start_date" type="date" min="{{ now()->format('Y-m-d') }}"
-                                        placeholder="Select Start Date" required>
-                                </div>
-
 
                                 <!-- Reference -->
                                 <div class="col-sm-6 mb-3">
@@ -190,7 +182,7 @@
                                 </div>
 
                                 <!-- Proof of Payment -->
-                                <div class="col-sm-12 mb-3">
+                                <div class="col-sm-6 mb-3">
                                     <label for="proof_of_payment" class="form-label fw-bold">Proof of Payment</label>
                                     <input class="form-control border border-2 border-primary" name="proof_of_payment"
                                         id="proof_of_payment" type="file" accept="image/*,.pdf" required>

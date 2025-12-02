@@ -10,6 +10,9 @@ use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
+use function Symfony\Component\Clock\now;
 
 class RegistrationController extends Controller
 {
@@ -62,6 +65,9 @@ class RegistrationController extends Controller
             Auth::login($user);
             Filament::auth()->login($user);
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'coach') {
+                if (Auth::user()->role === 'coach') {
+                    return redirect('/app/QR%20Code%20Scanner');
+                }
                 return redirect('/app');
             }
             return redirect('/#pricingSection')->with('success', 'Registration successful!');
@@ -87,6 +93,9 @@ class RegistrationController extends Controller
                     'qr_code' => bcrypt($user->id . now()),
                 ]);
                 $user->save();
+                if (Auth::user()->role === 'coach') {
+                    return redirect('/app/QR%20Code%20Scanner');
+                }
                 return redirect('/app');
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials.')->withInput();
@@ -98,6 +107,9 @@ class RegistrationController extends Controller
 
     public function subscribe(Request $request)
     {
+        $proofPath = null;
+        DB::beginTransaction();
+
         try {
             $request->validate([
                 'offer_id' => 'required|exists:fitness_offers,id',
@@ -105,7 +117,6 @@ class RegistrationController extends Controller
                 'address' => 'required|string|max:255',
                 'subscription_months' => 'required|integer|min:1',
                 'reference' => 'required|string',
-                'start_date' => 'required|date|after_or_equal:today',
                 'proof_of_payment' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
             ]);
 
@@ -114,7 +125,7 @@ class RegistrationController extends Controller
             $multiplier = $request->subscription_months / $baseDays;
             $amount = $offer->price * $multiplier;
 
-            // Store the proof of payment file
+            // Store file
             $proofPath = $request->file('proof_of_payment')->store('proofs', 'public');
 
             // Create subscription
@@ -122,29 +133,47 @@ class RegistrationController extends Controller
                 'user_id' => Auth::user()->id,
                 'fitness_offer_id' => $request->offer_id,
                 'status' => 'pending',
-                'start_date' => $request->start_date,
+                'start_date' => now(),
                 'end_date' => \Carbon\Carbon::parse($request->start_date)->addDays((int)$request->subscription_months),
                 'coach_id' => null
             ]);
 
-            // Create subscription transaction
+            // Create transaction
             $transaction = SubscriptionTransaction::create([
                 'subscription_id' => $subscription->id,
                 'amount' => $amount,
-                'payment_method' => 'upload', // or whatever
+                'payment_method' => 'upload',
                 'reference_no' => $request->reference,
                 'paid_at' => now(),
                 'proof_of_payment' => $proofPath,
             ]);
 
-            // Send payment submitted notification email to all admin users
-            $this->paymentMailService->sendPaymentSubmittedNotification($request->email, $transaction);
+            // Notify admin
+            $this->paymentMailService->sendPaymentSubmittedNotification(
+                $request->email,
+                $transaction
+            );
+
+            // Commit changes BEFORE login
+            DB::commit();
 
             Auth::login(User::where('email', $request->email)->first());
             Filament::auth()->login(User::where('email', $request->email)->first());
+
             return redirect('/app/subscriptions');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Subscription failed: ' . $e->getMessage())->withInput();
+
+            // Rollback = automatically deletes subscription + transaction
+            DB::rollBack();
+
+            // Delete the uploaded proof to avoid orphan file
+            if (!empty($proofPath) && Storage::disk('public')->exists($proofPath)) {
+                Storage::disk('public')->delete($proofPath);
+            }
+
+            return redirect()->back()
+                ->with('error', 'Unable to process your subscription right now.')
+                ->withInput();
         }
     }
 }
