@@ -23,3 +23,7 @@ Route::get('/subscription', fn() => Auth::check() ? view('subscription') : back(
 Route::post('/subscription', [App\Http\Controllers\RegistrationController::class, 'subscribe'])->name('subscription.store');
 
 Route::post('/qr-scan', [App\Http\Controllers\QRScannerController::class, 'scan'])->name('qr.scan');
+
+Route::get('paymentMail', function () {
+    return view('Mailler.payment_submitted');
+})->name('paymentMail');
