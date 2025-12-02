@@ -270,7 +270,7 @@
         }
 
         .dark .pricing-card.first {
-            background-color: rgba(233, 234, 236, 0.6);
+            background-color: rgba(55, 65, 81, 0.6);
             color: #fff;
         }
 
