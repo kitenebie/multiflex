@@ -190,7 +190,7 @@
         }
 
         .pricing-card.first .summary {
-            color: #4b5563;
+            color: #181818FF;
             /* gray-600 */
         }
 
