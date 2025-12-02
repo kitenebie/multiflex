@@ -20,6 +20,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Enums\Width;
 use daacreators\CreatorsTicketing\TicketingPlugin; // Add this line
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 
 class AdminPanelProvider extends PanelProvider
@@ -43,8 +44,7 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([
-            ])
+            ->widgets([])
             ->plugins([
                 FilamentShieldPlugin::make(),
                 TicketingPlugin::make(),
@@ -67,8 +67,10 @@ class AdminPanelProvider extends PanelProvider
                 Action::make('logout')
                     ->label('Log out')
                     ->icon('heroicon-o-arrow-left-on-rectangle')
-                    ->action(function(){
+                    ->action(function () {
                         Auth::logout();
+                        session()->invalidate();
+                        session()->regenerateToken();
                         return redirect('/');
                     }),
             ])
