@@ -74,6 +74,7 @@ class AdminPanelProvider extends PanelProvider
                         return redirect('/');
                     }),
             ])
+            ->globalSearch(false)
             ->authMiddleware([
                 Authenticate::class,
             ]);
