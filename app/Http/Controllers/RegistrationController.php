@@ -90,7 +90,7 @@ class RegistrationController extends Controller
                 Auth::login($user);
                 Filament::auth()->login($user);
                 $user->update([
-                    'qr_code' => bcrypt($user->id . now()),
+                    'qr_code' => bcrypt($user->id . now()->format('c')),
                 ]);
                 $user->save();
                 if (Auth::user()->role === 'coach') {
