@@ -312,6 +312,9 @@
             color: #818cf8;
         }
 
+        .dark .pricing-card.first .price .amount {
+            color: #0F0F0FFF;
+        }
         .dark .pricing-card.first a {
             color: #818cf8;
             border-color: rgba(147, 197, 253, 0.4);

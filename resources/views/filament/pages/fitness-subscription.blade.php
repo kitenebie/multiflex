@@ -282,6 +282,10 @@
             color: #fff;
         }
 
+
+        .dark .pricing-card.first .price .amount {
+            color: #0F0F0FFF;
+        }
         .dark .pricing-card {
             background-color: #09090B;
             color: #fff;
