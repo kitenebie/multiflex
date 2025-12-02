@@ -134,7 +134,7 @@
         }
 
         .pricing-card.first {
-            background-color: FAFAFA;
+            background-color: #FAFAFA;
             border-color: rgba(55, 65, 81, 0.2);
             color: #1A1A1AFF;
         }
