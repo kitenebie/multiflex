@@ -90,22 +90,30 @@
         @endphp
         <div class="qr-grid">
             <div class="qr-column qr-code-section">
-                {{-- <h2 class="qr-title">Your QR Code</h2> --}}
                 <div class="qr-code-container">
-                    @if($activeSubscription)
-                    @php
-                        $secret = env('QR_SECRET', 'gms_secret_key_2024');
-                        $data = [
-                            'qr_code' => auth()->user()->qr_code,
-                            'timestamp' => time()
-                        ];
-                        $json = json_encode($data);
-                        $signature = hash('sha256', $json . $secret);
-                        $payload = base64_encode(json_encode(['data' => $json, 'signature' => $signature]));
-                    @endphp
-                    {!! QrCode::size(250)->generate($payload) !!}
+                    @if ($activeSubscription)
+                        @php
+                            $secret = env('QR_SECRET', 'gms_secret_key_2024');
+
+                            $data = [
+                                'qr_code' => auth()->user()->qr_code,
+                                'timestamp' => time(),
+                            ];
+
+                            $json = json_encode($data);
+                            $signature = hash('sha256', $json . $secret);
+
+                            $payload = base64_encode(
+                                json_encode([
+                                    'data' => $json,
+                                    'signature' => $signature,
+                                ]),
+                            );
+                        @endphp
+
+                        {!! QrCode::size(250)->generate($payload) !!}
                     @else
-                    {!! QrCode::size(250)->generate("This member has no active subscription") !!}
+                        {!! QrCode::size(250)->generate('This member has no active subscription') !!}
                     @endif
                 </div>
             </div>
