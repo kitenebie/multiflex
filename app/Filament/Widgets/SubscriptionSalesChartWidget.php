@@ -9,7 +9,7 @@ use Filament\Forms\Components\DatePicker;
 
 class SubscriptionSalesChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Subscription Sales by Fitness Offer';
+    protected ?string $heading = 'Subscription Sales by Fitness Offer';
 
     protected int | string | array $columnSpan = 'full';
 
