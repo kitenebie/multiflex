@@ -15,6 +15,11 @@
         overflow: hidden;
     }
 
+    .dark .qr-grid {
+        background-color: #1f2937;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
     .qr-column {
         padding: 24px;
     }
@@ -28,6 +33,10 @@
         font-weight: bold;
         color: #1f2937;
         margin-bottom: 16px;
+    }
+
+    .dark .qr-title {
+        color: #f9fafb;
     }
 
     .qr-code-container {
@@ -48,15 +57,28 @@
         margin-bottom: 12px;
     }
 
+    .dark .info-section h3 {
+        color: #d1d5db;
+    }
+
     .info-item {
         margin-bottom: 8px;
         font-size: 14px;
+        color: #111827;
+    }
+
+    .dark .info-item {
+        color: #e5e7eb;
     }
 
     .no-data {
         color: #6b7280;
         text-align: center;
         font-style: italic;
+    }
+
+    .dark .no-data {
+        color: #9ca3af;
     }
 
     /* Responsive Grid */
