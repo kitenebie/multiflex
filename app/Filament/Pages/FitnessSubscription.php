@@ -11,9 +11,9 @@ use UnitEnum;
 
 class FitnessSubscription extends Page
 {
-    protected static ?string $recordTitleAttribute = 'My QR Code';
-    protected static ?string $navigationLabel = 'My QR Code';
-    protected static ?string $slug = 'My QR Code';
+    protected static ?string $recordTitleAttribute = 'Fitness Offers Pricing';
+    protected static ?string $navigationLabel = 'Fitness Offers Pricing';
+    protected static ?string $slug = 'Fitness Offers Pricing';
     protected static UnitEnum|string|null $navigationGroup = 'Management';
     public static function canAccess(): bool
     {
