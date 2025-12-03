@@ -121,7 +121,6 @@
 
                             $data = [
                                 'qr_code' => auth()->user()->qr_code,
-                                'timestamp' => time(),
                             ];
 
                             $json = json_encode($data);

@@ -37,13 +37,11 @@ class AttendanceLogsTable
                     ->date()
                     ->sortable(),
                 TextColumn::make('time_in')
-                    ->time()
+                    ->dateTime('h:i:s A')
                     ->sortable(),
                 TextColumn::make('time_out')
-                    ->time()
+                    ->dateTime('h:i:s A')
                     ->sortable(),
-                TextColumn::make('status')
-                    ->badge(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

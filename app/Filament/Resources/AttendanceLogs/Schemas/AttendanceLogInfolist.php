@@ -16,12 +16,10 @@ class AttendanceLogInfolist
                 TextEntry::make('date')
                     ->date(),
                 TextEntry::make('time_in')
-                    ->time(),
+                    ->dateTime('h:i:s A'),
                 TextEntry::make('time_out')
-                    ->time()
+                    ->dateTime('h:i:s A')
                     ->placeholder('-'),
-                TextEntry::make('status')
-                    ->badge(),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

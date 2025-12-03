@@ -59,7 +59,7 @@ class QRScannerController extends Controller
                 return response()->json([
                     'success' => true,
                     'user' => $user,
-                    'attendance_at' => $attendance->time_in,
+                    'attendance_at' => $attendance->time_in?->format('h:i:s A') ?? $attendance->time_in,
                     'action' => 'time-in',
                 ]);
             }
@@ -81,7 +81,7 @@ class QRScannerController extends Controller
             return response()->json([
                 'success' => true,
                 'user' => $user,
-                'attendance_at' => $attendance->time_in,
+                'attendance_at' => $attendance->time_in?->format('h:i:s A') ?? $attendance->time_in,
                 'action' => 'time-in',
             ]);
         }
@@ -103,7 +103,7 @@ class QRScannerController extends Controller
                 return response()->json([
                     'success' => true,
                     'user' => $user,
-                    'attendance_at' => $attendance->time_out,
+                    'attendance_at' => $attendance->time_out?->format('h:i:s A') ?? $attendance->time_out,
                     'action' => 'time-out',
                 ]);
             }
@@ -115,7 +115,7 @@ class QRScannerController extends Controller
             return response()->json([
                 'success' => true,
                 'user' => $user,
-                'attendance_at' => $attendance->time_out,
+                'attendance_at' => $attendance->time_out?->format('h:i:s A') ?? $attendance->time_out,
                 'action' => 'time-out',
             ]);
         }
@@ -123,7 +123,7 @@ class QRScannerController extends Controller
         return response()->json([
             'success' => true,
             'user' => $user,
-            'attendance_at' => $attendance->time_in,
+            'attendance_at' => $attendance->time_in?->format('h:i:s A') ?? $attendance->time_in,
             'action' => 'time-in',
         ]);
     }
