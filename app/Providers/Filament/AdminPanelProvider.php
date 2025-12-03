@@ -48,7 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([])
             ->plugins([
-                FilamentShieldPlugin::make(),
+                // FilamentShieldPlugin::make(),
                 TicketingPlugin::make(),
                 FilamentLogViewer::make()
                     ->authorize(fn() => Auth::user()->role === 'admin')
