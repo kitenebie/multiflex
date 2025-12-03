@@ -17,8 +17,8 @@ class EditSubscription extends EditRecord
     {
         return [
             ViewAction::make(),
-            DeleteAction::make(),
-            ForceDeleteAction::make(),
+            DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
+            ForceDeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
             RestoreAction::make(),
         ];
     }

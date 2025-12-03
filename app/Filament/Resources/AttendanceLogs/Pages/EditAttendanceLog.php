@@ -15,7 +15,7 @@ class EditAttendanceLog extends EditRecord
     {
         return [
             ViewAction::make(),
-            DeleteAction::make(),
+            DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
         ];
     }
 }
