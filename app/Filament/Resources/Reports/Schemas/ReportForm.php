@@ -12,6 +12,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -34,7 +35,7 @@ class ReportForm
                         'attendance' => 'Attendance',
                         'subscription' => 'Subscription',
                         'revenue' => 'Revenue'
-                    ])
+                    ])->columnSpanFull()
                     ->required(),
 
                 // Date Range Selection
@@ -46,12 +47,9 @@ class ReportForm
                     ->label('End Date')
                     ->required()
                     ->after('start_date'),
-
-                Textarea::make('filters')
-                    ->default(null)
-                    ->columnSpanFull(),
                 TextInput::make('created_by')
-                    ->required()
+                    ->hidden()
+                    ->default(Auth::user()->id)
                     ->numeric(),
             ]);
     }
