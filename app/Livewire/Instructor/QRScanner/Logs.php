@@ -40,9 +40,9 @@ class Logs extends Component implements HasActions, HasSchemas, HasTable
                 TextColumn::make('user.name')
                     ->label('User'),
                 TextColumn::make('time_in')
-                    ->time(),
+                    ->dateTime('h:i:s A'),
                 TextColumn::make('time_out')
-                    ->time(),
+                    ->dateTime('h:i:s A'),
                 TextColumn::make('date')
                     ->date('M j, Y'),
             ])
