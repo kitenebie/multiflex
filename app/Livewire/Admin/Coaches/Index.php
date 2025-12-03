@@ -57,6 +57,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ->color(fn(string $state): string => match ($state) {
                         'warning' => 'pending',
                         'success' => 'active',
+                        default => 'gray',
                     }),
                 TextColumn::make('address')->searchable(),
                 TextColumn::make('age'),

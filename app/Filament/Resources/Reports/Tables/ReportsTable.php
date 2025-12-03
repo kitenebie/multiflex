@@ -39,9 +39,6 @@ class ReportsTable
                     ->formatStateUsing(function ($state) {
                         return $state ? basename($state) : 'No file generated';
                     }),
-                TextColumn::make('creator.name')
-                    ->label('Created By')
-                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
