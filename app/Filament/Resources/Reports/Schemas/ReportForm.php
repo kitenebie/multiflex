@@ -52,7 +52,7 @@ class ReportForm
             ]);
     }
 
-    public static function generateReport(string $type, string $startDate, string $endDate, int $createdBy): string
+    public static function generateReport(string $type, string $startDate, string $endDate): string
     {
         $data = [];
         $filename = '';

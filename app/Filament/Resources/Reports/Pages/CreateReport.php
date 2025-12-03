@@ -21,7 +21,6 @@ class CreateReport extends CreateRecord
                 $this->record->type,
                 $this->record->start_date?->format('Y-m-d'),
                 $this->record->end_date?->format('Y-m-d'),
-                auth()->id() ?? 1
             );
 
             if ($filePath) {
