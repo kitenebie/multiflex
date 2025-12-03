@@ -22,6 +22,8 @@ use daacreators\CreatorsTicketing\TicketingPlugin; // Add this line
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -48,6 +50,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentShieldPlugin::make(),
                 TicketingPlugin::make(),
+                FilamentLogViewer::make(),
             ])
             ->middleware([
                 EncryptCookies::class,
