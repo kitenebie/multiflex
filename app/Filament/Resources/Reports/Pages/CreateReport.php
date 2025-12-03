@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Reports\Pages;
 
 use App\Filament\Resources\Reports\ReportResource;
 use App\Filament\Resources\Reports\Schemas\ReportForm;
-use App\Models\Report;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,8 +13,8 @@ class CreateReport extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Set the created_by field
-        $data['created_by'] = Auth::id();
+        // Ensure created_by is set
+        $data['created_by'] = Auth::id() ?? 1; // Fallback to user ID 1 if not authenticated
 
         return $data;
     }

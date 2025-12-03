@@ -51,6 +51,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                 TextColumn::make('address')->searchable(),
                 TextColumn::make('age'),
                 TextColumn::make('gender'),
+                TextColumn::make('subscriptions.coach.name'),
             ])
             ->filters([
                 SelectFilter::make('gender')

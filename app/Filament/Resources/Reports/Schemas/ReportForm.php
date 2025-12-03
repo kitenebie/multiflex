@@ -47,10 +47,6 @@ class ReportForm
                     ->label('End Date')
                     ->required()
                     ->after('start_date'),
-                TextInput::make('created_by')
-                    ->hidden()
-                    ->default(Auth::user()->id)
-                    ->numeric(),
             ]);
     }
 
