@@ -111,10 +111,18 @@ class ReportsTable
                             Log::info("Created report record with ID: {$report->id}");
 
                             // Generate the report file
+                            $startDate = $data['start_date'] instanceof \Carbon\Carbon
+                                ? $data['start_date']->format('Y-m-d')
+                                : $data['start_date'];
+
+                            $endDate = $data['end_date'] instanceof \Carbon\Carbon
+                                ? $data['end_date']->format('Y-m-d')
+                                : $data['end_date'];
+
                             $filePath = self::generateReport(
                                 $data['type'],
-                                $data['start_date']->format('Y-m-d'),
-                                $data['end_date']->format('Y-m-d')
+                                $startDate,
+                                $endDate
                             );
 
                             Log::info("Generated filePath: '$filePath'");
