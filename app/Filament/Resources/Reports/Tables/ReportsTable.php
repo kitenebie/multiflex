@@ -11,6 +11,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use App\Models\AttendanceLog;
 use App\Models\FitnessOffer;
+use App\Models\Report;
 use App\Models\Subscription;
 use App\Models\SubscriptionTransaction;
 use App\Models\User;
@@ -22,7 +23,6 @@ use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\FacadesLog;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
@@ -99,30 +99,36 @@ class ReportsTable
                             ->label('End Date')
                             ->required()
                             ->after('start_date'),
-                    ])->action(function ($data) {
-
-                        Log::info("afterCreate running for report {$data->id}");
-
+                    ])->action(function (array $data) {
                         try {
-                            $filePath = $this->generateReport(
-                                $data->type,
-                                $data->start_date?->format('Y-m-d'),
-                                $data->end_date?->format('Y-m-d'),
+                            // Create the report record first
+                            $report = Report::create([
+                                'type' => $data['type'],
+                                'start_date' => $data['start_date'],
+                                'end_date' => $data['end_date'],
+                            ]);
+
+                            Log::info("Created report record with ID: {$report->id}");
+
+                            // Generate the report file
+                            $filePath = self::generateReport(
+                                $data['type'],
+                                $data['start_date']->format('Y-m-d'),
+                                $data['end_date']->format('Y-m-d')
                             );
 
                             Log::info("Generated filePath: '$filePath'");
 
                             if ($filePath && !empty($filePath)) {
-                                $data->file_path = $filePath;
-                                $data->save();
+                                $report->update(['file_path' => $filePath]);
 
                                 Log::info("✅ SAVED file_path to database: $filePath");
-                                Log::info("Record ID: {$data->id}, file_path in DB: {$data->fresh()->file_path}");
+                                Log::info("Record ID: {$report->id}, file_path in DB: {$report->fresh()->file_path}");
                             } else {
-                                Log::warning("⚠ No file path returned or empty");
+                                Log::warning("⚠ No file path returned or empty for report {$report->id}");
                             }
                         } catch (\Throwable $e) {
-                            Log::error("❌ afterCreate ERROR: " . $e->getMessage());
+                            Log::error("❌ Report generation failed: " . $e->getMessage());
                             Log::error("Stack trace: " . $e->getTraceAsString());
                         }
                     }),

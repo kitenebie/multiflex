@@ -50,7 +50,10 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentShieldPlugin::make(),
                 TicketingPlugin::make(),
-                FilamentLogViewer::make(),
+                FilamentLogViewer::make()
+                    ->authorize(fn() => Auth::user()->role === 'admin')
+                    ->navigationGroup('Developers Support')
+                    ->navigationSort(10),
             ])
             ->middleware([
                 EncryptCookies::class,
