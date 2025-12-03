@@ -59,8 +59,8 @@ class CoachHandlesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    // DeleteBulkAction::make(),
-                    // ForceDeleteBulkAction::make(),
+                    // DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
+                    // ForceDeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
                     // RestoreBulkAction::make(),
                 ]),
             ]);

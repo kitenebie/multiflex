@@ -62,7 +62,7 @@ class AttendanceLogsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
                 ]),
             ]);
     }

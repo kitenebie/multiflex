@@ -14,6 +14,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\FacadesLog;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
@@ -55,64 +56,88 @@ class ReportForm
         $data = [];
         $filename = '';
 
+        // Pick the report + filename
         switch ($type) {
             case 'fitness_offers':
                 $data = self::generateFitnessOffersReport();
-                $filename = 'fitness_offers_report_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+                $filename = 'fitness_offers_' . now()->format('Ymd_His') . '.xlsx';
                 break;
 
             case 'sales':
                 $data = self::generateSalesReport($startDate, $endDate);
-                $filename = 'sales_report_' . $startDate . '_to_' . $endDate . '.xlsx';
+                $filename = 'sales_' . $startDate . '_' . $endDate . '.xlsx';
                 break;
 
             case 'overall_sales':
                 $data = self::generateOverallSalesReport($startDate, $endDate);
-                $filename = 'overall_sales_report_' . $startDate . '_to_' . $endDate . '.xlsx';
+                $filename = 'overall_sales_' . $startDate . '_' . $endDate . '.xlsx';
                 break;
 
             case 'attendance':
                 $data = self::generateAttendanceReport($startDate, $endDate);
-                $filename = 'attendance_report_' . $startDate . '_to_' . $endDate . '.xlsx';
+                $filename = 'attendance_' . $startDate . '_' . $endDate . '.xlsx';
                 break;
 
             case 'subscription':
                 $data = self::generateSubscriptionReport($startDate, $endDate);
-                $filename = 'subscription_report_' . $startDate . '_to_' . $endDate . '.xlsx';
+                $filename = 'subscription_' . $startDate . '_' . $endDate . '.xlsx';
                 break;
 
             case 'revenue':
                 $data = self::generateRevenueReport($startDate, $endDate);
-                $filename = 'revenue_report_' . $startDate . '_to_' . $endDate . '.xlsx';
+                $filename = 'revenue_' . $startDate . '_' . $endDate . '.xlsx';
                 break;
+
+            default:
+                Log::warning("Unknown report type: {$type}");
+                return '';
         }
 
-        if (!empty($data)) {
-            $filePath = 'generated/' . $filename;
-            Excel::store(new class($data) implements FromArray, WithHeadings {
-                protected $data;
+        // If no data was produced → stop
+        if (empty($data)) {
+            Log::warning("Report has no data: {$type}");
+            return '';
+        }
 
-                public function __construct(array $data)
-                {
-                    $this->data = $data;
-                }
+        // Make sure the folder exists
+        Storage::disk('public')->makeDirectory('generated');
 
-                public function array(): array
-                {
-                    return $this->data;
-                }
+        // Now generate file path
+        $filePath = 'generated/' . $filename;
 
-                public function headings(): array
-                {
-                    return array_keys($this->data[0] ?? []);
-                }
-            }, $filePath, 'public');
+        try {
+            // Store Excel file
+            Excel::store(
+                new class($data) implements FromArray, WithHeadings {
+                    protected array $data;
 
+                    public function __construct(array $data)
+                    {
+                        $this->data = $data;
+                    }
+
+                    public function array(): array
+                    {
+                        return $this->data;
+                    }
+
+                    public function headings(): array
+                    {
+                        return array_keys($this->data[0] ?? []);
+                    }
+                },
+                $filePath,
+                'public'
+            );
+
+            Log::info("Excel generated OK → {$filePath}");
             return $filePath;
+        } catch (\Throwable $e) {
+            Log::error("Excel generation error: " . $e->getMessage());
+            return '';
         }
-
-        return '';
     }
+
 
     private static function generateFitnessOffersReport(): array
     {
