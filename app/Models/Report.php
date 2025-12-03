@@ -15,10 +15,14 @@ class Report extends Model
         'filters',
         'file_path',
         'created_by',
+        'start_date',
+        'end_date',
     ];
 
     protected $casts = [
         'filters' => 'array',
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     public function creator(): BelongsTo

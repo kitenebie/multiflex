@@ -48,6 +48,7 @@ class ReportResource extends Resource
     {
         return [
             'index' => ListReports::route('/'),
+            'create' => Pages\CreateReport::route('/create'),
         ];
     }
 }
