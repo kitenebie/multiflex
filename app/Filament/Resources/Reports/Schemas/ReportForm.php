@@ -87,30 +87,41 @@ class ReportForm
                 break;
         }
 
+        // Debug: Log data count
+        \Illuminate\Support\Facades\Log::info('Report type: ' . $type . ', Data count: ' . count($data));
+
         if (!empty($data)) {
             $filePath = 'generated/' . $filename;
-            Excel::store(new class($data) implements FromArray, WithHeadings {
-                protected $data;
 
-                public function __construct(array $data)
-                {
-                    $this->data = $data;
-                }
+            try {
+                Excel::store(new class($data) implements FromArray, WithHeadings {
+                    protected $data;
 
-                public function array(): array
-                {
-                    return $this->data;
-                }
+                    public function __construct(array $data)
+                    {
+                        $this->data = $data;
+                    }
 
-                public function headings(): array
-                {
-                    return array_keys($this->data[0] ?? []);
-                }
-            }, $filePath, 'public');
+                    public function array(): array
+                    {
+                        return $this->data;
+                    }
 
-            return $filePath;
+                    public function headings(): array
+                    {
+                        return array_keys($this->data[0] ?? []);
+                    }
+                }, $filePath, 'public');
+
+                \Illuminate\Support\Facades\Log::info('Excel file stored successfully: ' . $filePath);
+                return $filePath;
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Excel storage failed: ' . $e->getMessage());
+                return '';
+            }
         }
 
+        \Illuminate\Support\Facades\Log::warning('No data generated for report type: ' . $type);
         return '';
     }
 

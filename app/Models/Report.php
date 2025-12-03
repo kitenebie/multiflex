@@ -14,7 +14,6 @@ class Report extends Model
         'type',
         'filters',
         'file_path',
-        'created_by',
         'start_date',
         'end_date',
     ];
@@ -25,8 +24,4 @@ class Report extends Model
         'end_date' => 'date',
     ];
 
-    public function creator(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
 }
