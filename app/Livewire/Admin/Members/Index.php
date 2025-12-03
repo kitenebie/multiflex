@@ -47,7 +47,12 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('email')->searchable(),
                 TextColumn::make('role'),
-                TextColumn::make('status'),
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'warning' => 'pending',
+                        'success' => 'active',
+                    }),
                 TextColumn::make('address')->searchable(),
                 TextColumn::make('age'),
                 TextColumn::make('gender'),
