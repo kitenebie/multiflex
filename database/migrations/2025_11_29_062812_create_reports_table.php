@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['attendance', 'subscription', 'revenue']);
+            $table->enum('type', ['attendance', 'subscription', 'revenue', 'fitness_offers', 'sales', 'overall_sales']);
             $table->json('filters')->nullable();
             $table->string('file_path');
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');

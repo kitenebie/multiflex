@@ -16,11 +16,31 @@ class ReportsTable
         return $table
             ->columns([
                 TextColumn::make('type')
-                    ->badge(),
+                    ->badge()
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'fitness_offers' => 'Fitness Offers',
+                            'sales' => 'Sales',
+                            'overall_sales' => 'Overall Sales',
+                            'attendance' => 'Attendance',
+                            'subscription' => 'Subscription',
+                            'revenue' => 'Revenue',
+                            default => $state,
+                        };
+                    }),
+                TextColumn::make('start_date')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('end_date')
+                    ->date()
+                    ->sortable(),
                 TextColumn::make('file_path')
-                    ->searchable(),
-                TextColumn::make('created_by')
-                    ->numeric()
+                    ->label('File')
+                    ->formatStateUsing(function ($state) {
+                        return $state ? basename($state) : 'No file generated';
+                    }),
+                TextColumn::make('creator.name')
+                    ->label('Created By')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
