@@ -73,6 +73,7 @@ class ReportsTable
             ->recordActions([
                 Action::make('download')
                     ->label('Download Excel')
+                    ->button()
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->action(function ($record) {
@@ -153,9 +154,7 @@ class ReportsTable
                             Log::error("Stack trace: " . $e->getTraceAsString());
                         }
                     }),
-                BulkActionGroup::make([
-                    DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
-                ]),
+                BulkActionGroup::make([  DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
     }
 
@@ -247,7 +246,7 @@ class ReportsTable
             $data[] = [
                 'ID' => $offer->id,
                 'Name' => $offer->name,
-                'Description' => is_array($offer->description) ? implode(', ', $offer->description) : $offer->description,
+                'Description' => self::formatFitnessOfferDescription($offer->description),
                 'Price' => $offer->price,
                 'Duration (Days)' => $offer->duration_days,
                 'Upgrade To' => $offer->upgradeTo?->name ?? 'N/A',
@@ -259,6 +258,35 @@ class ReportsTable
         }
 
         return $data;
+    }
+
+    private static function formatFitnessOfferDescription($description): string
+    {
+        if (!is_array($description)) {
+            return (string) $description;
+        }
+
+        $formatted = [];
+
+        foreach ($description as $item) {
+            if (is_array($item) && isset($item['fitness_offered'])) {
+                $formatted[] = $item['fitness_offered'];
+
+                if (isset($item['includes']) && is_array($item['includes'])) {
+                    $includes = [];
+                    foreach ($item['includes'] as $include) {
+                        if (is_array($include) && isset($include['sub_fitness_offered'])) {
+                            $includes[] = $include['sub_fitness_offered'];
+                        }
+                    }
+                    if (!empty($includes)) {
+                        $formatted[] = 'Includes: ' . implode(', ', $includes);
+                    }
+                }
+            }
+        }
+
+        return implode(' | ', $formatted);
     }
 
     private static function generateSalesReport(string $startDate, string $endDate): array

@@ -53,9 +53,7 @@ class SchedulesTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
-                ]),
+                BulkActionGroup::make([  DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
     }
 }
