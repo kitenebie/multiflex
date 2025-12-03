@@ -14,31 +14,26 @@ class CreateReport extends CreateRecord
 
     protected function afterCreate(): void
     {
-        // Debug: Log that afterCreate is called
-        Log::info('afterCreate called for report ID: ' . $this->record->id . ', type: ' . $this->record->type);
+        Log::info("afterCreate running for report {$this->record->id}");
 
         try {
-            // Generate the report file after the record is created
             $filePath = ReportForm::generateReport(
                 $this->record->type,
                 $this->record->start_date?->format('Y-m-d'),
                 $this->record->end_date?->format('Y-m-d'),
-                Auth::id() ?? 1 // Use current user ID or fallback to 1
+                auth()->id() ?? 1
             );
 
-            // Debug: Log the file path
-            Log::info('Generated file path: ' . $filePath);
+            if ($filePath) {
+                $this->record->file_path = $filePath;
+                $this->record->save();
 
-            // Update the record with the generated file path
-            if ($filePath && !empty($filePath)) {
-                $this->record->update(['file_path' => $filePath]);
-                Log::info('Updated record with file_path: ' . $filePath);
+                Log::info("UPDATED file_path → $filePath");
             } else {
-                Log::warning('No file path generated for report type: ' . $this->record->type);
+                Log::warning("⚠ No file path returned");
             }
-        } catch (\Exception $e) {
-            Log::error('Error generating report: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
+        } catch (\Throwable $e) {
+            Log::error("❌ afterCreate ERROR: " . $e->getMessage());
         }
     }
 }
