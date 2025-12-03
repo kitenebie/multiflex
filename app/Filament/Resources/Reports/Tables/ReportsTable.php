@@ -71,8 +71,20 @@ class ReportsTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                Action::make('download')
+                    ->label('Download Excel')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->action(function ($record) {
+                        if (!$record->file_path || !Storage::disk('public')->exists($record->file_path)) {
+                            throw new \Exception('Report file not found. Please regenerate the report.');
+                        }
+
+                        return response()->download(storage_path('app/public/' . $record->file_path));
+                    })
+                    ->visible(function ($record) {
+                        return $record->file_path && Storage::disk('public')->exists($record->file_path);
+                    }),
             ])
             ->toolbarActions([
                 Action::make('Generate new report')
@@ -98,7 +110,8 @@ class ReportsTable
                         DatePicker::make('end_date')
                             ->label('End Date')
                             ->required()
-                            ->after('start_date'),
+                            ->after('start_date')
+                            ->minDate(fn (callable $get) => $get('start_date')),
                     ])->action(function (array $data) {
                         try {
                             // Create the report record first
