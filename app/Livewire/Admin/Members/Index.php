@@ -134,7 +134,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                             ->send();
                         $this->dispatch('refresh');
                     }),
-                DeleteAction::make()
+                DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark')
                     ->label('Decline')
                     ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
                     ->icon('heroicon-o-x-mark')

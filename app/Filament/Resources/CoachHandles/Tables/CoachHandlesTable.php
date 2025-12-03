@@ -55,7 +55,7 @@ class CoachHandlesTable
             ->recordActions([
                 // ViewAction::make(),
                 // EditAction::make(),
-                // DeleteAction::make(),
+                // DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

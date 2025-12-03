@@ -50,8 +50,6 @@ class ReportForm
                 Textarea::make('filters')
                     ->default(null)
                     ->columnSpanFull(),
-                TextInput::make('file_path')
-                    ->required(),
                 TextInput::make('created_by')
                     ->required()
                     ->numeric(),

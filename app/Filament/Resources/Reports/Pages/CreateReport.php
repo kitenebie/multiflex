@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Reports\Pages;
 
 use App\Filament\Resources\Reports\ReportResource;
 use App\Filament\Resources\Reports\Schemas\ReportForm;
+use App\Models\Report;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,18 +14,25 @@ class CreateReport extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Generate the report file
-        $filePath = ReportForm::generateReport(
-            $data['type'],
-            $data['start_date'],
-            $data['end_date'],
-            Auth::id()
-        );
-
-        // Update the data with the generated file path
-        $data['file_path'] = $filePath;
+        // Set the created_by field
         $data['created_by'] = Auth::id();
 
         return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        // Generate the report file after the record is created
+        $filePath = ReportForm::generateReport(
+            $this->record->type,
+            $this->record->start_date,
+            $this->record->end_date,
+            $this->record->created_by
+        );
+
+        // Update the record with the generated file path
+        if ($filePath) {
+            $this->record->update(['file_path' => $filePath]);
+        }
     }
 }

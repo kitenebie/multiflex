@@ -103,7 +103,7 @@ class SubscriptionsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
                 Action::make('approve')
                     ->label('Approve')
                     ->icon('heroicon-o-check-circle')
