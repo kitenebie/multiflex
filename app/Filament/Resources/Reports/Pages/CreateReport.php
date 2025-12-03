@@ -23,16 +23,20 @@ class CreateReport extends CreateRecord
                 $this->record->end_date?->format('Y-m-d'),
             );
 
-            if ($filePath) {
+            Log::info("Generated filePath: '$filePath'");
+
+            if ($filePath && !empty($filePath)) {
                 $this->record->file_path = $filePath;
                 $this->record->save();
 
-                Log::info("UPDATED file_path → $filePath");
+                Log::info("✅ SAVED file_path to database: $filePath");
+                Log::info("Record ID: {$this->record->id}, file_path in DB: {$this->record->fresh()->file_path}");
             } else {
-                Log::warning("⚠ No file path returned");
+                Log::warning("⚠ No file path returned or empty");
             }
         } catch (\Throwable $e) {
             Log::error("❌ afterCreate ERROR: " . $e->getMessage());
+            Log::error("Stack trace: " . $e->getTraceAsString());
         }
     }
 }
