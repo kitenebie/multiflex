@@ -49,7 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([])
             ->plugins([
                 // FilamentShieldPlugin::make(),
-                TicketingPlugin::make(),
+                // TicketingPlugin::make(),
                 // FilamentLogViewer::make()
                 //     ->authorize(fn() => Auth::user()->role === 'admin')
                 //     ->navigationGroup('Developers Support')
