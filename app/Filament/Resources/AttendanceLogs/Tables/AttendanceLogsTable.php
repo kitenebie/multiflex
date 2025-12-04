@@ -64,6 +64,7 @@ class AttendanceLogsTable implements HasFilamentTablePresets
                 EditAction::make()
                     ->label(' ')
                     ->button()
+                    ->color('warning')
                     ->tooltip('edit'),
             ])
             ->toolbarActions([
