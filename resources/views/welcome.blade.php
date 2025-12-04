@@ -136,7 +136,7 @@
                         <div class="row d-flex justify-content-end align-items-end">
                             <div class="col-xl-9 col-lg-9 col-md-10">
                                 <div class="hero__caption">
-                                    <h3 data-animation="fadeInLeft" data-delay="0.1s">Hi This is Multiflex</h3>
+                                    <h1dsd data-animation="fadeInLeft" data-delay="0.1s">Hi This is Multiflex</h1dsd>
                                     <h1 data-animation="fadeInLeft" data-delay="0.4s">Gym Trainer</h1>
                                     <a href="#offeredSection" class="border-btn hero-btn" data-animation="fadeInLeft"
                                         data-delay="0.8s">Courses Offered</a>
