@@ -57,11 +57,19 @@ class AttendanceLogsTable implements HasFilamentTablePresets
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()
+                    ->label(' ')
+                    ->button()->color('info')
+                    ->tooltip('view'),
+                EditAction::make()
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('edit'),
             ])
             ->toolbarActions([
-                ManageTablePresetAction::make()->label(' '),
+                ManageTablePresetAction::make()->label(' ')
+                    ->button()
+                    ->tooltip('manage table'),
                 BulkActionGroup::make([DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
     }
