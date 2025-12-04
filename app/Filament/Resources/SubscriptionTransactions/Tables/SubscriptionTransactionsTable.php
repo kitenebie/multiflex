@@ -12,9 +12,13 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
+use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
+use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class SubscriptionTransactionsTable
+class SubscriptionTransactionsTable implements HasFilamentTablePresets
 {
+    use WithFilamentTablePresets;
     public static function configure(Table $table): Table
     {
         
@@ -29,23 +33,23 @@ class SubscriptionTransactionsTable
             ->query($query)
             ->columns([
                 TextColumn::make('subscription.fitnessOffer.name')
-                    ->searchable(),
+                    ->searchable()->toggleable(),
                 TextColumn::make('amount')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()->toggleable(),
                 TextColumn::make('payment_method')
-                    ->searchable(),
+                    ->searchable()->toggleable(),
                 TextColumn::make('reference_no')
                     ->url(fn ($state) => '/app/subscriptions?search=' . $state)
                     ->color('primary')
-                    ->searchable(),
+                    ->searchable()->toggleable(),
                 TextColumn::make('paid_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()->toggleable(),
                 ImageColumn::make('proof_of_payment')
                     ->url(fn ($record) => asset('storage/' . $record->proof_of_payment))
                     ->openUrlInNewTab()
-                    ->size(70),
+                    ->size(70)->toggleable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -68,7 +72,23 @@ class SubscriptionTransactionsTable
                     ->openUrlInNewTab(),
             ])
             ->toolbarActions([
+                ManageTablePresetAction::make()->label(' '),
                 BulkActionGroup::make([  DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
+    }
+    
+    protected function getTableHeaderActions(): array
+    {
+        return $this->retrieveVisiblePresetActions();
+    }
+
+    protected function handleTableFilterUpdates(): void
+    {
+        $this->selectedFilamentPreset = null;
+    }
+
+    public function updatedTableSort(): void
+    {
+        $this->selectedFilamentPreset = null;
     }
 }

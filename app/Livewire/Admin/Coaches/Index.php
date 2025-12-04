@@ -27,9 +27,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\CoachHandle;
 use App\Services\UserApprovalMailService;
 use PhpParser\Node\Stmt\Label;
+use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
+use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
+use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class Index extends Component implements HasActions, HasSchemas, HasTable
+class Index extends Component implements HasActions, HasSchemas, HasTable, HasFilamentTablePresets
 {
+    use WithFilamentTablePresets;
     use InteractsWithActions;
     use InteractsWithSchemas;
     use InteractsWithTable;
@@ -49,19 +53,19 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
         return $table
             ->query($query)
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('email')->searchable(),
-                TextColumn::make('role'),
+                TextColumn::make('name')->searchable()->toggleable(),
+                TextColumn::make('email')->searchable()->toggleable(),
+                TextColumn::make('role')->toggleable(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'warning' => 'pending',
                         'success' => 'active',
                         default => 'gray',
-                    }),
-                TextColumn::make('address')->searchable(),
-                TextColumn::make('age'),
-                TextColumn::make('gender'),
+                    })->toggleable(),
+                TextColumn::make('address')->searchable()->toggleable(),
+                TextColumn::make('age')->toggleable(),
+                TextColumn::make('gender')->toggleable(),
             ])
             ->filters([
                 SelectFilter::make('gender')
@@ -94,6 +98,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         TextInput::make('email')->disabled(),
                         Select::make('role')->options(['coach' => 'Coach'])->disabled(),
                         Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->disabled(),
+                        Select::make('role')->options(['coach' => 'Coach', 'member' => 'Member'])->disabled(),
                         Textarea::make('address')->disabled(),
                         TextInput::make('age')->numeric()->disabled(),
                         Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
@@ -108,6 +113,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                         TextInput::make('name')->required(),
                         TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
                         Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive']),
+                        Select::make('role')->options(['coach' => 'Coach', 'member' => 'Member']),
                         Textarea::make('address'),
                         TextInput::make('age')->numeric(),
                         Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
@@ -147,6 +153,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
                     ->hidden(Auth::user()->role == 'coach')
             ])
             ->toolbarActions([
+                ManageTablePresetAction::make()->label(' '),
                 Action::make('create_coach')
                     ->hidden(Auth::user()->role == 'coach')
                     ->label('Create Coach')
@@ -178,5 +185,20 @@ class Index extends Component implements HasActions, HasSchemas, HasTable
     public function render()
     {
         return view('livewire.admin.coaches.index');
+    }
+    
+    protected function getTableHeaderActions(): array
+    {
+        return $this->retrieveVisiblePresetActions();
+    }
+
+    protected function handleTableFilterUpdates(): void
+    {
+        $this->selectedFilamentPreset = null;
+    }
+
+    public function updatedTableSort(): void
+    {
+        $this->selectedFilamentPreset = null;
     }
 }

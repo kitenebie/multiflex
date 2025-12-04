@@ -10,21 +10,23 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
+use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
+use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class AttendanceLogsTable
+class AttendanceLogsTable implements HasFilamentTablePresets
 {
+    use WithFilamentTablePresets;
     public static function configure(Table $table): Table
     {
-        $query =AttendanceLog::query();
-        if(Auth::user()->roles()->where('name', 'coach')->exists())
-        {
-            $query->whereHas('user.subscriptions', function($q) {
+        $query = AttendanceLog::query();
+        if (Auth::user()->roles()->where('name', 'coach')->exists()) {
+            $query->whereHas('user.subscriptions', function ($q) {
                 $q->where('coach_id', Auth::user()->id)->where('is_extendable', false);
             });
         }
-        if(Auth::user()->roles()->where('name', 'member')->exists())
-        {
-            $query->where('user_id', Auth::user()->id)->whereHas('user.subscriptions', function($q) {
+        if (Auth::user()->roles()->where('name', 'member')->exists()) {
+            $query->where('user_id', Auth::user()->id)->whereHas('user.subscriptions', function ($q) {
                 $q->where('is_extendable', false);
             });
         }
@@ -32,16 +34,16 @@ class AttendanceLogsTable
             ->query($query)
             ->columns([
                 TextColumn::make('user.name')
-                    ->searchable(),
+                    ->searchable()->toggleable(),
                 TextColumn::make('date')
                     ->date()
-                    ->sortable(),
+                    ->sortable()->toggleable(),
                 TextColumn::make('time_in')
                     ->dateTime('h:i:s A')
-                    ->sortable(),
+                    ->sortable()->toggleable(),
                 TextColumn::make('time_out')
                     ->dateTime('h:i:s A')
-                    ->sortable(),
+                    ->sortable()->toggleable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -59,7 +61,23 @@ class AttendanceLogsTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([  DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
+                ManageTablePresetAction::make()->label(' '),
+                BulkActionGroup::make([DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
+    }
+
+    protected function getTableHeaderActions(): array
+    {
+        return $this->retrieveVisiblePresetActions();
+    }
+
+    protected function handleTableFilterUpdates(): void
+    {
+        $this->selectedFilamentPreset = null;
+    }
+
+    public function updatedTableSort(): void
+    {
+        $this->selectedFilamentPreset = null;
     }
 }

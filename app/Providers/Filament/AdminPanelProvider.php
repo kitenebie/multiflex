@@ -23,6 +23,7 @@ use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
+use Ymsoft\FilamentTablePresets\FilamentTablePresetPlugin;
 
 
 class AdminPanelProvider extends PanelProvider
@@ -54,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
                 //     ->authorize(fn() => Auth::user()->role === 'admin')
                 //     ->navigationGroup('Developers Support')
                 //     ->navigationSort(10),
+            FilamentTablePresetPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -8,18 +8,22 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
+use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
+use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class FitnessOffersTable
+class FitnessOffersTable implements HasFilamentTablePresets
 {
+    use WithFilamentTablePresets;
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()->toggleable(),
                 TextColumn::make('price')
                     ->money('PHP')
-                    ->sortable(),
+                    ->sortable()->toggleable(),
                 TextColumn::make('description')
                     ->formatStateUsing(function ($state) {
 
@@ -52,10 +56,10 @@ class FitnessOffersTable
 
                         return $renderItems($state);
                     })
-                    ->html(),
+                    ->html()->toggleable(),
                 TextColumn::make('duration_days')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()->toggleable(),
                 // TextColumn::make('upgrade_to')
                 //     ->numeric()
                 //     ->sortable(),
@@ -76,7 +80,23 @@ class FitnessOffersTable
                 EditAction::make(),
             ])
             ->toolbarActions([
+                ManageTablePresetAction::make()->label(' '),
                 BulkActionGroup::make([  DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
+    }
+    
+    protected function getTableHeaderActions(): array
+    {
+        return $this->retrieveVisiblePresetActions();
+    }
+
+    protected function handleTableFilterUpdates(): void
+    {
+        $this->selectedFilamentPreset = null;
+    }
+
+    public function updatedTableSort(): void
+    {
+        $this->selectedFilamentPreset = null;
     }
 }
