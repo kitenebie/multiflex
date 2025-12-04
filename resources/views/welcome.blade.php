@@ -133,7 +133,7 @@
                 <!-- Single Slider -->
                 <div class="single-slider slider-height d-flex align-items-center">
                     <div class="container">
-                        <div class="row d-flex justify-content-end align-items-center">
+                        <div class="row d-flex justify-content-end align-items-end">
                             <div class="col-xl-9 col-lg-9 col-md-10">
                                 <div class="hero__caption">
                                     <span data-animation="fadeInLeft" data-delay="0.1s">Hi This is Multiflex</span>
