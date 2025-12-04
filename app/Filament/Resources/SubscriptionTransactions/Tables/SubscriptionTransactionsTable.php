@@ -69,7 +69,7 @@ class SubscriptionTransactionsTable implements HasFilamentTablePresets
                     ->tooltip('view')
                     ->color('warning'),
                 Action::make('view_proof')
-                    ->icon('heroicon-o-bacnknotes')
+                    ->icon('heroicon-o-bancknotes')
                     ->label(' ')
                     ->button()
                     ->tooltip('view proof of payment')
