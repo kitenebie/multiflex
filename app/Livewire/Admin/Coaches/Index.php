@@ -87,13 +87,13 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ]),
             ])
             ->recordActions([
-
                 Action::make('view')
                     ->hidden(Auth::user()->role == 'member')
                     ->label(' ')
                     ->button()
+                    ->tooltip('view')
                     ->icon('heroicon-o-eye')
-                    ->color('gray')
+                    ->color('info')
                     ->form([
                         TextInput::make('name')->disabled(),
                         TextInput::make('email')->disabled(),
@@ -155,11 +155,14 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                 DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark')
                     ->label(' ')
                     ->button()
+                    ->tooltip('decline')
                     ->icon('heroicon-o-x-mark')
                     ->hidden(Auth::user()->role == 'coach')
             ])
             ->toolbarActions([
-                ManageTablePresetAction::make()->label(' '),
+                ManageTablePresetAction::make()->label(' ')
+                    ->button()
+                    ->tooltip('manage table'),
                 Action::make('create_coach')
                     ->hidden(Auth::user()->role == 'coach')
                     ->label('Create Coach')

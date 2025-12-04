@@ -78,9 +78,11 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
             ])
             ->recordActions([
                 Action::make('view')
-                    ->label('View')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('approve')
                     ->icon('heroicon-o-eye')
-                    ->color('gray')
+                    ->color('info')
                     ->form([
                         Grid::make(2)
                             ->schema([
@@ -101,8 +103,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->fillForm(fn(User $record) => $record->toArray()),
                 Action::make('edit')
                     ->hidden(Auth::user()->role == 'coach')
-                    ->label('Edit')
-                    ->icon('heroicon-o-pencil')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('edit')->icon('heroicon-o-pencil')
                     ->color('warning')
                     ->form([
                         Grid::make(2)
@@ -129,8 +132,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     }),
                 Action::make('approved')
                     ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
-                    ->label('Approve')
-                    ->color('success')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('approve')->color('success')
                     ->requiresConfirmation()
                     ->icon('heroicon-o-users')
                     ->color('success')
@@ -146,12 +150,15 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                         $this->dispatch('refresh');
                     }),
                 DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark')
-                    ->label('Decline')
-                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('decilene')                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
                     ->icon('heroicon-o-x-mark')
             ])
             ->toolbarActions([
-                ManageTablePresetAction::make()->label(' '),
+                ManageTablePresetAction::make()->label(' ')
+                    ->button()
+                    ->tooltip('manage table'),
                 Action::make('create_member')
                     ->label('Create Member')
                     ->hidden(Auth::user()->role == 'coach')
@@ -187,7 +194,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
     {
         return view('livewire.admin.members.index');
     }
-    
+
     protected function getTableHeaderActions(): array
     {
         return $this->retrieveVisiblePresetActions();

@@ -63,16 +63,24 @@ class SubscriptionTransactionsTable implements HasFilamentTablePresets
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('view')
+                    ->color('warning'),
                 Action::make('view_proof')
-                    ->label('View Proof')
                     ->icon('heroicon-o-eye')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('view proof of payment')
                     ->color('info')
                     ->url(fn ($record) => asset('storage/' . $record->proof_of_payment))
                     ->openUrlInNewTab(),
             ])
             ->toolbarActions([
-                ManageTablePresetAction::make()->label(' '),
+                ManageTablePresetAction::make()->label(' ')
+                    ->button()
+                    ->tooltip('manage table'),
                 BulkActionGroup::make([  DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
     }
