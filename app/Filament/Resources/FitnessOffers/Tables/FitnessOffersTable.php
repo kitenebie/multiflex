@@ -83,6 +83,7 @@ class FitnessOffersTable implements HasFilamentTablePresets
                     ->color('info'),
                 EditAction::make()
                     ->label(' ')
+                    ->color('warning')
                     ->button()
                     ->tooltip('edit'),
             ])

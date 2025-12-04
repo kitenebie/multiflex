@@ -24,9 +24,13 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
+use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
+use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class SubscriptionsTable
+class SubscriptionsTable implements HasFilamentTablePresets
 {
+    use WithFilamentTablePresets;
     public static function configure(Table $table): Table
     {
         $query = Subscription::query();
@@ -101,11 +105,25 @@ class SubscriptionsTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
+                ViewAction::make()
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('view')
+                    ->color('info'),
+                EditAction::make()
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('edit')
+                    ->color('warning'),
+                DeleteAction::make()
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('archive')
+                    ->color('danger')->icon('heroicon-o-archive-box-x-mark'),
                 Action::make('approve')
-                    ->label('Approve')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('approve')
                     ->icon('heroicon-o-check-circle')
                     ->hidden(fn ($record) => (Auth::user()->role != 'admin' || $record->status === 'active' || $record->status === 'rejected' || $record->status === 'expired' || $record->status === 'inactive'))
                     ->color('success')
@@ -144,6 +162,9 @@ class SubscriptionsTable
                     }),
             ])
             ->toolbarActions([
+                ManageTablePresetAction::make()->label(' ')
+                    ->button()
+                    ->tooltip('manage table'),
                 Action::make('sub')
                     ->hidden(fn () => Auth::user()->role != 'member')
                     ->label('Add Subscription')
@@ -152,9 +173,22 @@ class SubscriptionsTable
 
                 BulkActionGroup::make([
                     DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
-                    ForceDeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),
-                    RestoreBulkAction::make(),
                 ]),
             ]);
+    }
+    
+    protected function getTableHeaderActions(): array
+    {
+        return $this->retrieveVisiblePresetActions();
+    }
+
+    protected function handleTableFilterUpdates(): void
+    {
+        $this->selectedFilamentPreset = null;
+    }
+
+    public function updatedTableSort(): void
+    {
+        $this->selectedFilamentPreset = null;
     }
 }

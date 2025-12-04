@@ -80,7 +80,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                 Action::make('view')
                     ->label(' ')
                     ->button()
-                    ->tooltip('approve')
+                    ->tooltip('view')
                     ->icon('heroicon-o-eye')
                     ->color('info')
                     ->form([
