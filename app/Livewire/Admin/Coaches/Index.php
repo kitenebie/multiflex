@@ -90,7 +90,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
 
                 Action::make('view')
                     ->hidden(Auth::user()->role == 'member')
-                    ->label('View')
+                    ->label(' ')
+                    ->button()
                     ->icon('heroicon-o-eye')
                     ->color('gray')
                     ->form([
@@ -106,7 +107,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->fillForm(fn(User $record) => $record->toArray()),
                 Action::make('edit')
                     ->hidden(Auth::user()->role == 'member')
-                    ->label('Edit')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('Edit')
                     ->icon('heroicon-o-pencil')
                     ->color('warning')
                     ->form([
@@ -131,7 +134,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     }),
                 Action::make('approved')
                     ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status !== 'pending')
-                    ->label('Approve')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('approve')
                     ->color('success')
                     ->requiresConfirmation()
                     ->icon('heroicon-o-users')
@@ -148,7 +153,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                         $this->dispatch('refresh');
                     }),
                 DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark')
-                    ->label('Decline')
+                    ->label(' ')
+                    ->button()
                     ->icon('heroicon-o-x-mark')
                     ->hidden(Auth::user()->role == 'coach')
             ])
