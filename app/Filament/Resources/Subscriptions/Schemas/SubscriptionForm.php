@@ -7,7 +7,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionTransaction;
 use App\Models\FitnessOffer;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -151,7 +151,7 @@ class SubscriptionForm
                             FileUpload::make('proof_of_payment')
                                 ->image()->columnSpanFull()
                                 ->directory('proofs'),
-                            DatePicker::make('paid_at')
+                            DateTimePicker::make('paid_at')
                                 ->default(now())->hidden()
                                 ->required(),
                         ])->columns(2)
