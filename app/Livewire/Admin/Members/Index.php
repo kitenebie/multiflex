@@ -172,62 +172,69 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->schema([
                         // User fields
                         Grid::make()->columnSpanFull()->schema([
-                        TextInput::make('name')->required(),
-                        TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
-                        TextInput::make('password')->password()->revealable()->required(),
-                        TextInput::make('password_confirmation')->password()->revealable()->same('password')->required(),
-                        TextInput::make('address'),
-                        TextInput::make('age')
-                            ->default(18)
-                            ->minValue(18)->numeric(),
-                        Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
+                            TextInput::make('name')->required(),
+                            TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
+                            TextInput::make('password')->password()->revealable()->required(),
+                            TextInput::make('password_confirmation')->password()->revealable()->same('password')->required(),
+                            TextInput::make('address'),
+                            TextInput::make('age')
+                                ->default(18)
+                                ->minValue(18)->numeric(),
+                            Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
 
-                        // Subscription fields
-                        Select::make('fitness_offer_id')
-                            ->label('Fitness Offer')
-                            ->options(FitnessOffer::pluck('name', 'id'))
-                            ->required()
-                            ->live()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                $offer = FitnessOffer::find($state);
-                                if ($offer) {
-                                    $set('amount', $offer->price);
-                                    $set('end_date', now()->addDays($offer->duration_days)->toDateString());
-                                }
-                            }),
-                        TextInput::make('months')
-                            ->label('Months')
-                            ->numeric()
-                            ->default(0)
-                            ->minValue(1)
-                            ->maxValue(120)
-                            ->required()
-                            ->live()
-                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                                $startDate = $get('start_date');
-                                if ($startDate && $state) {
-                                    $set('end_date', \Carbon\Carbon::parse($startDate)->addMonths($state)->toDateString());
-                                }
-                            }),
-                        Select::make('coach_id')
-                            ->label('Coach')
-                            ->options(User::where('role', 'coach')->pluck('name', 'id'))
-                            ->required(),
-                        DateTimePicker::make('start_date')->default(now())->required(),
-                        DateTimePicker::make('end_date')->required(),
-                        // Transaction fields
-                        TextInput::make('amount')->hidden()->numeric()->required()->prefix('PHP'),
-                        Select::make('payment_method')
-                            ->options([
-                                'Cash' => 'Cash',
-                                'upload' => 'Upload',
-                                'others' => 'Others',
-                            ])
-                            ->required(),
-                        TextInput::make('reference_no'),
-                        FileUpload::make('proof_of_payment')->image()->directory('proofs')->columnSpanFull(),
-                        DateTimePicker::make('paid_at')->default(now())->required()->hidden(),
-                    ])->columns(2)
+                            // Subscription fields
+                            Select::make('fitness_offer_id')
+                                ->label('Fitness Offer')
+                                ->options(FitnessOffer::pluck('name', 'id'))
+                                ->required()
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    $offer = FitnessOffer::find($state);
+                                    if ($offer) {
+                                        $set('amount', $offer->price);
+                                        $set('end_date', now()->addDays($offer->duration_days)->toDateString());
+                                    }
+                                }),
+                            TextInput::make('months')
+                                ->label('Months')
+                                ->numeric()
+                                ->default(0)
+                                ->minValue(1)
+                                ->maxValue(120)
+                                ->required()
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                    $startDate = $get('start_date');
+                                    if ($startDate && $state) {
+                                        $set('end_date', \Carbon\Carbon::parse($startDate)->addMonths($state)->toDateString());
+                                    }
+                                }),
+                            Select::make('coach_id')
+                                ->label('Coach')
+                                ->options(User::where('role', 'coach')->pluck('name', 'id'))
+                                ->required(),
+                            DateTimePicker::make('start_date')->default(now())->required()->live()
+                                ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                    $months = $get('months');
+                                    if ($state && $months) {
+                                        $set('end_date', \Carbon\Carbon::parse($state)->addMonths($months)->toDateString());
+                                    }
+                                }),
+                            DateTimePicker::make('end_date')->required()
+                                ->disabled(),
+                            // Transaction fields
+                            TextInput::make('amount')->hidden()->numeric()->required()->prefix('PHP'),
+                            Select::make('payment_method')
+                                ->options([
+                                    'Cash' => 'Cash',
+                                    'upload' => 'Upload',
+                                    'others' => 'Others',
+                                ])
+                                ->required(),
+                            TextInput::make('reference_no'),
+                            FileUpload::make('proof_of_payment')->image()->directory('proofs')->columnSpanFull(),
+                            DateTimePicker::make('paid_at')->default(now())->required()->hidden(),
+                        ])->columns(2)
                     ])
                     ->action(function (array $data) {
                         $userData = [
@@ -242,6 +249,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                         ];
                         $user = User::create($userData);
                         $user->update(['qr_code' => bcrypt($user->id)]);
+
+                        unset($data['months']); // Remove months as it's not a column, used only for calculation
 
                         $subscription = Subscription::create([
                             'user_id' => $user->id,
