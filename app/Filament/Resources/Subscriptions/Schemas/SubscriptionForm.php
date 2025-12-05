@@ -123,6 +123,7 @@ class SubscriptionForm
                                 ->default(now())
                                 ->required()
                                 ->live()
+                                ->native(false)
                                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                     $months = $get('months');
                                     if ($state && $months) {
@@ -130,6 +131,7 @@ class SubscriptionForm
                                     }
                                 }),
                             DatePicker::make('end_date')
+                                ->native(false)
                                 ->displayFormat('d F Y')
                                 ->disabled()
 
