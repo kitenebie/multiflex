@@ -85,6 +85,9 @@ class SubscriptionsTable
                 TextColumn::make('end_date')
                     ->date()
                     ->sortable(),
+                TextColumn::make('subscriptionTransactions.active_at')
+                    ->date()
+                    ->sortable(),
                 // IconColumn::make('is_extendable')
                 //     ->boolean(),
                 // TextColumn::make('created_at')
@@ -138,6 +141,7 @@ class SubscriptionsTable
                             'status' => 'active',
                             'coach_id' => $data['coach_id']
                         ]);
+                        $record->subscriptionTransactions()->update(['active_at' => now()]);
                         CoachHandle::create([
                             'coach_id' => $data['coach_id'],
                             'member_id' => $record->user_id,
