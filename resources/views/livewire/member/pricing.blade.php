@@ -38,8 +38,7 @@
                 </ul>
                 @if (auth()->check() && auth()->user()->role == 'member' && auth()->user()->status == 'active')
                     @if (auth()->user()->subscriptions()->where('end_date', '>', now())->exists())
-                        <a href="#">You're
-                            already Subscribed</a>
+                        <a href="#">There's active Subscription</a>
                     @else
                         <a href="/subscription?offer_id={{ $offer->id }}">Get started today</a>
                     @endif
