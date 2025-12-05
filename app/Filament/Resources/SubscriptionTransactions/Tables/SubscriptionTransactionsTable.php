@@ -46,9 +46,12 @@ class SubscriptionTransactionsTable
                 TextColumn::make('payment_method')
                     ->searchable()->toggleable(),
                 TextColumn::make('reference_no')
+                ->hidden(fn() => Auth::user()->role === 'member')
                     ->url(fn ($state) => '/app/subscriptions?search=' . $state)
                     ->color('primary')
                     ->searchable()->toggleable(),
+                TextColumn::make('reference_no')
+                    ->searchable()->toggleable()->hidden(fn() => Auth::user()->role === 'admin'),
                 TextColumn::make('paid_at')
                     ->dateTime()
                     ->sortable()->toggleable(),
