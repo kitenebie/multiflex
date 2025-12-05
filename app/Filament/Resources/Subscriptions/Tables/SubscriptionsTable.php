@@ -138,6 +138,7 @@ class SubscriptionsTable
                             'status' => 'active',
                             'coach_id' => $data['coach_id']
                         ]);
+                        $record->subscriptionTransactions()->update(['active_at' => now()]);
                         CoachHandle::create([
                             'coach_id' => $data['coach_id'],
                             'member_id' => $record->user_id,

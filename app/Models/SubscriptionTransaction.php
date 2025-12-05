@@ -17,11 +17,13 @@ class SubscriptionTransaction extends Model
         'reference_no',
         'paid_at',
         'proof_of_payment',
+        'active_at',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
         'paid_at' => 'datetime',
+        'active_at' => 'datetime',
     ];
 
     public function subscription(): BelongsTo
