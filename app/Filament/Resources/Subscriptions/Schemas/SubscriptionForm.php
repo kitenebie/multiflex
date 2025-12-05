@@ -120,9 +120,17 @@ class SubscriptionForm
                                 ->required(),
                             DateTimePicker::make('start_date')
                                 ->default(now())
-                                ->required(),
+                                ->required()
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                    $months = $get('months');
+                                    if ($state && $months) {
+                                        $set('end_date', \Carbon\Carbon::parse($state)->addMonths($months)->toDateString());
+                                    }
+                                }),
                             DateTimePicker::make('end_date')
                                 ->disabled()
+                                
                                 ->required(),
                             // Transaction fields
                             TextInput::make('amount')
