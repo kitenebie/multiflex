@@ -7,7 +7,7 @@ use App\Models\Subscription;
 use App\Models\SubscriptionTransaction;
 use App\Models\FitnessOffer;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -118,7 +118,7 @@ class SubscriptionForm
                                 ->label('Coach')
                                 ->options(User::where('role', 'coach')->pluck('name', 'id'))
                                 ->required(),
-                            DateTimePicker::make('start_date')
+                            DatePicker::make('start_date')
                                 ->displayFormat('d F Y')
                                 ->default(now())
                                 ->required()
@@ -129,7 +129,7 @@ class SubscriptionForm
                                         $set('end_date', \Carbon\Carbon::parse($state)->addMonths($months)->toDateString());
                                     }
                                 }),
-                            DateTimePicker::make('end_date')
+                            DatePicker::make('end_date')
                                 ->displayFormat('d F Y')
                                 ->disabled()
 
@@ -151,7 +151,7 @@ class SubscriptionForm
                             FileUpload::make('proof_of_payment')
                                 ->image()->columnSpanFull()
                                 ->directory('proofs'),
-                            DateTimePicker::make('paid_at')
+                            DatePicker::make('paid_at')
                                 ->default(now())->hidden()
                                 ->required(),
                         ])->columns(2)
