@@ -33,6 +33,7 @@ class ReportsTable
     public static function configure(Table $table): Table
     {
         return $table
+        ->query(Report::query()->orderBy('id', 'desc'))
             ->columns([
                 TextColumn::make('type')
                     ->badge()
