@@ -7,6 +7,7 @@ use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -20,7 +21,11 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Subscription;
+use App\Models\SubscriptionTransaction;
+use App\Models\FitnessOffer;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
@@ -83,7 +88,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->tooltip('view')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->form([
+                    ->schema([
                         Grid::make(2)
                             ->schema([
                                 TextInput::make('name')->disabled(),
@@ -165,11 +170,94 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->icon('heroicon-o-plus')
                     ->color('primary')
                     ->form([
+                        // User fields
+                        TextInput::make('name')->required(),
+                        TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
+                        TextInput::make('password')->password()->revealable()->required(),
+                        TextInput::make('password_confirmation')->password()->revealable()->same('password')->required(),
+                        TextInput::make('address'),
+                        TextInput::make('age')->numeric(),
+                        Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
+
+                        // Subscription fields
+                        Select::make('fitness_offer_id')
+                            ->label('Fitness Offer')
+                            ->options(FitnessOffer::pluck('name', 'id'))
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                $offer = FitnessOffer::find($state);
+                                if ($offer) {
+                                    $set('amount', $offer->price);
+                                    $set('end_date', now()->addDays($offer->duration_days)->toDateString());
+                                }
+                            }),
+                        TextInput::make('months')
+                            ->label('Months')
+                            ->numeric()
+                            ->default(1)
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                $startDate = $get('start_date');
+                                if ($startDate && $state) {
+                                    $set('end_date', \Carbon\Carbon::parse($startDate)->addMonths($state)->toDateString());
+                                }
+                            }),
+                        Select::make('coach_id')
+                            ->label('Coach')
+                            ->options(User::where('role', 'coach')->pluck('name', 'id'))
+                            ->required(),
+                        DateTimePicker::make('start_date')->default(now())->required(),
+                        DateTimePicker::make('end_date')->required(),
+                        Toggle::make('is_extendable')->default(true),
+
+                        // Transaction fields
+                        TextInput::make('amount')->hidden()->numeric()->required()->prefix('PHP'),
+                        Select::make('payment_method')
+                            ->options([
+                                'Cash' => 'Cash',
+                                'upload' => 'Upload',
+                                'others' => 'Others',
+                            ])
+                            ->required(),
+                        TextInput::make('reference_no'),
+                        FileUpload::make('proof_of_payment')->image()->directory('proofs'),
+                        DateTimePicker::make('paid_at')->default(now())->required()->hidden(),
                     ])
                     ->action(function (array $data) {
-                        $data['password'] = bcrypt($data['password']);
-                        $user = User::create($data);
+                        $userData = [
+                            'name' => $data['name'],
+                            'email' => $data['email'],
+                            'password' => Hash::make($data['password']),
+                            'role' => 'member',
+                            'status' => 'active',
+                            'address' => $data['address'] ?? null,
+                            'age' => $data['age'] ?? null,
+                            'gender' => $data['gender'] ?? null,
+                        ];
+                        $user = User::create($userData);
                         $user->update(['qr_code' => bcrypt($user->id)]);
+
+                        $subscription = Subscription::create([
+                            'user_id' => $user->id,
+                            'fitness_offer_id' => $data['fitness_offer_id'],
+                            'coach_id' => $data['coach_id'],
+                            'status' => 'active',
+                            'start_date' => $data['start_date'],
+                            'end_date' => $data['end_date'],
+                            'is_extendable' => $data['is_extendable'] ?? true,
+                        ]);
+
+                        SubscriptionTransaction::create([
+                            'subscription_id' => $subscription->id,
+                            'amount' => $data['amount'],
+                            'payment_method' => $data['payment_method'],
+                            'reference_no' => $data['reference_no'] ?? null,
+                            'paid_at' => $data['paid_at'],
+                            'proof_of_payment' => $data['proof_of_payment'] ?? null,
+                        ]);
+
                         $this->dispatch('refresh');
                     }),
 
