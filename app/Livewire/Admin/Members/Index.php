@@ -171,6 +171,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->color('primary')
                     ->schema([
                         // User fields
+                        Grid::make()->columnSpanFull()->schema([
                         TextInput::make('name')->required(),
                         TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
                         TextInput::make('password')->password()->revealable()->required(),
@@ -222,8 +223,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                             ])
                             ->required(),
                         TextInput::make('reference_no'),
-                        FileUpload::make('proof_of_payment')->image()->directory('proofs'),
+                        FileUpload::make('proof_of_payment')->image()->directory('proofs')->columnSpanFull(),
                         DateTimePicker::make('paid_at')->default(now())->required()->hidden(),
+                    ])->columns(2)
                     ])
                     ->action(function (array $data) {
                         $userData = [
