@@ -119,6 +119,7 @@ class SubscriptionForm
                                 ->options(User::where('role', 'coach')->pluck('name', 'id'))
                                 ->required(),
                             DateTimePicker::make('start_date')
+                                ->displayFormat('d F Y')
                                 ->default(now())
                                 ->required()
                                 ->live()
@@ -129,8 +130,9 @@ class SubscriptionForm
                                     }
                                 }),
                             DateTimePicker::make('end_date')
+                                ->displayFormat('d F Y')
                                 ->disabled()
-                                
+
                                 ->required(),
                             // Transaction fields
                             TextInput::make('amount')
