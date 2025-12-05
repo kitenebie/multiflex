@@ -214,6 +214,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 ->options(User::where('role', 'coach')->pluck('name', 'id'))
                                 ->required(),
                             DateTimePicker::make('start_date')->default(now())->required()->live()
+                                ->displayFormat('d F Y')
                                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                     $months = $get('months');
                                     if ($state && $months) {
@@ -221,6 +222,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                     }
                                 }),
                             DateTimePicker::make('end_date')->required()
+                                ->displayFormat('d F Y')
                                 ->disabled(),
                             // Transaction fields
                             TextInput::make('amount')->hidden()->numeric()->required()->prefix('PHP'),
