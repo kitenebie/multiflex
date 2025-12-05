@@ -177,7 +177,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                         TextInput::make('password')->password()->revealable()->required(),
                         TextInput::make('password_confirmation')->password()->revealable()->same('password')->required(),
                         TextInput::make('address'),
-                        TextInput::make('age')->numeric(),
+                        TextInput::make('age')
+                            ->default(18)
+                            ->minValue(18)->numeric(),
                         Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
 
                         // Subscription fields
