@@ -88,7 +88,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->tooltip('view')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->form([
+                    ->schema([
                         Grid::make(2)
                             ->schema([
                                 TextInput::make('name')->disabled(),
@@ -192,6 +192,18 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                     $set('end_date', now()->addDays($offer->duration_days)->toDateString());
                                 }
                             }),
+                        TextInput::make('months')
+                            ->label('Months')
+                            ->numeric()
+                            ->default(1)
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                $startDate = $get('start_date');
+                                if ($startDate && $state) {
+                                    $set('end_date', \Carbon\Carbon::parse($startDate)->addMonths($state)->toDateString());
+                                }
+                            }),
                         Select::make('coach_id')
                             ->label('Coach')
                             ->options(User::where('role', 'coach')->pluck('name', 'id'))
@@ -201,7 +213,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                         Toggle::make('is_extendable')->default(true),
 
                         // Transaction fields
-                        TextInput::make('amount')->numeric()->required()->prefix('$'),
+                        TextInput::make('amount')->hidden()->numeric()->required()->prefix('PHP'),
                         Select::make('payment_method')
                             ->options([
                                 'Cash' => 'Cash',
@@ -211,7 +223,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                             ->required(),
                         TextInput::make('reference_no'),
                         FileUpload::make('proof_of_payment')->image()->directory('proofs'),
-                        DateTimePicker::make('paid_at')->default(now())->required(),
+                        DateTimePicker::make('paid_at')->default(now())->required()->hidden(),
                     ])
                     ->action(function (array $data) {
                         $userData = [
