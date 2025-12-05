@@ -169,7 +169,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->hidden(Auth::user()->role == 'coach')
                     ->icon('heroicon-o-plus')
                     ->color('primary')
-                    ->form([
+                    ->schema([
                         // User fields
                         TextInput::make('name')->required(),
                         TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
@@ -210,8 +210,6 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                             ->required(),
                         DateTimePicker::make('start_date')->default(now())->required(),
                         DateTimePicker::make('end_date')->required(),
-                        Toggle::make('is_extendable')->default(true),
-
                         // Transaction fields
                         TextInput::make('amount')->hidden()->numeric()->required()->prefix('PHP'),
                         Select::make('payment_method')
