@@ -80,6 +80,7 @@ class SubscriptionForm
         return $schema
             ->components([
                 Grid::make()
+                    ->columnSpanFull()
                     ->schema([
                         Select::make('user_id')
                             ->label('Member Name')
@@ -142,7 +143,7 @@ class SubscriptionForm
                             ->default(now())->hidden()
                             ->required(),
 
-                    ])->columns(1),
+                    ])->columns(2),
             ]);
     }
 }
