@@ -165,21 +165,6 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->icon('heroicon-o-plus')
                     ->color('primary')
                     ->form([
-                        Grid::make(2)
-                            ->schema([
-                                TextInput::make('name')->required(),
-                                TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
-                                TextInput::make('password')->password()->required()->confirmed()->minLength(8)
-                                    ->revealable(),
-                                TextInput::make('password_confirmation')->password()->required()
-                                    ->revealable(),
-                                Select::make('role')->options(['member' => 'Member'])->default('member')->disabled(),
-                                Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->default('active'),
-                                Textarea::make('address'),
-                                TextInput::make('age')->numeric(),
-                                Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
-                            ])
-                            ->columns(2)
                     ])
                     ->action(function (array $data) {
                         $data['password'] = bcrypt($data['password']);
