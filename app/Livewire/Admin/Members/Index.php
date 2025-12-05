@@ -157,7 +157,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                 DeleteAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark')
                     ->label(' ')
                     ->button()
-                    ->tooltip('decilene')                    ->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
+                    ->tooltip('decilene')->hidden(fn($record) => Auth::user()->role == 'coach' || $record->status == 'active' || $record->status == 'inactive')
                     ->icon('heroicon-o-x-mark')
             ])
             ->toolbarActions([
@@ -195,7 +195,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                         TextInput::make('months')
                             ->label('Months')
                             ->numeric()
-                            ->default(1)
+                            ->default(0)
+                            ->minValue(1)
+                            ->maxValue(120)
                             ->required()
                             ->live()
                             ->afterStateUpdated(function ($state, callable $set, callable $get) {
