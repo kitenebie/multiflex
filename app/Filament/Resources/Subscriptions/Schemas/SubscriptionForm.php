@@ -82,67 +82,69 @@ class SubscriptionForm
                 Grid::make()
                     ->columnSpanFull()
                     ->schema([
-                        Select::make('user_id')
-                            ->label('Member Name')
-                            ->options(User::where('role', 'member')->pluck('name', 'id'))
-                            ->required(),
-                        // Subscription fields
-                        Select::make('fitness_offer_id')
-                            ->label('Fitness Offer')
-                            ->options(FitnessOffer::pluck('name', 'id'))
-                            ->required()
-                            ->live()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                $offer = FitnessOffer::find($state);
-                                if ($offer) {
-                                    $set('amount', $offer->price);
-                                    $set('end_date', now()->addDays($offer->duration_days)->toDateString());
-                                }
-                            }),
-                        TextInput::make('months')
-                            ->label('Months')
-                            ->numeric()
-                            ->default(1)
-                            ->required()
-                            ->live()
-                            ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                                $startDate = $get('start_date');
-                                if ($startDate && $state) {
-                                    $set('end_date', \Carbon\Carbon::parse($startDate)->addMonths($state)->toDateString());
-                                }
-                            }),
-                        Select::make('coach_id')
-                            ->label('Coach')
-                            ->options(User::where('role', 'coach')->pluck('name', 'id'))
-                            ->required(),
-                        DateTimePicker::make('start_date')
-                            ->default(now())
-                            ->required(),
-                        DateTimePicker::make('end_date')
-                            ->required(),
-                        Toggle::make('is_extendable')
-                            ->default(true),
-                        // Transaction fields
-                        TextInput::make('amount')
-                            ->numeric()
-                            ->hidden()
-                            ->required()
-                            ->prefix('PHP'),
-                        Select::make('payment_method')
-                            ->options([
-                                'Cash' => 'Cash',
-                                'upload' => 'Upload',
-                                'others' => 'Others',
-                            ])
-                            ->required(),
-                        TextInput::make('reference_no'),
-                        FileUpload::make('proof_of_payment')
-                            ->image()->columnSpanFull()
-                            ->directory('proofs'),
-                        DateTimePicker::make('paid_at')
-                            ->default(now())->hidden()
-                            ->required(),
-
+                        Grid::make()->columnSpanFull()->schema([
+                            Select::make('user_id')
+                                ->label('Member Name')
+                                ->options(User::where('role', 'member')->pluck('name', 'id'))
+                                ->required(),
+                            // Subscription fields
+                            Select::make('fitness_offer_id')
+                                ->label('Fitness Offer')
+                                ->options(FitnessOffer::pluck('name', 'id'))
+                                ->required()
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set) {
+                                    $offer = FitnessOffer::find($state);
+                                    if ($offer) {
+                                        $set('amount', $offer->price);
+                                        $set('end_date', now()->addDays($offer->duration_days)->toDateString());
+                                    }
+                                }),
+                            TextInput::make('months')
+                                ->label('Months')
+                                ->numeric()
+                                ->default(0)
+                                ->minValue(1)
+                                ->maxValue(120)
+                                ->required()
+                                ->live()
+                                ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                    $startDate = $get('start_date');
+                                    if ($startDate && $state) {
+                                        $set('end_date', \Carbon\Carbon::parse($startDate)->addMonths($state)->toDateString());
+                                    }
+                                }),
+                            Select::make('coach_id')
+                                ->label('Coach')
+                                ->options(User::where('role', 'coach')->pluck('name', 'id'))
+                                ->required(),
+                            DateTimePicker::make('start_date')
+                                ->default(now())
+                                ->required(),
+                            DateTimePicker::make('end_date')
+                                ->disabled()
+                                ->required(),
+                            // Transaction fields
+                            TextInput::make('amount')
+                                ->numeric()
+                                ->hidden()
+                                ->required()
+                                ->prefix('PHP'),
+                            Select::make('payment_method')
+                                ->options([
+                                    'Cash' => 'Cash',
+                                    'upload' => 'Upload',
+                                    'others' => 'Others',
+                                ])
+                                ->required(),
+                            TextInput::make('reference_no'),
+                            FileUpload::make('proof_of_payment')
+                                ->image()->columnSpanFull()
+                                ->directory('proofs'),
+                            DateTimePicker::make('paid_at')
+                                ->default(now())->hidden()
+                                ->required(),
+                        ])->columns(2)
                     ])->columns(2),
             ]);
     }
