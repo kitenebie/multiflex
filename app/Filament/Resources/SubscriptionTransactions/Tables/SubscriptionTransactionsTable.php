@@ -32,6 +32,14 @@ class SubscriptionTransactionsTable implements HasFilamentTablePresets
         return $table
             ->query($query)
             ->columns([
+                TextColumn::make('subscription.user.name')
+                    ->searchable()->toggleable(),
+                TextColumn::make('subscription.user.age')
+                    ->searchable()->toggleable(),
+                TextColumn::make('subscription.user.gender')
+                    ->searchable()->toggleable(),
+                TextColumn::make('subscription.user.address')
+                    ->searchable()->toggleable(),
                 TextColumn::make('subscription.fitnessOffer.name')
                     ->searchable()->toggleable(),
                 TextColumn::make('amount')
