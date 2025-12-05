@@ -6,7 +6,7 @@ use Livewire\Component;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -100,8 +100,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 TextInput::make('age')->numeric()->disabled(),
                                 Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
                                 Toggle::make('is_admin')->label('Is Admin')->disabled(),
-                                DateTimePicker::make('created_at')->disabled(),
-                                DateTimePicker::make('updated_at')->disabled(),
+                                DatePicker::make('created_at')->disabled(),
+                                DatePicker::make('updated_at')->disabled(),
                             ])
                             ->columns(2)
                     ])
@@ -213,7 +213,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 ->label('Coach')
                                 ->options(User::where('role', 'coach')->pluck('name', 'id'))
                                 ->required(),
-                            DateTimePicker::make('start_date')->default(now())->required()->live()
+                            DatePicker::make('start_date')->default(now())->required()->live()
                                 ->displayFormat('d F Y')
                                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                     $months = $get('months');
@@ -221,7 +221,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                         $set('end_date', \Carbon\Carbon::parse($state)->addMonths($months)->toDateString());
                                     }
                                 }),
-                            DateTimePicker::make('end_date')->required()
+                            DatePicker::make('end_date')->required()
                                 ->displayFormat('d F Y')
                                 ->disabled(),
                             // Transaction fields
@@ -235,7 +235,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 ->required(),
                             TextInput::make('reference_no'),
                             FileUpload::make('proof_of_payment')->image()->directory('proofs')->columnSpanFull(),
-                            DateTimePicker::make('paid_at')->default(now())->required()->hidden(),
+                            DatePicker::make('paid_at')->default(now())->required()->hidden(),
                         ])->columns(2)
                     ])
                     ->action(function (array $data) {
