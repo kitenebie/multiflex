@@ -85,6 +85,9 @@ class SubscriptionsTable
                 TextColumn::make('end_date')
                     ->date()
                     ->sortable(),
+                TextColumn::make('subscriptionTransactions.active_at')
+                    ->date()
+                    ->sortable(),
                 // IconColumn::make('is_extendable')
                 //     ->boolean(),
                 // TextColumn::make('created_at')
