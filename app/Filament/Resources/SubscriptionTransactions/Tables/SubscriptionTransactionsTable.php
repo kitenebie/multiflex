@@ -56,6 +56,10 @@ class SubscriptionTransactionsTable
                     ->url(fn ($record) => asset('storage/' . $record->proof_of_payment))
                     ->openUrlInNewTab()
                     ->size(70)->toggleable(),
+                TextColumn::make('active_at')
+                    ->toggleable()
+                    ->date()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
