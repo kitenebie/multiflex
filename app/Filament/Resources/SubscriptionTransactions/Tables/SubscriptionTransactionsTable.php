@@ -13,12 +13,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
-use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
-use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class SubscriptionTransactionsTable implements HasFilamentTablePresets
+
+class SubscriptionTransactionsTable
 {
-    use WithFilamentTablePresets;
     public static function configure(Table $table): Table
     {
         
@@ -91,20 +89,5 @@ class SubscriptionTransactionsTable implements HasFilamentTablePresets
                     ->tooltip('manage table'),
                 BulkActionGroup::make([  DeleteBulkAction::make()->label('Archive')->icon('heroicon-o-archive-box-x-mark'),])->label('danger zone')->icon('heroicon-o-shield-exclamation')
             ]);
-    }
-    
-    protected function getTableHeaderActions(): array
-    {
-        return $this->retrieveVisiblePresetActions();
-    }
-
-    protected function handleTableFilterUpdates(): void
-    {
-        $this->selectedFilamentPreset = null;
-    }
-
-    public function updatedTableSort(): void
-    {
-        $this->selectedFilamentPreset = null;
     }
 }

@@ -28,9 +28,8 @@ use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
 use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
 use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class SubscriptionsTable implements HasFilamentTablePresets
+class SubscriptionsTable 
 {
-    use WithFilamentTablePresets;
     public static function configure(Table $table): Table
     {
         $query = Subscription::query();
@@ -177,18 +176,4 @@ class SubscriptionsTable implements HasFilamentTablePresets
             ]);
     }
     
-    protected function getTableHeaderActions(): array
-    {
-        return $this->retrieveVisiblePresetActions();
-    }
-
-    protected function handleTableFilterUpdates(): void
-    {
-        $this->selectedFilamentPreset = null;
-    }
-
-    public function updatedTableSort(): void
-    {
-        $this->selectedFilamentPreset = null;
-    }
 }
