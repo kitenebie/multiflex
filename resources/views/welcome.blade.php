@@ -80,7 +80,7 @@
                     <div class="menu-wrapper d-flex align-items-center mt-4 justify-content-between">
                         <!-- Logo -->
                         <div class="logo d-none d-md-block">
-                            <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                            <a href="/"><img src="assets/img/logo/logo.png" alt=""></a>
                         </div>
                         <!-- Header-btn -->
                         @if (!auth()->check())
@@ -398,7 +398,7 @@
                             <div class="single-footer-caption mb-50 text-center">
                                 <!-- logo -->
                                 <div class="footer-logo wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
-                                    <a href="index.html"><img src="assets/img/logo/logo2_footer.png"
+                                    <a href="/"><img src="assets/img/logo/logo2_footer.png"
                                             alt=""></a>
                                 </div>
                                 <!-- Menu -->
