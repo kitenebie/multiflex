@@ -37,6 +37,7 @@ class SubscriptionsTable
         {
            $query->where('user_id', Auth::user()->id);
         }
+        $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END, created_at ASC");
         return $table
             ->query($query)
             ->columns([
@@ -48,25 +49,6 @@ class SubscriptionsTable
                     ->url(fn ($state) => '/app/subscription-transactions?search=' . $state)
                     ->color('primary')
                     ->searchable(),
-                // SelectColumn::make('coach_id')
-                //     ->label('Assigned Coach')
-                //     ->options(User::where('role', 'coach')->where('status', 'active')->pluck('name', 'id'))
-                //     ->searchable()
-                //     ->disabled(fn ($record) => ($record->status === 'active' || $record->status === 'rejected' || $record->status === 'expired' || $record->status === 'inactive'))
-                //     ->afterStateUpdated(function ($state, $record) {
-                //         if ($state) {
-                //             $record->update([
-                //                 'status' => 'active'
-                //             ]);
-                //             CoachHandle::create([
-                //                 'coach_id' => $state,
-                //                 'member_id' => $record->user_id,
-                //                 'fitnessOffer_id' => $record->fitness_offer_id,
-                //                 'start_at' => $record->start_date,
-                //                 'end_at' => $record->end_date,
-                //             ]);
-                //         }
-                //     }),
                 TextColumn::make('coach_id')
                     ->formatStateUsing(fn ($state) => User::where('id', $state)->first()?->name)
                     ->label('Assigned Coach'),

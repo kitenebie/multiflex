@@ -42,7 +42,7 @@
                 <div class="menu-wrapper d-flex align-items-center justify-content-between mt-4">
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                        <a href="/"><img src="assets/img/logo/logo.png" alt=""></a>
                     </div>
                     <!-- Header-btn -->
                     <div class="header-btns d-none d-lg-block f-right">
@@ -160,7 +160,7 @@
                         <div class="single-footer-caption mb-50 text-center">
                             <!-- logo -->
                             <div class="footer-logo wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
-                                <a href="index.html"><img src="assets/img/logo/logo2_footer.png" alt=""></a>
+                                <a href="/"><img src="assets/img/logo/logo2_footer.png" alt=""></a>
                             </div>
                             <!-- Menu -->
                             <!-- social -->
