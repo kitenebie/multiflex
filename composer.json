@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.10.1",
         "livewire/volt": "^1.7.0",
         "maatwebsite/excel": "*",
+        "pusher/pusher-php-server": "^7.2",
         "simplesoftwareio/simple-qrcode": "*",
         "ymsoft/filament-table-presets": "^0.1.0"
     },
