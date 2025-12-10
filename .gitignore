@@ -21,6 +21,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-!/vendor/daacreators/creators-ticketing/config/creators-ticketing.php
-!/vendor/filament/filament/src/Auth/Pages/PasswordReset/RequestPasswordReset.php
-!/vendor/filament/filament/src/Pages/Dashboard.php
+!vendor/pusher
