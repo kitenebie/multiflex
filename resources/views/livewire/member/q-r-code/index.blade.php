@@ -168,7 +168,7 @@
                             {{ $activeSubscription->start_date->format('M d, Y') }}</p>
                         <p class="info-item"><strong>Expire On:</strong>
                             @if ($activeSubscription->end_date < now())
-                                EXPIRED
+                               {{ $activeSubscription->end_date->format('M d, Y') }} (EXPIRED)
                             @else
                                 {{ $activeSubscription->end_date->format('M d, Y') }}
                             @endif
