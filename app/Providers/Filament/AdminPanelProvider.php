@@ -100,17 +100,6 @@ class AdminPanelProvider extends PanelProvider
                         'x-on:click.prevent' => 'confirmLogout()',
                         'id' => 'logoutFi'
                     ]),
-            ])->defaultAvatarProvider(function () {
-                $user = Auth::user();
-
-                // if user has uploaded avatar
-                if ($user?->profile_picture) {
-                    return "/storage". "/" . $user->profile_picture;
-                }
-
-                // fallback: use a generated placeholder avatar
-                return "/storage". "/" . 'profile_pictures/01KC64D0Z06SNCSQ5WT5QHC7MB.png';
-            })
-        ;
+            ]);
     }
 }
