@@ -36,6 +36,7 @@ class RegistrationController extends Controller
                 'gender' => 'required|in:male,female,other',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string',
+                'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $name = trim($request->firstname . ' ' . ($request->middlename ? $request->middlename . ' ' : '') . $request->lastname);
@@ -53,6 +54,12 @@ class RegistrationController extends Controller
                 'role' => $role, // dynamically set
                 'status' => 'pending',
                 'membership' => $request->member_type,
+            ]);
+
+            // Store profile picture
+            $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->update([
+                'profile_picture' => $profilePicturePath,
             ]);
 
             // Assign Spatie role

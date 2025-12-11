@@ -89,7 +89,7 @@
                 </div>
                 <div class="col-lg-8">
                     <form class="form-contact contact_form" action="{{ route('registration.store') }}" method="post"
-                        id="contactForm" novalidate="novalidate">
+                        id="contactForm" enctype="multipart/form-data" novalidate="novalidate">
                         @csrf
                         <div class="row">
                             <!-- Select User -->
@@ -180,6 +180,13 @@
                                     </button>
                                 </div>
                                 <span id="confirm-error" class="text-danger"></span>
+                            </div>
+
+                            <!-- Profile Picture -->
+                            <div class="col-12 mb-3">
+                                <label for="profile_picture" class="form-label fw-bold">Profile Picture</label>
+                                <input class="form-control border border-2 border-primary" name="profile_picture"
+                                    id="profile_picture" type="file" accept="image/*" required>
                             </div>
                         </div>
 
