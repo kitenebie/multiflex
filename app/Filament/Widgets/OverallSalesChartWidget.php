@@ -6,6 +6,7 @@ use Filament\Widgets\ChartWidget;
 use App\Models\SubscriptionTransaction;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Actions;
 use Filament\Actions\Action;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
@@ -21,6 +22,7 @@ class OverallSalesChartWidget extends ChartWidget
 
     public ?CarbonImmutable $startDate = null;
     public ?CarbonImmutable $endDate = null;
+    public ?int $year = null;
 
     public function mount(): void
     {
@@ -31,6 +33,7 @@ class OverallSalesChartWidget extends ChartWidget
         }
 
         $this->applyFilters(shouldRefresh: false);
+        $this->year = data_get($this->filters, 'year', now()->year);
     }
 
     /**
@@ -39,16 +42,10 @@ class OverallSalesChartWidget extends ChartWidget
     public function filtersSchema($schema)
     {
         return $schema->components([
-            DatePicker::make('startDate')
-                ->label('From Date')
-                ->maxDate(fn () => data_get($this->filters, 'endDate'))
-                ->default($this->getDefaultFiltersState()['startDate'])
-                ->native(false),
-
-            DatePicker::make('endDate')
-                ->label('To Date')
-                ->minDate(fn () => data_get($this->filters, 'startDate'))
-                ->default($this->getDefaultFiltersState()['endDate'])
+            Select::make('year')
+                ->label('Year')
+                ->options($this->getYearOptions())
+                ->default(now()->year)
                 ->native(false),
 
             Actions::make([
@@ -70,17 +67,11 @@ class OverallSalesChartWidget extends ChartWidget
     {
         $filters = $this->filters ?? [];
 
-        $start = $this->resolveDate(data_get($filters, 'startDate'), true)
-            ?? CarbonImmutable::now()->startOfYear()->startOfDay();
-        $end = $this->resolveDate(data_get($filters, 'endDate'), false)
-            ?? CarbonImmutable::now()->endOfYear()->endOfDay();
+        $year = data_get($filters, 'year', now()->year);
+        $this->year = $year;
 
-        if ($start->greaterThan($end)) {
-            [$start, $end] = [$end->startOfDay(), $start->endOfDay()];
-        }
-
-        $this->startDate = $start;
-        $this->endDate = $end;
+        $this->startDate = CarbonImmutable::createFromDate($year, 1, 1)->startOfDay();
+        $this->endDate = CarbonImmutable::createFromDate($year, 12, 31)->endOfDay();
 
         if ($shouldRefresh) {
             $this->dispatch('$refresh');
@@ -96,20 +87,14 @@ class OverallSalesChartWidget extends ChartWidget
     protected function getDefaultFiltersState(): array
     {
         return [
-            'startDate' => CarbonImmutable::now()->startOfYear()->toDateString(),
-            'endDate' => CarbonImmutable::now()->endOfYear()->toDateString(),
+            'year' => now()->year,
         ];
     }
 
-    protected function resolveDate(null|string $value, bool $isStart): ?CarbonImmutable
+    protected function getYearOptions(): array
     {
-        if (blank($value)) {
-            return null;
-        }
-
-        $date = CarbonImmutable::parse($value);
-
-        return $isStart ? $date->startOfDay() : $date->endOfDay();
+        $years = range(2010, now()->year);
+        return array_combine($years, $years);
     }
 
     protected function getData(): array
@@ -147,5 +132,30 @@ class OverallSalesChartWidget extends ChartWidget
     protected function getType(): string
     {
         return 'line';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'scales' => [
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Month',
+                    ],
+                ],
+                'y' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Total Sales',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function getHeading(): ?string
+    {
+        return $this->heading . ' ' . $this->year;
     }
 }
