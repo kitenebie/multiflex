@@ -104,7 +104,7 @@ class AdminPanelProvider extends PanelProvider
 
                 // if user has uploaded avatar
                 if ($user?->profile_picture) {
-                    return asset('storage/' . $user->profile_picture);
+                    return "/storage". "/" . $user->profile_picture;
                 }
 
                 // fallback: use a generated placeholder avatar
