@@ -93,9 +93,10 @@ class OverallSalesChartWidget extends ChartWidget
 
     protected function getYearOptions(): array
     {
-        $years = range(2010, now()->year);
+        $years = range(now()->year, 2010); // start from current year down to 2010
         return array_combine($years, $years);
     }
+
 
     protected function getData(): array
     {
