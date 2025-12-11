@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use Ymsoft\FilamentTablePresets\FilamentTablePresetPlugin;
+use Filament\Support\Facades\FilamentColor;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
 
 class AdminPanelProvider extends PanelProvider
@@ -105,8 +108,18 @@ class AdminPanelProvider extends PanelProvider
 
                 // if user has uploaded avatar
                 if ($user?->profile_picture) {
-                    return "/storage". "/" . $user->profile_picture;
+                    return "/storage" . "/" . $user->profile_picture;
                 }
+
+                // fallback: use a generated placeholder avatar
+
+                $name = str(Filament::getNameForDefaultAvatar($user))
+                    ->trim()
+                    ->explode(' ')
+                    ->map(fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+                    ->join(' ');
+
+                return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=' . urlencode(FilamentColor::getColor('gray')[950] ?? Color::Gray[950]);
             })
         ;
     }
