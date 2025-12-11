@@ -151,7 +151,14 @@
                 </div>
                 <br>
                 <br>
-                <h3 class="qr-title">Active Subscription</h3>
+                <h3 class="qr-title">
+                    @if ($activeSubscription->end_date < now())
+                        Expired Subscription
+                    @else
+                        Active Subscription
+                    @endif
+                    </p>
+                </h3>
                 @if ($activeSubscription)
                     <div>
                         <p class="info-item"><strong>Fitness Offer:</strong>
@@ -160,7 +167,12 @@
                         <p class="info-item"><strong>Registered Date:</strong>
                             {{ $activeSubscription->start_date->format('M d, Y') }}</p>
                         <p class="info-item"><strong>Expire On:</strong>
-                            {{ $activeSubscription->end_date->format('M d, Y') }}</p>
+                            @if ($activeSubscription->end_date < now())
+                                EXPIRED
+                            @else
+                                {{ $activeSubscription->end_date->format('M d, Y') }}
+                            @endif
+                        </p>
                     </div>
                 @else
                     <div>
