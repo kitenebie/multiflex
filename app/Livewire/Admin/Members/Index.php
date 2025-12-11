@@ -101,7 +101,6 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->disabled(),
                                 Textarea::make('address')->disabled(),
                                 Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
-                                Toggle::make('is_admin')->label('Is Admin')->disabled(),
                                 DatePicker::make('created_at')->disabled(),
                                 DatePicker::make('updated_at')->disabled(),
                             ])
