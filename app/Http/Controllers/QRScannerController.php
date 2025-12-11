@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class QRScannerController extends Controller
 {
@@ -24,9 +25,12 @@ class QRScannerController extends Controller
         $attendanceType = $request->attendance_type;
         $action = $attendanceType == '0' ? 'time-in' : 'time-out';
 
+        Log::info('QR Scan initiated', ['qr_code' => $qrCode, 'attendance_type' => $attendanceType, 'coach_id' => Auth::user()->id]);
+
         $user = User::where('qr_code', $qrCode)->first();
-        dd($user);
+
         if (!$user) {
+            Log::warning('User not found for QR code', ['qr_code' => $qrCode]);
             return response()->json([
                 'success' => false,
                 'message' => 'User not found',
@@ -39,9 +43,11 @@ class QRScannerController extends Controller
             ->where('end_date', '>=', today())
             ->first();
         if (!$subscription) {
+            Log::warning('No valid subscription', ['user_id' => $user->id, 'coach_id' => Auth::user()->id]);
             $ExSubscription = Subscription::where('user_id', $user->id)
                 ->where('coach_id', Auth::user()->id)->first();
             if ($ExSubscription) {
+                Log::info('Expired subscription event triggered', ['user_id' => $user->id]);
                 event(new ExpiredNotification($user->id));
             }
             return response()->json([
@@ -62,6 +68,7 @@ class QRScannerController extends Controller
         if ($action === 'time-in') {
 
             if ($attendance && !empty($attendance->time_in)) {
+                Log::info('User already time-in today', ['user_id' => $user->id, 'time_in' => $attendance->time_in]);
                 return response()->json([
                     'success' => true,
                     'user' => $user,
@@ -82,6 +89,7 @@ class QRScannerController extends Controller
                     'time_in' => now()->toTimeString(),
                 ]);
             }
+            Log::info('Time-in recorded', ['user_id' => $user->id, 'attendance_id' => $attendance->id, 'time_in' => $attendance->time_in]);
             event(new scannedNotification($user->id));
 
 
