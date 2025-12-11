@@ -6,8 +6,8 @@ use Filament\Widgets\ChartWidget;
 use App\Models\SubscriptionTransaction;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Actions;
 use Filament\Actions\Action;
+use Filament\Schemas\Components\Actions;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
 use Carbon\CarbonImmutable;
 
@@ -75,11 +75,12 @@ class SubscriptionSalesChartWidget extends ChartWidget
         ];
     }
 
-    protected function getYearOptions(): array
-    {
-        $years = range(2010, now()->year);
-        return array_combine($years, $years);
-    }
+protected function getYearOptions(): array
+{
+    $years = range(now()->year, 2010); // start from current year down to 2010
+    return array_combine($years, $years);
+}
+
 
     protected function getData(): array
     {
