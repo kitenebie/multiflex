@@ -19,6 +19,7 @@ use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SelectColumn;
+use Carbon\Carbon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -28,14 +29,13 @@ use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
 use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
 use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
-class SubscriptionsTable 
+class SubscriptionsTable
 {
     public static function configure(Table $table): Table
     {
         $query = Subscription::query();
-        if(Auth::user()->roles()->where('name', 'member')->exists())
-        {
-           $query->where('user_id', Auth::user()->id);
+        if (Auth::user()->roles()->where('name', 'member')->exists()) {
+            $query->where('user_id', Auth::user()->id);
         }
         $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END, created_at ASC");
         return $table
@@ -46,15 +46,15 @@ class SubscriptionsTable
                 TextColumn::make('fitnessOffer.name')
                     ->searchable(),
                 TextColumn::make('subscriptionTransactions.reference_no')
-                    ->url(fn ($state) => '/app/subscription-transactions?search=' . $state)
+                    ->url(fn($state) => '/app/subscription-transactions?search=' . $state)
                     ->color('primary')
                     ->searchable(),
                 TextColumn::make('coach_id')
-                    ->formatStateUsing(fn ($state) => User::where('id', $state)->first()?->name)
+                    ->formatStateUsing(fn($state) => User::where('id', $state)->first()?->name)
                     ->label('Assigned Coach'),
                 TextColumn::make('status')
-                   ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
                         'active' => 'success',
                         'pending' => 'warning',
                         'expired' => 'danger',
@@ -109,7 +109,7 @@ class SubscriptionsTable
                     ->button()
                     ->tooltip('approve')
                     ->icon('heroicon-o-check-circle')
-                    ->hidden(fn ($record) => (Auth::user()->role != 'admin' || $record->status === 'active' || $record->status === 'rejected' || $record->status === 'expired' || $record->status === 'inactive'))
+                    ->hidden(fn($record) => (Auth::user()->role != 'admin' || $record->status === 'active' || $record->status === 'rejected' || $record->status === 'expired' || $record->status === 'inactive'))
                     ->color('success')
                     ->requiresConfirmation()
                     ->schema([
@@ -145,13 +145,29 @@ class SubscriptionsTable
                             Mail::to($coach->email)->send(new CoachAssignmentNotification($coach, $record->user, $record));
                         }
                     }),
+                Action::make('expired')
+                    ->label(' ')
+                    ->button()
+                    ->tooltip('End subscription (demo only)')
+                    ->color('secondary')
+                    ->icon('heroicon-o-x-circle')
+                    ->action(function ($record) {
+                        $record->end_date = Carbon::yesterday();
+                        $record->save();
+                        Notification::make()
+                            ->title('Subscription expired successfully')
+                            ->success()
+                            ->send();
+                    }),
+
+
             ])
             ->toolbarActions([
                 ManageTablePresetAction::make()->label(' ')
                     ->button()
                     ->tooltip('manage table'),
                 Action::make('sub')
-                    ->hidden(fn () => Auth::user()->role != 'member')
+                    ->hidden(fn() => Auth::user()->role != 'member')
                     ->label('Add Subscription')
                     ->icon('heroicon-o-plus')
                     ->url('/#pricingSection'),
@@ -161,5 +177,4 @@ class SubscriptionsTable
                 ]),
             ]);
     }
-    
 }
