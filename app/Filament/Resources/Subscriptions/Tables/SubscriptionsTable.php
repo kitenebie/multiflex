@@ -18,7 +18,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Carbon\Carbon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
@@ -41,6 +41,8 @@ class SubscriptionsTable
         return $table
             ->query($query)
             ->columns([
+                ImageColumn::make('user.profile_picture')
+                    ->imageHeight(50),
                 TextColumn::make('user.name')
                     ->searchable(),
                 TextColumn::make('fitnessOffer.name')
