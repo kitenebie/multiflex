@@ -40,7 +40,8 @@ class QRScannerController extends Controller
             ->first();
 
         if (!$subscription) {
-            $ExSubscription = Subscription::where('user_id', $user->id)->first();
+            $ExSubscription = Subscription::where('user_id', $user->id)
+                ->where('coach_id', Auth::user()->id)->first();
             if ($ExSubscription) {
                 event(new ExpiredNotification($user->id));
             }
