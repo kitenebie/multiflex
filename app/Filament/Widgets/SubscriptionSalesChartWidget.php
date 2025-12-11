@@ -5,20 +5,18 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\ChartWidget;
 use App\Models\SubscriptionTransaction;
 use Illuminate\Support\Facades\DB;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Actions;
-use Filament\Actions\Action;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
+use Filament\Widgets\ChartWidget\Concerns\HasHeaderActions;
 use Carbon\CarbonImmutable;
 
 class SubscriptionSalesChartWidget extends ChartWidget
 {
     use HasFiltersSchema;
+    use HasHeaderActions; // Enables actions in the header
 
     protected ?string $heading = 'Subscription Sales by Fitness Offer';
-
-    protected int | string | array $columnSpan = 1;
+    protected int|string|array $columnSpan = 1;
 
     public ?CarbonImmutable $startDate = null;
     public ?CarbonImmutable $endDate = null;
@@ -36,31 +34,20 @@ class SubscriptionSalesChartWidget extends ChartWidget
         $this->year = data_get($this->filters, 'year', now()->year);
     }
 
-    /**
-     * Define the chart filters schema
-     */
-    public function filtersSchema($schema)
+    // Header actions: select year directly in chart header
+    protected function getHeaderActions(): array
     {
-        return $schema->components([
+        return [
             Select::make('year')
-                ->label('Year')
+                ->label(false)
                 ->options($this->getYearOptions())
-                ->default(now()->year)
-                ->native(false),
-
-            Actions::make([
-                Action::make('applyFilters')
-                    ->label('Apply')
-                    ->action('applyFilters')
-                    ->icon('heroicon-o-funnel')
-                    ->color('primary'),
-                Action::make('resetFilters')
-                    ->label('Reset')
-                    ->color('danger')
-                    ->action('resetFilters')
-                    ->icon('heroicon-o-arrow-path'),
-            ])->fullWidth(),
-        ]);
+                ->default($this->year)
+                ->reactive() // live update
+                ->afterStateUpdated(function ($state) {
+                    $this->filters['year'] = $state;
+                    $this->applyFilters();
+                }),
+        ];
     }
 
     public function applyFilters(bool $shouldRefresh = true): void
@@ -152,6 +139,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
 
     public function getHeading(): ?string
     {
+        // Show year in heading dynamically
         return $this->heading . ' ' . $this->year;
     }
 }
