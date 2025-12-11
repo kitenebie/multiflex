@@ -25,7 +25,7 @@ class QRScannerController extends Controller
         $action = $attendanceType == '0' ? 'time-in' : 'time-out';
 
         $user = User::where('qr_code', $qrCode)->first();
-
+        dd($user);
         if (!$user) {
             return response()->json([
                 'success' => false,
@@ -38,7 +38,6 @@ class QRScannerController extends Controller
             ->where('status', 'active')
             ->where('end_date', '>=', today())
             ->first();
-        dd($subscription);
         if (!$subscription) {
             $ExSubscription = Subscription::where('user_id', $user->id)
                 ->where('coach_id', Auth::user()->id)->first();
