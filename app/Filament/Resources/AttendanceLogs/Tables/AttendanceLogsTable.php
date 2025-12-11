@@ -31,7 +31,7 @@ class AttendanceLogsTable implements HasFilamentTablePresets
             });
         }
         return $table
-            ->query($query)
+            ->query($query->orderByDesc('id'))
             ->columns([
                 TextColumn::make('user.name')
                     ->searchable()->toggleable(),
