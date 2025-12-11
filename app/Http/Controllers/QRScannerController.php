@@ -48,7 +48,7 @@ class QRScannerController extends Controller
                 ->where('coach_id', Auth::user()->id)->first();
             if ($ExSubscription) {
                 Log::info('Expired subscription event triggered', ['user_id' => $user->id]);
-                event(new ExpiredNotification($user->id));
+                event(new ExpiredNotification($user->id, 'Your subscription has expired.'));
             }
             return response()->json([
                 'success' => false,
@@ -90,7 +90,7 @@ class QRScannerController extends Controller
                 ]);
             }
             Log::info('Time-in recorded', ['user_id' => $user->id, 'attendance_id' => $attendance->id, 'time_in' => $attendance->time_in]);
-            event(new scannedNotification($user->id));
+            event(new scannedNotification($user->id, 'Time-in recorded successfully.'));
 
 
             return response()->json([
@@ -129,7 +129,7 @@ class QRScannerController extends Controller
                 'time_out' => now()->toTimeString(),
             ]);
             Log::info('Time-out recorded', ['user_id' => $user->id, 'attendance_id' => $attendance->id, 'time_out' => $attendance->time_out]);
-            event(new scannedNotification($user->id));
+            event(new scannedNotification($user->id, 'Time-out recorded successfully.'));
 
             return response()->json([
                 'success' => true,

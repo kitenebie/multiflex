@@ -16,9 +16,12 @@ class scannedNotification implements ShouldBroadcast
 
     public $member_id;
 
-    public function __construct($member_id)
+    public $message;
+
+    public function __construct($member_id, $message)
     {
         $this->member_id = $member_id;
+        $this->message = $message;
     }
 
     public function broadcastOn()
