@@ -22,3 +22,4 @@ yarn-error.log
 /.vscode
 /.zed
 !vendor/pusher
+!/vendor/filament/filament/resources/views/components/layout/base.blade.php
