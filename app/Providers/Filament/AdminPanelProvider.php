@@ -100,7 +100,16 @@ class AdminPanelProvider extends PanelProvider
                         'id' => 'logoutFi'
                     ]),
             ])->defaultAvatarProvider(function () {
-                return Auth::user()->profile_photo_url ?? null;
-            });
+                $user = Auth::user();
+
+                // if user has uploaded avatar
+                if ($user?->profile_picture) {
+                    return asset('storage/' . $user->profile_picture);
+                }
+
+                // fallback: use a generated placeholder avatar
+                return 'https://ui-avatars.com/api/?name=' . urlencode($user->name);
+            })
+        ;
     }
 }
