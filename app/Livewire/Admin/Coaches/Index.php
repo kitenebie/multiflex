@@ -99,15 +99,18 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->icon('heroicon-o-eye')
                     ->color('info')
                     ->form([
-                        FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull()->disabled(),
-                        TextInput::make('name')->disabled(),
-                        TextInput::make('email')->disabled(),
-                        Select::make('role')->options(['coach' => 'Coach'])->disabled(),
-                        Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->disabled(),
-                        Select::make('role')->options(['coach' => 'Coach', 'member' => 'Member'])->disabled(),
-                        Textarea::make('address')->disabled(),
-                        TextInput::make('age')->numeric()->disabled(),
-                        Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
+                        Grid::make(2)
+                            ->schema([
+                                FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull()->disabled(),
+                                TextInput::make('name')->disabled(),
+                                TextInput::make('email')->disabled(),
+                                Select::make('role')->options(['coach' => 'Coach'])->disabled(),
+                                Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->disabled(),
+                                Select::make('role')->options(['coach' => 'Coach', 'member' => 'Member'])->disabled(),
+                                Textarea::make('address')->disabled(),
+                                TextInput::make('age')->numeric()->disabled(),
+                                Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
+                            ])
                     ])
                     ->fillForm(fn(User $record) => $record->toArray()),
                 Action::make('edit')
@@ -118,14 +121,17 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->icon('heroicon-o-pencil')
                     ->color('warning')
                     ->form([
-                        FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull(),
-                        TextInput::make('name')->required(),
-                        TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
-                        Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive']),
-                        Select::make('role')->options(['coach' => 'Coach', 'member' => 'Member']),
-                        Textarea::make('address'),
-                        TextInput::make('age')->numeric(),
-                        Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
+                        Grid::make(2)
+                            ->schema([
+                                FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull(),
+                                TextInput::make('name')->required(),
+                                TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
+                                Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive']),
+                                Select::make('role')->options(['coach' => 'Coach', 'member' => 'Member']),
+                                Textarea::make('address'),
+                                TextInput::make('age')->numeric(),
+                                Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
+                            ])
                     ])
                     ->fillForm(fn(User $record) => $record->toArray())
                     ->action(function (array $data, User $record) {
