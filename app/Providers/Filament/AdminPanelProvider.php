@@ -109,7 +109,7 @@ class AdminPanelProvider extends PanelProvider
                 }
 
                 // fallback: use a generated placeholder avatar
-                return 'https://irosincommandcenter.site/storage/01K51JXV9SH9ACPQKCCZ9VK61T.jpg';
+                return "/storage". "/" . 'profile_pictures/01KC64D0Z06SNCSQ5WT5QHC7MB.png';
             })
         ;
     }
