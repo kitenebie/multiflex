@@ -109,7 +109,7 @@ class AdminPanelProvider extends PanelProvider
                 }
 
                 // fallback: use a generated placeholder avatar
-                return "";
+                return null;
             })
         ;
     }
