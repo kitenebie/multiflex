@@ -99,6 +99,8 @@ class AdminPanelProvider extends PanelProvider
                         'x-on:click.prevent' => 'confirmLogout()',
                         'id' => 'logoutFi'
                     ]),
-            ]);
+            ])->defaultAvatarProvider(function () {
+                return Auth::user()->profile_photo_url ?? null;
+            });
     }
 }
