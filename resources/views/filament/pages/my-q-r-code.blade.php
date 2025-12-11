@@ -353,7 +353,7 @@
                 footer: "Pay ₱50.00 to continue using this gym offer.",
                 confirmButtonText: "OK"
             });
-            const audio = new Audio('/bell-notification-337658.mp3');
+            const audio = new Audio('/error-010-206498.mp3');
             audio.play().catch(() => {
                 console.warn("Audio playback was prevented by the browser.");
             });
