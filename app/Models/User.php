@@ -3,17 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use Ymsoft\FilamentTablePresets\Traits\WithFilamentTablePresets;
 
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, SoftDeletes, WithFilamentTablePresets;
@@ -75,6 +77,14 @@ class User extends Authenticatable
             ->implode('');
     }
 
+    /**
+     * Get the user's avatar URL for Filament
+     */
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->profile_picture ? Storage::url($this->profile_picture) : null;
+    }
+
     // Relationships
     public function subscriptions(): HasMany
     {
@@ -114,6 +124,6 @@ class User extends Authenticatable
     // Accessor for avatar_url to work with Filament
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->profile_picture ? asset('storage/' . $this->profile_picture) : null;
+        return $this->profile_picture ? Storage::url($this->profile_picture) : null;
     }
 }
