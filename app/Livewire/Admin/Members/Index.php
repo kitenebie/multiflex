@@ -8,6 +8,7 @@ use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -53,6 +54,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
         return $table
             ->query($query)
             ->columns([
+                ImageColumn::make('profile_picture')
+                    ->imageHeight(50),
                 TextColumn::make('name')->searchable()->toggleable(),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('role')->toggleable(),

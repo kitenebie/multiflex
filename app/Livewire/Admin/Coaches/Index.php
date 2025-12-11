@@ -26,6 +26,7 @@ use Filament\Schemas\Components\Grid;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CoachHandle;
 use App\Services\UserApprovalMailService;
+use Filament\Tables\Columns\ImageColumn;
 use PhpParser\Node\Stmt\Label;
 use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
 use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
@@ -53,6 +54,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
         return $table
             ->query($query)
             ->columns([
+                ImageColumn::make('profile_picture')
+                    ->imageHeight(50),
                 TextColumn::make('name')->searchable()->toggleable(),
                 TextColumn::make('email')->searchable()->toggleable(),
                 TextColumn::make('role')->toggleable(),
