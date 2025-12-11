@@ -55,7 +55,7 @@ class AdminPanelProvider extends PanelProvider
                     // ->authorize(fn() => Auth::user()->role === 'admin')
                     ->navigationGroup('Developers Support')
                     ->navigationSort(10),
-            FilamentTablePresetPlugin::make(),
+                FilamentTablePresetPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -87,6 +87,18 @@ class AdminPanelProvider extends PanelProvider
             ->globalSearch(false)
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->userMenuItems([
+                'logout' => fn(Action $action) => $action->label('Log out')
+                    ->hidden()
+                    ->action(fn() => dd('logout')),
+                Action::make('logout')
+                    ->label('Log out')
+                    ->icon('heroicon-o-arrow-left-on-rectangle')
+                    ->extraAttributes([
+                        'x-on:click.prevent' => 'confirmLogout()',
+                        'id' => 'logoutFi'
+                    ]),
             ]);
     }
 }
