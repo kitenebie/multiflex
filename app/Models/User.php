@@ -110,4 +110,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class, 'created_by');
     }
+
+    // Accessor for avatar_url to work with Filament
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->profile_picture ? asset('storage/' . $this->profile_picture) : null;
+    }
 }
