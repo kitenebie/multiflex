@@ -109,7 +109,7 @@ class AdminPanelProvider extends PanelProvider
                 }
 
                 // fallback: use a generated placeholder avatar
-                return 'https://ui-avatars.com/api/?name=' . urlencode($user->name);
+                return 'https://ui-avatars.com/api/?name=U';
             })
         ;
     }
