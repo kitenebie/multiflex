@@ -28,7 +28,7 @@ class SubscriptionTransactionsTable
             });
         }
         return $table
-            ->query($query)
+            ->query($query->orderByDesc('id'))
             ->columns([
                 TextColumn::make('subscription.user.name')->label('Name')
                     ->searchable()->toggleable(),
