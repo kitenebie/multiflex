@@ -327,6 +327,8 @@
         }
     </style>
 
+    <script src="sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     <script>
         // Enable pusher logging - don't include this in production
@@ -339,11 +341,23 @@
             cluster: 'ap1'
         });
 
-        var channel = pusher.subscribe('my-channel' + myAccount);
-        channel.bind('my-event', function(data) {
-            alert(JSON.stringify(data));
+        var channel = pusher.subscribe('my-channel-' + myAccount);
+        channel.bind('alert', function(data) {
             var audio = new Audio('/new-notification-09-352705.mp3');
             audio.play();
+        });
+        channel.bind('expired', function(data) {
+            const audio = new Audio('/bell-notification-337658.mp3');
+            audio.play().catch(() => {
+                console.warn("Audio playback was prevented by the browser.");
+            });
+            Swal.fire({
+                icon: "error",
+                title: "Subscription Expired",
+                text: "Your subscription has expired!",
+                footer: "Pay ₱50.00 to continue using this gym offer.",
+                confirmButtonText: "OK"
+            });
         });
     </script>
 </x-filament-panels::page>

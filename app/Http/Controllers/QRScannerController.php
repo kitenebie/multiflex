@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ExpiredNotification;
+use App\Events\scannedNotification;
 use App\Models\AttendanceLog;
 use App\Models\Subscription;
 use App\Models\User;
@@ -38,6 +40,10 @@ class QRScannerController extends Controller
             ->first();
 
         if (!$subscription) {
+            $ExSubscription = Subscription::where('user_id', $user->id)->first();
+            if ($ExSubscription) {
+                event(new ExpiredNotification($user->id));
+            }
             return response()->json([
                 'success' => false,
                 'message' => 'User does not have a valid active subscription with this coach.',
@@ -76,6 +82,7 @@ class QRScannerController extends Controller
                     'time_in' => now()->toTimeString(),
                 ]);
             }
+            event(new scannedNotification($user->id));
 
 
             return response()->json([
@@ -111,6 +118,7 @@ class QRScannerController extends Controller
             $attendance->update([
                 'time_out' => now()->toTimeString(),
             ]);
+            event(new scannedNotification($user->id));
 
             return response()->json([
                 'success' => true,
