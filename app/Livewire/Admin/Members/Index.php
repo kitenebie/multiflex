@@ -94,13 +94,12 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->schema([
                         Grid::make(2)
                             ->schema([
+                                FileUpload::make('profile_picture')->disabled()->image()->directory('profile_pictures')->columnSpanFull(),
                                 TextInput::make('name')->disabled(),
                                 TextInput::make('email')->disabled(),
                                 Select::make('role')->options(['member' => 'Member'])->disabled(),
                                 Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive'])->disabled(),
-                                Toggle::make('membership')->label('Has Membership')->disabled(),
                                 Textarea::make('address')->disabled(),
-                                TextInput::make('age')->numeric()->disabled(),
                                 Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
                                 Toggle::make('is_admin')->label('Is Admin')->disabled(),
                                 DatePicker::make('created_at')->disabled(),
@@ -118,6 +117,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->form([
                         Grid::make(2)
                             ->schema([
+                                FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull(),
                                 TextInput::make('name')->required(),
                                 TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
                                 Select::make('role')->options(['member' => 'Member'])->disabled(),
@@ -239,7 +239,8 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 ])
                                 ->required(),
                             TextInput::make('reference_no'),
-                            FileUpload::make('proof_of_payment')->image()->directory('proofs')->columnSpanFull(),
+                            FileUpload::make('profile_picture')->image()->directory('profile_pictures'),
+                            FileUpload::make('proof_of_payment')->image()->directory('proofs'),
                             DatePicker::make('paid_at')->default(now())->required()->hidden(),
                         ])->columns(2)
                     ])

@@ -18,6 +18,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Contracts\View\View;
 use App\Models\User;
 use Filament\Actions\DeleteAction;
@@ -98,6 +99,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->icon('heroicon-o-eye')
                     ->color('info')
                     ->form([
+                        FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull()->disabled(),
                         TextInput::make('name')->disabled(),
                         TextInput::make('email')->disabled(),
                         Select::make('role')->options(['coach' => 'Coach'])->disabled(),
@@ -116,6 +118,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->icon('heroicon-o-pencil')
                     ->color('warning')
                     ->form([
+                        FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull(),
                         TextInput::make('name')->required(),
                         TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email', ignoreRecord: true),
                         Select::make('status')->options(['active' => 'Active', 'inactive' => 'Inactive']),
@@ -174,6 +177,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->form([
                         Grid::make(2)
                             ->schema([
+                                FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull(),
                                 TextInput::make('name')->required(),
                                 TextInput::make('email')->email()->required()->unique(table: 'users', column: 'email'),
                                 TextInput::make('password')->password()->required()->confirmed()->minLength(8)
@@ -198,7 +202,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
     {
         return view('livewire.admin.coaches.index');
     }
-    
+
     protected function getTableHeaderActions(): array
     {
         return $this->retrieveVisiblePresetActions();
