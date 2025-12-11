@@ -107,6 +107,7 @@ class QRScannerController extends Controller
         if ($action === 'time-out') {
 
             if (!$attendance || empty($attendance->time_in)) {
+                Log::warning('Attempted time-out without time-in', ['user_id' => $user->id]);
                 return response()->json([
                     'success' => false,
                     'message' => 'Cannot Time-Out (No Time-In today)',
@@ -115,6 +116,7 @@ class QRScannerController extends Controller
             }
 
             if (!empty($attendance->time_out)) {
+                Log::info('User already time-out today', ['user_id' => $user->id, 'time_out' => $attendance->time_out]);
                 return response()->json([
                     'success' => true,
                     'user' => $user,
@@ -126,6 +128,7 @@ class QRScannerController extends Controller
             $attendance->update([
                 'time_out' => now()->toTimeString(),
             ]);
+            Log::info('Time-out recorded', ['user_id' => $user->id, 'attendance_id' => $attendance->id, 'time_out' => $attendance->time_out]);
             event(new scannedNotification($user->id));
 
             return response()->json([
