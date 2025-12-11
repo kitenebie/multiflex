@@ -1,5 +1,6 @@
 <x-filament-panels::page>
     {{-- Page content --}}
+
     @livewire('member.q-r-code.index')
     @livewireScripts()
     <style>
@@ -315,12 +316,32 @@
         .dark .pricing-card.first .price .amount {
             color: #D3D3D3FF;
         }
+
         .dark .pricing-card.first a {
             color: #818cf8;
             border-color: rgba(147, 197, 253, 0.4);
         }
-        .fi-loading-indicator{
+
+        .fi-loading-indicator {
             display: none !important;
         }
     </style>
+
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+    <script>
+        // Enable pusher logging - don't include this in production
+        const myAccount = @json(auth()->user()->id);
+        console.log('my account id = ' + myAccount);
+
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('e4faca1c135c89231d38', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('my-channel' + myAccount);
+        channel.bind('my-event', function(data) {
+            alert(JSON.stringify(data));
+        });
+    </script>
 </x-filament-panels::page>
