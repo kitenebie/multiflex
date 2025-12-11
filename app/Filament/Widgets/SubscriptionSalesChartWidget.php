@@ -46,12 +46,6 @@ class SubscriptionSalesChartWidget extends ChartWidget
                 ->default(now()->year)
                 ->reactive()
                 ->afterStateUpdated(fn ($state) => $this->applyFilters()),
-
-                Action::make('resetFilters')
-                    ->label('Reset')
-                    ->color('danger')
-                    ->action('resetFilters')
-                    ->icon('heroicon-o-arrow-path'),
         ]);
     }
 
