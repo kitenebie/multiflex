@@ -149,7 +149,7 @@ class SubscriptionsTable
                     ->label(' ')
                     ->button()
                     ->tooltip('End subscription (demo only)')
-                    ->color('secondary')
+                    ->color('danger')
                     ->icon('heroicon-o-x-circle')
                     ->action(function ($record) {
                         $record->end_date = Carbon::yesterday();
