@@ -342,6 +342,8 @@
         var channel = pusher.subscribe('my-channel' + myAccount);
         channel.bind('my-event', function(data) {
             alert(JSON.stringify(data));
+            var audio = new Audio('/new-notification-09-352705.mp3');
+            audio.play();
         });
     </script>
 </x-filament-panels::page>
