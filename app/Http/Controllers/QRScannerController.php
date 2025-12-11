@@ -38,7 +38,7 @@ class QRScannerController extends Controller
             ->where('status', 'active')
             ->where('end_date', '>=', today())
             ->first();
-
+        dd($subscription);
         if (!$subscription) {
             $ExSubscription = Subscription::where('user_id', $user->id)
                 ->where('coach_id', Auth::user()->id)->first();
