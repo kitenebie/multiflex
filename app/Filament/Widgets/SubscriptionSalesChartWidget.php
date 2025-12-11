@@ -6,6 +6,7 @@ use Filament\Widgets\ChartWidget;
 use App\Models\SubscriptionTransaction;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Actions;
 use Filament\Actions\Action;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
@@ -21,6 +22,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
 
     public ?CarbonImmutable $startDate = null;
     public ?CarbonImmutable $endDate = null;
+    public ?int $year = null;
 
     public function mount(): void
     {
@@ -31,6 +33,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
         }
 
         $this->applyFilters(shouldRefresh: false);
+        $this->year = data_get($this->filters, 'year', now()->year);
     }
 
     /**
@@ -39,16 +42,10 @@ class SubscriptionSalesChartWidget extends ChartWidget
     public function filtersSchema($schema)
     {
         return $schema->components([
-            DatePicker::make('startDate')
-                ->label('From Date')
-                ->maxDate(fn () => data_get($this->filters, 'endDate'))
-                ->default($this->getDefaultFiltersState()['startDate'])
-                ->native(false),
-
-            DatePicker::make('endDate')
-                ->label('To Date')
-                ->minDate(fn () => data_get($this->filters, 'startDate'))
-                ->default($this->getDefaultFiltersState()['endDate'])
+            Select::make('year')
+                ->label('Year')
+                ->options($this->getYearOptions())
+                ->default(now()->year)
                 ->native(false),
 
             Actions::make([
@@ -70,17 +67,11 @@ class SubscriptionSalesChartWidget extends ChartWidget
     {
         $filters = $this->filters ?? [];
 
-        $start = $this->resolveDate(data_get($filters, 'startDate'), true)
-            ?? CarbonImmutable::now()->startOfMonth()->startOfDay();
-        $end = $this->resolveDate(data_get($filters, 'endDate'), false)
-            ?? CarbonImmutable::now()->endOfMonth()->endOfDay();
+        $year = data_get($filters, 'year', now()->year);
+        $this->year = $year;
 
-        if ($start->greaterThan($end)) {
-            [$start, $end] = [$end->startOfDay(), $start->endOfDay()];
-        }
-
-        $this->startDate = $start;
-        $this->endDate = $end;
+        $this->startDate = CarbonImmutable::createFromDate($year, 1, 1)->startOfDay();
+        $this->endDate = CarbonImmutable::createFromDate($year, 12, 31)->endOfDay();
 
         if ($shouldRefresh) {
             $this->dispatch('$refresh');
@@ -96,26 +87,20 @@ class SubscriptionSalesChartWidget extends ChartWidget
     protected function getDefaultFiltersState(): array
     {
         return [
-            'startDate' => CarbonImmutable::now()->startOfMonth()->toDateString(),
-            'endDate' => CarbonImmutable::now()->endOfMonth()->toDateString(),
+            'year' => now()->year,
         ];
     }
 
-    protected function resolveDate(null|string $value, bool $isStart): ?CarbonImmutable
+    protected function getYearOptions(): array
     {
-        if (blank($value)) {
-            return null;
-        }
-
-        $date = CarbonImmutable::parse($value);
-
-        return $isStart ? $date->startOfDay() : $date->endOfDay();
+        $years = range(2010, now()->year);
+        return array_combine($years, $years);
     }
 
     protected function getData(): array
     {
-        $startDate = $this->startDate?->format('Y-m-d') ?: now()->startOfMonth()->format('Y-m-d');
-        $endDate = $this->endDate?->format('Y-m-d') ?: now()->endOfMonth()->format('Y-m-d');
+        $startDate = $this->startDate?->format('Y-m-d') ?: now()->startOfYear()->format('Y-m-d');
+        $endDate = $this->endDate?->format('Y-m-d') ?: now()->endOfYear()->format('Y-m-d');
 
         $query = SubscriptionTransaction::query()
             ->join('subscriptions', 'subscription_transactions.subscription_id', '=', 'subscriptions.id')
@@ -143,5 +128,30 @@ class SubscriptionSalesChartWidget extends ChartWidget
     protected function getType(): string
     {
         return 'bar';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'scales' => [
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Fitness Offer',
+                    ],
+                ],
+                'y' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Total Sales',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function getHeading(): ?string
+    {
+        return $this->heading . ' ' . $this->year;
     }
 }
