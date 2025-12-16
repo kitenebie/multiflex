@@ -49,27 +49,20 @@ class PayslipForm
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
-        $secondCutoffType = $cutoffData['second_cutoff_type'];
         
         $now = Carbon::now();
-        $currentMonth = $now->month;
         $currentYear = $now->year;
+        $currentMonth = $now->month;
+        $nextMonth = $now->copy()->addMonth();
         
         if ($period === 'first') {
-            // First period: Day 1 to first cutoff day of current month
-            $periodStart = Carbon::create($currentYear, $currentMonth, 1);
-            $periodEnd = Carbon::create($currentYear, $currentMonth, $firstCutoff);
+            // First Period: first_cutoff_day to (second_cutoff_day - 1)
+            $periodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff);
+            $periodEnd = Carbon::create($currentYear, $currentMonth, $secondCutoff - 1);
         } else {
-            // Second period logic
-            if ($secondCutoffType === 'same_month') {
-                // Both cutoffs in same month: (first cutoff + 1) to second cutoff
-                $periodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff + 1);
-                $periodEnd = Carbon::create($currentYear, $currentMonth, $secondCutoff);
-            } else {
-                // Second cutoff in next month: (first cutoff + 1) to end of current month
-                $periodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff + 1);
-                $periodEnd = Carbon::create($currentYear, $currentMonth)->endOfMonth();
-            }
+            // Second Period: second_cutoff_day to (first_cutoff_day - 1 of next month)
+            $periodStart = Carbon::create($currentYear, $currentMonth, $secondCutoff);
+            $periodEnd = Carbon::create($nextMonth->year, $nextMonth->month, $firstCutoff - 1);
         }
         
         return [
@@ -83,31 +76,22 @@ class PayslipForm
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
-        $secondCutoffType = $cutoffData['second_cutoff_type'];
         
         $now = Carbon::now();
         $currentYear = $now->year;
         $currentMonth = $now->month;
+        $nextMonth = $now->copy()->addMonth();
         
         // Create Carbon instances for better date formatting
-        $periodStart = Carbon::create($currentYear, $currentMonth, 1);
-        $periodEnd = Carbon::create($currentYear, $currentMonth, $firstCutoff);
-        $secondPeriodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff + 1);
-        $nextMonth = $now->copy()->addMonth();
-        $nextMonthStart = Carbon::create($nextMonth->year, $nextMonth->month, 1);
-        $nextMonthEnd = Carbon::create($nextMonth->year, $nextMonth->month, $secondCutoff);
+        $firstPeriodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff);
+        $firstPeriodEnd = Carbon::create($currentYear, $currentMonth, $secondCutoff - 1);
+        $secondPeriodStart = Carbon::create($currentYear, $currentMonth, $secondCutoff);
+        $secondPeriodEnd = Carbon::create($nextMonth->year, $nextMonth->month, $firstCutoff - 1);
         
         $options = [
-            'first' => "First Period (" . $periodStart->format('M j Y') . " - " . $periodEnd->format('M j Y') . ")",
+            'first' => "First Period (" . $firstPeriodStart->format('M j Y') . " - " . $firstPeriodEnd->format('M j Y') . ")",
+            'second' => "Second Period (" . $secondPeriodStart->format('M j Y') . " - " . $secondPeriodEnd->format('M j Y') . ")",
         ];
-        
-        if ($secondCutoffType === 'same_month') {
-            $secondPeriodEnd = Carbon::create($currentYear, $currentMonth, $secondCutoff);
-            $options['second'] = "Second Period (" . $secondPeriodStart->format('M j Y') . " - " . $secondPeriodEnd->format('M j Y') . ")";
-        } else {
-            $currentMonthEnd = Carbon::create($currentYear, $currentMonth)->endOfMonth();
-            $options['second'] = "Second Period (" . $secondPeriodStart->format('M j Y') . " - " . $currentMonthEnd->format('M j Y') . ", " . $nextMonthStart->format('M j Y') . " - " . $nextMonthEnd->format('M j Y') . ")";
-        }
         
         return $options;
     }
@@ -117,51 +101,47 @@ class PayslipForm
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
-        $secondCutoffType = $cutoffData['second_cutoff_type'];
         
         $now = Carbon::now();
-        $currentMonth = $now->month;
         $currentYear = $now->year;
-        $daysInMonth = Carbon::create($currentYear, $currentMonth)->daysInMonth;
+        $currentMonth = $now->month;
+        $daysInCurrentMonth = Carbon::create($currentYear, $currentMonth)->daysInMonth;
+        $nextMonth = $now->copy()->addMonth();
+        $daysInNextMonth = Carbon::create($nextMonth->year, $nextMonth->month)->daysInMonth;
         
         $disabledDates = [];
         
         if ($field === 'period_start') {
             if ($period === 'first') {
-                // For first period start: only day 1 should be enabled
-                for ($day = 2; $day <= $daysInMonth; $day++) {
-                    $disabledDates[] = Carbon::create($currentYear, $currentMonth, $day)->format('Y-m-d');
+                // For first period start: only first_cutoff_day should be enabled
+                for ($day = 1; $day <= $daysInCurrentMonth; $day++) {
+                    if ($day !== $firstCutoff) {
+                        $disabledDates[] = Carbon::create($currentYear, $currentMonth, $day)->format('Y-m-d');
+                    }
                 }
             } else {
-                // For second period start: only (first cutoff + 1) should be enabled
-                $startDay = $firstCutoff + 1;
-                for ($day = 1; $day <= $daysInMonth; $day++) {
-                    if ($day !== $startDay) {
+                // For second period start: only second_cutoff_day should be enabled
+                for ($day = 1; $day <= $daysInCurrentMonth; $day++) {
+                    if ($day !== $secondCutoff) {
                         $disabledDates[] = Carbon::create($currentYear, $currentMonth, $day)->format('Y-m-d');
                     }
                 }
             }
         } elseif ($field === 'period_end') {
             if ($period === 'first') {
-                // For first period end: only first cutoff day should be enabled
-                for ($day = 1; $day <= $daysInMonth; $day++) {
-                    if ($day !== $firstCutoff) {
+                // For first period end: only (second_cutoff_day - 1) should be enabled
+                $endDay = $secondCutoff - 1;
+                for ($day = 1; $day <= $daysInCurrentMonth; $day++) {
+                    if ($day !== $endDay) {
                         $disabledDates[] = Carbon::create($currentYear, $currentMonth, $day)->format('Y-m-d');
                     }
                 }
             } else {
-                // For second period end: depends on cutoff type
-                if ($secondCutoffType === 'same_month') {
-                    // Only second cutoff day should be enabled
-                    for ($day = 1; $day <= $daysInMonth; $day++) {
-                        if ($day !== $secondCutoff) {
-                            $disabledDates[] = Carbon::create($currentYear, $currentMonth, $day)->format('Y-m-d');
-                        }
-                    }
-                } else {
-                    // Only end of month should be enabled
-                    for ($day = 1; $day < $daysInMonth; $day++) {
-                        $disabledDates[] = Carbon::create($currentYear, $currentMonth, $day)->format('Y-m-d');
+                // For second period end: only (first_cutoff_day - 1 of next month) should be enabled
+                $endDay = $firstCutoff - 1;
+                for ($day = 1; $day <= $daysInNextMonth; $day++) {
+                    if ($day !== $endDay) {
+                        $disabledDates[] = Carbon::create($nextMonth->year, $nextMonth->month, $day)->format('Y-m-d');
                     }
                 }
             }
@@ -196,8 +176,6 @@ class PayslipForm
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) {
                         $periodDates = self::getPayPeriodDates($state);
-                        $disabledDates = self::getDisabledDates('period_start', $state);
-                        $disabledEndDates = self::getDisabledDates('period_end', $state);
                         
                         $set('period_start', $periodDates['start']);
                         $set('period_end', $periodDates['end']);

@@ -44,7 +44,7 @@ class ListPayslips extends ListRecords
                     ]);
                 })
                 ->schema([
-                    Grid::make(1)
+                    Grid::make(1)->columns(2)
                         ->schema([
                             Select::make('First_Cutoff')
                                 ->options(collect(range(1, 28))->mapWithKeys(function ($day) {
@@ -88,7 +88,7 @@ class ListPayslips extends ListRecords
                                 ->default($this->getCutoffData()['tax_rate'] ?? 0)
                                 ->helperText('Enter tax rate as percentage (e.g., 5.0 for 5.0%)'),
                         ]),
-                ])->columns(2)
+                ])
         ];
     }
 
