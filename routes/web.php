@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaySlipController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +28,7 @@ Route::post('/qr-scan', [App\Http\Controllers\QRScannerController::class, 'scan'
 Route::get('paymentMail', function () {
     return view('Mailler.payment_submitted');
 })->name('paymentMail');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payslips/view/{PaySlipId}', [PaySlipController::class, 'index']);
+});
