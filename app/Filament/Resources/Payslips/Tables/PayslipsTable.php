@@ -39,6 +39,9 @@ class PayslipsTable
                     ->numeric()
                     ->money('PHP')
                     ->sortable(),
+                TextColumn::make('days_attended')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('total_deductions')
                     ->numeric()
                     ->money('PHP')
