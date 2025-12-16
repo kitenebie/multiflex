@@ -23,7 +23,7 @@ class PayslipsTable
         $user = Auth::user();
         
         $query = $user && $user->role === 'coach'
-            ? Payslip::query()->where('user_id', $user->id)
+            ? Payslip::query()->where('user_id', $user->id)->where('is_submit', true)
             : Payslip::query();
         return $table->query($query->orderByDesc('id'))
             ->columns([

@@ -97,23 +97,25 @@ class CreatePayslip extends CreateRecord
             // 6️⃣ Totals
             $totalDeductions = $attendanceDeduction + $tax + $sss + $philhealth + $pagibig;
             $netPay = $gross - ($tax + $sss + $philhealth + $pagibig);
-
-            Payslip::updateOrCreate([
-                'user_id' => $coach->id,
-                'period_start' => $dates['start']->format('Y-m-d'),
-                'period_end' => $dates['end']->format('Y-m-d'),
-                'basic_salary' => $basicSalary,
-                'total_salary' => round($gross, 2),
-                'allowances' => $data['allowances'] ?? 0,
-                'overtime_pay' => $data['overtime_pay'] ?? 0,
-                'tax' => round($tax, 2),
-                'sss' => $sss,
-                'philhealth' => $philhealth,
-                'pagibig' => $pagibig,
-                'total_deductions' => round($totalDeductions, 2),
-                'net_pay' => round($netPay, 2),
-                'days_attended' => $daysWorked,
-            ]);
+            if ($daysWorked < 0) {
+                Payslip::updateOrCreate([
+                    'user_id' => $coach->id,
+                    'period_start' => $dates['start']->format('Y-m-d'),
+                    'period_end' => $dates['end']->format('Y-m-d'),
+                    'basic_salary' => $basicSalary,
+                    'total_salary' => round($gross, 2),
+                    'allowances' => $data['allowances'] ?? 0,
+                    'overtime_pay' => $data['overtime_pay'] ?? 0,
+                    'tax' => round($tax, 2),
+                    'sss' => $sss,
+                    'philhealth' => $philhealth,
+                    'pagibig' => $pagibig,
+                    'total_deductions' => round($totalDeductions, 2),
+                    'net_pay' => round($netPay, 2),
+                    'days_attended' => $daysWorked,
+                    'is_submit' => $netPay > 0 ? true : false,
+                ]);
+            }
         }
 
         // Filament requires one model return
