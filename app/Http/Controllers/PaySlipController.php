@@ -9,8 +9,9 @@ class PaySlipController extends Controller
 {
     public function index($PaySlipId)
     {
+        $user = Auth::user();
         $PaySlip = \App\Models\Payslip::findOrFail($PaySlipId);
-        if(Auth::user()->roles()->where('name', 'admin')->exists()){
+        if($PaySlip->user_id !== $user->id() || $user->roles()->where('name', 'admin')->exists()){
             abort(403, 'Unauthorized action.');
         }
         return view('filament.pages.payslip-print', compact('PaySlip'));
