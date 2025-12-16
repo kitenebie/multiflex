@@ -38,6 +38,7 @@ class QRScannerController extends Controller
         }
         
         if ($user->role ==='member') {
+            dd('member scanned');
             $subscription = Subscription::where('user_id', $user->id)
                 ->where('coach_id', Auth::user()->id)
                 ->where('status', 'active')
