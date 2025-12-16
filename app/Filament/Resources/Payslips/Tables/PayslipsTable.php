@@ -27,6 +27,12 @@ class PayslipsTable
             : Payslip::query();
         return $table->query($query->orderByDesc('id'))
             ->columns([
+                TextColumn::make('is_submit')
+                    ->label('Status')
+                    ->badge()
+                    ->getStateUsing(fn($record) => $record->is_submit ? 'Submitted' : 'Draft')
+                    ->color(fn($record) => $record->is_submit ? 'success' : 'warning')
+                    ->sortable(),
                 // Employee Information
                 TextColumn::make('employee.name')
                     ->label('Employee Name')
@@ -101,15 +107,6 @@ class PayslipsTable
                     ->sortable()
                     ->weight(FontWeight::Bold)
                     ->color('success'),
-
-                // // Status
-                // TextColumn::make('is_submit')
-                //     ->label('Status')
-                //     ->badge()
-                //     ->getStateUsing(fn($record) => $record->is_submit ? 'Submitted' : 'Draft')
-                //     ->color(fn($record) => $record->is_submit ? 'success' : 'warning')
-                //     ->sortable(),
-
                 // Actions and Timestamps
                 TextColumn::make('created_at')
                     ->label('Created')
