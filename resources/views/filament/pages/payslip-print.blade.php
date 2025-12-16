@@ -29,8 +29,8 @@
     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-8">
      <div class="flex items-center justify-between">
       <div>
-       <h1 id="company-name" class="text-3xl font-bold mb-2">GMS Fitness Center</h1>
-       <p id="company-address" class="text-indigo-100">Manila, Philippines</p>
+       <h1 id="company-name" class="text-3xl font-bold mb-2">Multiflex Fitness Gym</h1>
+       <p id="company-address" class="text-indigo-100">Zone 6, Bulan, Sorsogon</p>
       </div>
       <div class="text-right">
        <div class="text-4xl mb-2">
@@ -43,22 +43,19 @@
     <div class="p-8 border-b-2 border-indigo-100">
      <div class="grid grid-cols-2 gap-6">
       <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Employee Name</label>
-       <p id="employee-name" class="text-lg font-medium text-gray-900 mt-1">John Smith</p>
+       <p id="employee-name" class="text-lg font-medium text-gray-900 mt-1">{{ $PaySlip->employee->name }}</p>
       </div>
       <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Employee ID</label>
-       <p id="employee-id" class="text-lg font-medium text-gray-900 mt-1">EMP-2024-001</p>
+       <p id="employee-id" class="text-lg font-medium text-gray-900 mt-1">{{ $PaySlip->employee->id }}</p>
       </div>
       <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Designation</label>
-       <p id="designation" class="text-lg font-medium text-gray-900 mt-1">Senior Software Engineer</p>
-      </div>
-      <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Department</label>
-       <p id="department" class="text-lg font-medium text-gray-900 mt-1">Engineering</p>
+       <p id="designation" class="text-lg font-medium text-gray-900 mt-1">{{ $PaySlip->employee->role }}</p>
       </div>
       <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Pay Period</label>
-       <p id="pay-period" class="text-lg font-medium text-gray-900 mt-1">January 2024</p>
+       <p id="pay-period" class="text-lg font-medium text-gray-900 mt-1">{{ $PaySlip->period_start }} - {{ $PaySlip->period_end }}</p>
       </div>
       <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Payment Date</label>
-       <p id="pay-date" class="text-lg font-medium text-gray-900 mt-1">31 Jan 2024</p>
+       <p id="pay-date" class="text-lg font-medium text-gray-900 mt-1">{{ $PaySlip->created_at }}</p>
       </div>
      </div>
     </div><!-- Earnings and Deductions -->
@@ -67,30 +64,26 @@
       <div>
        <h3 class="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-green-500">Earnings</h3>
        <div class="space-y-3">
-        <div class="flex justify-between"><span class="text-gray-700">Basic Salary</span> <span class="font-semibold text-gray-900">$5,000.00</span>
+        <div class="flex justify-between"><span class="text-gray-700">Daily Basic Salary</span> <span class="font-semibold text-gray-900">PHP {{ $PaySlip->basic_salary }}</span>
         </div>
-        <div class="flex justify-between"><span class="text-gray-700">House Rent Allowance</span> <span class="font-semibold text-gray-900">$1,500.00</span>
+        <div class="flex justify-between"><span class="text-gray-700">Monthly Basic Salary</span> <span class="font-semibold text-gray-900">PHP {{ $PaySlip->total_salary }}</span>
         </div>
-        <div class="flex justify-between"><span class="text-gray-700">Transport Allowance</span> <span class="font-semibold text-gray-900">$500.00</span>
-        </div>
-        <div class="flex justify-between"><span class="text-gray-700">Performance Bonus</span> <span class="font-semibold text-gray-900">$1,000.00</span>
-        </div>
-        <div class="flex justify-between pt-3 border-t-2 border-gray-200"><span class="font-bold text-gray-900">Total Earnings</span> <span class="font-bold text-green-600 text-lg">$8,000.00</span>
+        <div class="flex justify-between pt-3 border-t-2 border-gray-200"><span class="font-bold text-gray-900">Total Earnings</span> <span class="font-bold text-green-600 text-lg">PHP {{ $PaySlip->total_salary }}</span>
         </div>
        </div>
       </div><!-- Deductions -->
       <div>
        <h3 class="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-red-500">Deductions</h3>
        <div class="space-y-3">
-        <div class="flex justify-between"><span class="text-gray-700">Income Tax</span> <span class="font-semibold text-gray-900">$800.00</span>
+        <div class="flex justify-between"><span class="text-gray-700">Income Tax</span> <span class="font-semibold text-gray-900">PHP {{ $PaySlip->tax }}</span>
         </div>
-        <div class="flex justify-between"><span class="text-gray-700">Social Security</span> <span class="font-semibold text-gray-900">$400.00</span>
+        <div class="flex justify-between"><span class="text-gray-700">SSS</span> <span class="font-semibold text-gray-900">PHP {{ $PaySlip->sss }}</span>
         </div>
-        <div class="flex justify-between"><span class="text-gray-700">Health Insurance</span> <span class="font-semibold text-gray-900">$200.00</span>
+        <div class="flex justify-between"><span class="text-gray-700">PhilHealth</span> <span class="font-semibold text-gray-900">PHP {{ $PaySlip->philhealth }}</span>
         </div>
-        <div class="flex justify-between"><span class="text-gray-700">Provident Fund</span> <span class="font-semibold text-gray-900">$600.00</span>
+        <div class="flex justify-between"><span class="text-gray-700">Pag-Ibig</span> <span class="font-semibold text-gray-900">PHP {{ $PaySlip->pagibig }}</span>
         </div>
-        <div class="flex justify-between pt-3 border-t-2 border-gray-200"><span class="font-bold text-gray-900">Total Deductions</span> <span class="font-bold text-red-600 text-lg">$2,000.00</span>
+        <div class="flex justify-between pt-3 border-t-2 border-gray-200"><span class="font-bold text-gray-900">Total Deductions</span> <span class="font-bold text-red-600 text-lg">PHP {{ $PaySlip->total_deductions }}</span>
         </div>
        </div>
       </div>
@@ -100,7 +93,7 @@
      <div class="flex justify-between items-center">
       <div>
        <p class="text-indigo-100 text-sm uppercase tracking-wide mb-1">Net Pay Amount</p>
-       <p class="text-4xl font-bold">$6,000.00</p>
+       <p class="text-4xl font-bold">PHP {{ $PaySlip->net_pay }}</p>
       </div>
       <div class="text-right">
        <p class="text-indigo-100 text-sm">Amount in Words</p>

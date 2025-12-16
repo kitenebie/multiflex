@@ -12,7 +12,7 @@ class Payslip extends Model
 {
     protected $fillable = [
         'user_id',
-        'period_start',
+        'period_start', 
         'period_end',
         'basic_salary',
         'days_attended',
