@@ -70,6 +70,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                 TextColumn::make('address')->searchable()->toggleable(),
                 TextColumn::make('age')->toggleable(),
                 TextColumn::make('gender')->toggleable(),
+                TextColumn::make('daily_basic_salary')->money('php', true)->toggleable(),
             ])
             ->filters([
                 SelectFilter::make('gender')
@@ -98,7 +99,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->tooltip('view')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->form([
+                    ->schema([
                         Grid::make(2)
                             ->schema([
                                 FileUpload::make('profile_picture')->image()->directory('profile_pictures')->columnSpanFull()->disabled(),
@@ -109,6 +110,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 Select::make('role')->options(['coach' => 'Coach', 'member' => 'Member'])->disabled(),
                                 Textarea::make('address')->disabled(),
                                 TextInput::make('age')->numeric()->disabled(),
+                                TextInput::make('daily_basic_salary')->numeric()->disabled(),
                                 Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other'])->disabled(),
                             ])
                     ])
@@ -131,6 +133,7 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                                 Textarea::make('address'),
                                 TextInput::make('age')->numeric(),
                                 Select::make('gender')->options(['male' => 'Male', 'female' => 'Female', 'other' => 'Other']),
+                                TextInput::make('daily_basic_salary')->numeric()->required(),
                             ])
                     ])
                     ->fillForm(fn(User $record) => $record->toArray())
@@ -153,6 +156,9 @@ class Index extends Component implements HasActions, HasSchemas, HasTable, HasFi
                     ->requiresConfirmation()
                     ->icon('heroicon-o-users')
                     ->color('success')
+                    ->schema([
+                        TextInput::make('daily_basic_salary')->label('Daily Basic Salary')->numeric()->required(),
+                    ])
                     ->action(function (User $record) {
                         $record->update(['status' => 'active']);
                         $mailService = new UserApprovalMailService();
