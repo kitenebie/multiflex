@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Payslips\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -127,7 +128,10 @@ class PayslipsTable
             ->filters([
                 // Add filters for date range and employee if needed
             ])->recordActions([
-                ViewAction::make()->url(fn($record)=> '/payslips/view/'.$record->id),
+                Action::make('view')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->url(fn($record) => '/payslips/view/'.$record->id),
             ])
             ->defaultSort('created_at', 'desc');
     }
