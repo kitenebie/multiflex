@@ -108,7 +108,7 @@ class CreatePayslip extends CreateRecord
                 'period_start' => $dates['start']->format('Y-m-d'),
                 'period_end' => $dates['end']->format('Y-m-d'),
                 'basic_salary' => $basicSalary,
-                'total_salary' => round($netPay, 2),
+                'total_salary' => round($totalSalary, 2),
                 'allowances' => $data['allowances'] ?? 0,
                 'overtime_pay' => $data['overtime_pay'] ?? 0,
                 'tax' => round($tax, 2),

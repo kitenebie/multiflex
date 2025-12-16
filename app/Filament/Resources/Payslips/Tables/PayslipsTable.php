@@ -16,6 +16,7 @@ class PayslipsTable
         return $table
             ->columns([
                 TextColumn::make('employee.name')
+                    ->label('Coach name')
                     ->searchable(),
                 TextColumn::make('period_start')
                     ->date()
@@ -24,10 +25,17 @@ class PayslipsTable
                     ->date()
                     ->sortable(),
                 TextColumn::make('basic_salary')
+                    ->label('Total daily basic salary')
+                    ->numeric()
+                    ->money('PHP')
+                    ->sortable(),
+                TextColumn::make('total_salary')
+                    ->label('Total monthly basic salary')
                     ->numeric()
                     ->money('PHP')
                     ->sortable(),
                 TextColumn::make('net_pay')
+                    ->label('Gross Pay (Net Pay)')
                     ->numeric()
                     ->money('PHP')
                     ->sortable(),
