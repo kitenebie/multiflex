@@ -62,7 +62,6 @@ class PayslipForm
                     ->disabled(),
                 TextInput::make('allowances')
                     ->required()
-                    ->disabled()
                     ->default(0.0),
                 TextInput::make('overtime_pay')
                     ->required()
