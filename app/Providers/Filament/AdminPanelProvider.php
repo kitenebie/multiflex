@@ -55,10 +55,10 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 // FilamentShieldPlugin::make(),
                 // TicketingPlugin::make(), 
-                FilamentLogViewer::make()
-                    // ->authorize(fn() => Auth::user()->role === 'admin')
-                    ->navigationGroup('Developers Support')
-                    ->navigationSort(10),
+                // FilamentLogViewer::make()
+                //     // ->authorize(fn() => Auth::user()->role === 'admin')
+                //     ->navigationGroup('Developers Support')
+                //     ->navigationSort(10),
                 FilamentTablePresetPlugin::make(),
             ])
             ->middleware([
@@ -91,7 +91,7 @@ class AdminPanelProvider extends PanelProvider
             ->globalSearch(false)
             ->authMiddleware([
                 Authenticate::class,
-            ])
+            ])->sidebarCollapsibleOnDesktop()
             ->userMenuItems([
                 'logout' => fn(Action $action) => $action->label('Log out')
                     ->hidden()

@@ -370,7 +370,7 @@
                                             @endif
                                         @else
                                             @if (auth()->check() && auth()->user()->status == 'pending')
-                                                <a href="#pricingSection" class="border-btn border-btn2">Your accout
+                                                <a href="#pricingSection" style="cursor: progress" class="border-btn border-btn2">Your accout
                                                     is waiting for Approval</a>
                                             @else
                                                 <a href="/register" class="border-btn border-btn2">Join Now</a>

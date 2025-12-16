@@ -43,6 +43,9 @@
                         <a href="/subscription?offer_id={{ $offer->id }}">Get started today</a>
                     @endif
                 @endif
+                @if (auth()->check() && auth()->user()->status == 'pending')
+                    <a style="cursor: progress">Your accout is waiting for Approval</a>
+                @endif
             </div>
         @endforeach
     </div>

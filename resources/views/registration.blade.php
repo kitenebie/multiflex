@@ -195,7 +195,7 @@
                         </div>
 
                         <div class="form-group mt-3">
-                            <a href="{{ route('login') }}" class="text-dark link-opacity-100 link-underline-primary w-100"><u>Have an accout?</u></a>
+                            <a href="{{ route('login') }}" class="text-dark link-opacity-100 link-underline-primary w-100"><u>Have an account?</u></a>
                         </div>
 
                     </form>
