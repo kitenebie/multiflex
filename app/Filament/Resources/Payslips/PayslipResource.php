@@ -15,6 +15,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class PayslipResource extends Resource
 {
@@ -53,4 +55,15 @@ class PayslipResource extends Resource
             'create' => CreatePayslip::route('/create'),
         ];
     }
+    public static function canAccess(): bool
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return false; // not logged in = no access
+        }
+
+        return !$user->roles()->where('name', 'member')->exists();
+    }
+    protected static UnitEnum|string|null $navigationGroup = 'Management';
 }
