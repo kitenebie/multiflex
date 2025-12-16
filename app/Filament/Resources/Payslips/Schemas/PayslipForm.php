@@ -185,7 +185,7 @@ class PayslipForm
                     ->disabledDates(fn ($get) => $get('pay_period') === 'first' 
                         ? self::getDisabledDates('period_start', 'first')
                         : self::getDisabledDates('period_start', 'second')
-                    )
+                    )->hidden()
                     ->required(),
                 DatePicker::make('period_end')
                     ->label('Period End')
@@ -193,23 +193,8 @@ class PayslipForm
                     ->disabledDates(fn ($get) => $get('pay_period') === 'first' 
                         ? self::getDisabledDates('period_end', 'first')
                         : self::getDisabledDates('period_end', 'second')
-                    )
+                    )->hidden()
                     ->required(),
-                TextInput::make('basic_salary')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('allowances')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
-                TextInput::make('overtime_pay')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
-                TextInput::make('tax')
-                    ->required()
-                    ->numeric()
-                    ->default($cutoffData['tax_rate']),
                 TextInput::make('sss')
                     ->required()
                     ->numeric()
@@ -222,14 +207,6 @@ class PayslipForm
                     ->required()
                     ->numeric()
                     ->default($cutoffData['pagibig_rate']),
-                TextInput::make('total_deductions')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
-                TextInput::make('net_pay')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
             ]);
     }
 }
