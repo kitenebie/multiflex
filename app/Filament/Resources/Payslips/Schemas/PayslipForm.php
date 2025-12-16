@@ -183,6 +183,7 @@ class PayslipForm
                     ->required(),
                 DatePicker::make('period_start')
                     ->label('Period Start')
+                    ->hidden()
                     ->default($firstPeriod['start'])
                     ->disabledDates(fn ($get) => $get('pay_period') === 'first' 
                         ? self::getDisabledDates('period_start', 'first')
@@ -191,6 +192,7 @@ class PayslipForm
                     ->required(),
                 DatePicker::make('period_end')
                     ->label('Period End')
+                    ->hidden()
                     ->default($firstPeriod['end'])
                     ->disabledDates(fn ($get) => $get('pay_period') === 'first' 
                         ? self::getDisabledDates('period_end', 'first')
@@ -199,37 +201,41 @@ class PayslipForm
                     ->required(),
                 TextInput::make('basic_salary')
                     ->required()
+                    ->disabled()
                     ->numeric(),
-                TextInput::make('allowances')
-                    ->required()
-                    ->numeric()
-                    ->default(0.0),
                 TextInput::make('overtime_pay')
                     ->required()
+                    ->disabled()
                     ->numeric()
                     ->default(0.0),
                 TextInput::make('tax')
                     ->required()
+                    ->hidden()
                     ->numeric()
                     ->default($cutoffData['tax_rate']),
                 TextInput::make('sss')
                     ->required()
+                    ->disabled()
                     ->numeric()
                     ->default($cutoffData['sss_rate']),
                 TextInput::make('philhealth')
                     ->required()
+                    ->disabled()
                     ->numeric()
                     ->default($cutoffData['philhealth_rate']),
                 TextInput::make('pagibig')
                     ->required()
+                    ->disabled()
                     ->numeric()
                     ->default($cutoffData['pagibig_rate']),
                 TextInput::make('total_deductions')
                     ->required()
+                    ->hidden()
                     ->numeric()
                     ->default(0.0),
                 TextInput::make('net_pay')
                     ->required()
+                    ->hidden()
                     ->numeric()
                     ->default(0.0),
             ]);
