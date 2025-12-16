@@ -43,13 +43,14 @@ class PayslipForm
         ];
     }
 
-    protected static function getPayPeriodDates(string $period = 'first'): array
+    protected static function getPayPeriodDates(string $period = 'first', ?Carbon $selectedMonth = null): array
     {
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
 
-        $now = Carbon::now();
+        // Use selected month or current month if not provided
+        $now = $selectedMonth ?? Carbon::now();
         $currentYear = $now->year;
         $currentMonth = $now->month;
         $nextMonth = $now->copy()->addMonth();
@@ -70,13 +71,14 @@ class PayslipForm
         ];
     }
 
-    protected static function getPayPeriodOptions(): array
+    protected static function getPayPeriodOptions(?Carbon $selectedMonth = null): array
     {
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
 
-        $now = Carbon::now();
+        // Use selected month or current month if not provided
+        $now = $selectedMonth ?? Carbon::now();
         $currentYear = $now->year;
         $currentMonth = $now->month;
         $nextMonth = $now->copy()->addMonth();
@@ -95,13 +97,14 @@ class PayslipForm
         return $options;
     }
 
-    protected static function getDisabledDates(string $field, string $period = 'first'): array
+    protected static function getDisabledDates(string $field, string $period = 'first', ?Carbon $selectedMonth = null): array
     {
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
 
-        $now = Carbon::now();
+        // Use selected month or current month if not provided
+        $now = $selectedMonth ?? Carbon::now();
         $currentYear = $now->year;
         $currentMonth = $now->month;
         $daysInCurrentMonth = Carbon::create($currentYear, $currentMonth)->daysInMonth;
@@ -158,13 +161,41 @@ class PayslipForm
 
         return $schema
             ->components([
-                Select::make('pay_period')
-                    ->label('Pay Period')
-                    ->options($payPeriodOptions)
-                    ->default('first')
+                DatePicker::make('selected_month')
+                    ->label('Select Month for Payslip Generation')
+                    ->default(Carbon::now()->startOfMonth())
+                    ->displayFormat('F Y')
+                    ->pickerFormat('Y-m')
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) {
-                        $periodDates = self::getPayPeriodDates($state);
+                        // Convert selected month to Carbon instance
+                        $selectedMonth = Carbon::parse($state)->startOfMonth();
+                        
+                        // Update pay period options based on selected month
+                        $payPeriodOptions = self::getPayPeriodOptions($selectedMonth);
+                        $set('pay_period_options', $payPeriodOptions);
+                        
+                        // Update period dates based on selected month
+                        $periodDates = self::getPayPeriodDates('first', $selectedMonth);
+                        $set('period_start', $periodDates['start']);
+                        $set('period_end', $periodDates['end']);
+                    })
+                    ->required()->columnSpanFull(),
+                Select::make('pay_period')
+                    ->label('Pay Period')
+                    ->options(function ($get) use ($payPeriodOptions) {
+                        // Use updated options if available, otherwise use default
+                        return $get('pay_period_options') ?? $payPeriodOptions;
+                    })
+                    ->default('first')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, Set $set, $get) {
+                        // Get selected month or use current month
+                        $selectedMonth = $get('selected_month')
+                            ? Carbon::parse($get('selected_month'))->startOfMonth()
+                            : Carbon::now()->startOfMonth();
+                        
+                        $periodDates = self::getPayPeriodDates($state, $selectedMonth);
 
                         $set('period_start', $periodDates['start']);
                         $set('period_end', $periodDates['end']);
@@ -183,8 +214,8 @@ class PayslipForm
                     ->default($firstPeriod['start'])
                     ->disabledDates(
                         fn($get) => $get('pay_period') === 'first'
-                            ? self::getDisabledDates('period_start', 'first')
-                            : self::getDisabledDates('period_start', 'second')
+                            ? self::getDisabledDates('period_start', 'first', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
+                            : self::getDisabledDates('period_start', 'second', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
                     )->hidden()
                     ->required(),
                 DatePicker::make('period_end')
@@ -192,8 +223,8 @@ class PayslipForm
                     ->default($firstPeriod['end'])
                     ->disabledDates(
                         fn($get) => $get('pay_period') === 'first'
-                            ? self::getDisabledDates('period_end', 'first')
-                            : self::getDisabledDates('period_end', 'second')
+                            ? self::getDisabledDates('period_end', 'first', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
+                            : self::getDisabledDates('period_end', 'second', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
                     )->hidden()
                     ->required(),
                 TextInput::make('sss')
