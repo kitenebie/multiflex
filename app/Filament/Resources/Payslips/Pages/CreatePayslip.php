@@ -122,7 +122,7 @@ class CreatePayslip extends CreateRecord
 
         // Ensure at least one payslip was created
         $latestPayslip = Payslip::latest()->first();
-        
+
         if (!$latestPayslip) {
             throw new \Exception('No payslips were created. At least one coach must have worked during the pay period.');
         }
@@ -134,16 +134,34 @@ class CreatePayslip extends CreateRecord
     /* ---------------------------------------------
      |  PH TAX (TRAIN LAW)
      | --------------------------------------------- */
+    /* ---------------------------------------------
+ |  PH TAX (TRAIN LAW) - MONTHLY
+ | --------------------------------------------- */
     protected function computePhTax(float $income): float
     {
-        if ($income <= 20833) return 0;
-        if ($income <= 33332) return ($income - 20833) * 0.15;
-        if ($income <= 66666) return 1875 + (($income - 33333) * 0.20);
-        if ($income <= 166666) return 8541.80 + (($income - 66667) * 0.25);
-        if ($income <= 666666) return 33541.80 + (($income - 166667) * 0.30);
+        if ($income <= 20833) {
+            return 0;
+        }
 
-        return 183541.80 + (($income - 666667) * 0.35);
+        if ($income <= 33333) {
+            return ($income - 20833) * 0.15;
+        }
+
+        if ($income <= 66667) {
+            return 1875 + (($income - 33333) * 0.20);
+        }
+
+        if ($income <= 166667) {
+            return 8541.67 + (($income - 66667) * 0.25);
+        }
+
+        if ($income <= 666667) {
+            return 33541.67 + (($income - 166667) * 0.30);
+        }
+
+        return 183541.67 + (($income - 666667) * 0.35);
     }
+
 
     /* ---------------------------------------------
      |  ATTENDANCE CALCULATION
