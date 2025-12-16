@@ -11,6 +11,7 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Grid;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
@@ -21,8 +22,10 @@ class ListPayslips extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->label('Generate Payslip')->createAnother(false),
+            CreateAction::make()
+                ->hidden(FacadesAuth::user()->role !== 'admin')->label('Generate Payslip')->createAnother(false),
             Action::make('date_cutoff_info')
+                ->hidden(FacadesAuth::user()->role !== 'admin')
                 ->label('Settings')
                 ->modalHeading('Payslip Settings Information')
                 ->modalContent(fn() => new HtmlString("Payslips are generated based on a monthly cutoff period, typically from the 1st to the last day of each month. Ensure that all work hours, overtime, and deductions are accurately recorded within this period to reflect in the payslip. For any discrepancies or adjustments, please contact the HR department before the end of the month."))
