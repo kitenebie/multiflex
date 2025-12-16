@@ -115,7 +115,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-indigo-100 text-sm">Amount in Words</p>
-                        <p class="text-lg font-semibold">{{ numberToWords($PaySlip->net_pay) }}</p>
+                        <p class="text-sm font-semibold">{{ numberToWords($PaySlip->net_pay) }}</p>
                     </div>
                 </div>
             </div><!-- Footer -->
