@@ -71,7 +71,6 @@ class Payslip extends Model
         });
     }
 
-
     /**
      * PH Monthly Withholding Tax (TRAIN Law)
      */
