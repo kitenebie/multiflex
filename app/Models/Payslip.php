@@ -32,7 +32,7 @@ class Payslip extends Model
             // 1️⃣ Attendance deduction
             $attendanceDeduction = self::calculateAttendanceDeduction($payslip);
 
-            // Reduce basic salary
+            // Adjust basic salary
             $adjustedBasicSalary = max(
                 0,
                 $payslip->basic_salary - $attendanceDeduction
@@ -50,7 +50,7 @@ class Payslip extends Model
                 - $payslip->philhealth
                 - $payslip->pagibig;
 
-            // 4️⃣ Compute PH tax
+            // 4️⃣ Tax computation
             $payslip->tax = self::computePhTax($taxable);
 
             // 5️⃣ Total deductions
@@ -72,28 +72,22 @@ class Payslip extends Model
     }
 
     /**
-     * PH Monthly Withholding Tax (TRAIN Law)
+     * TRAIN Law Monthly Withholding Tax
      */
     protected static function computePhTax(float $income): float
     {
-        if ($income <= 20833) {
-            return 0;
-        } elseif ($income <= 33332) {
-            return ($income - 20833) * 0.15;
-        } elseif ($income <= 66666) {
-            return 1875 + (($income - 33333) * 0.20);
-        } elseif ($income <= 166666) {
-            return 8541.80 + (($income - 66667) * 0.25);
-        } elseif ($income <= 666666) {
-            return 33541.80 + (($income - 166667) * 0.30);
-        }
+        if ($income <= 20833) return 0;
+        if ($income <= 33332) return ($income - 20833) * 0.15;
+        if ($income <= 66666) return 1875 + (($income - 33333) * 0.20);
+        if ($income <= 166666) return 8541.80 + (($income - 66667) * 0.25);
+        if ($income <= 666666) return 33541.80 + (($income - 166667) * 0.30);
 
         return 183541.80 + (($income - 666667) * 0.35);
     }
 
     protected static function calculateAttendanceDeduction(self $payslip): float
     {
-        $dailyRate = $payslip->basic_salary; // 8-hr salary
+        $dailyRate = $payslip->basic_salary;
         $hourlyRate = $dailyRate / 8;
 
         $logs = AttendanceLog::where('user_id', $payslip->employee_id)
@@ -104,7 +98,6 @@ class Payslip extends Model
 
         foreach ($logs as $log) {
             if (!$log->time_in || !$log->time_out) {
-                // no time record = full deduction
                 $totalDeduction += $dailyRate;
                 continue;
             }
@@ -113,15 +106,16 @@ class Payslip extends Model
                 ->diffInMinutes(Carbon::parse($log->time_out)) / 60;
 
             if ($workedHours < 8) {
-                $missingHours = 8 - $workedHours;
-                $totalDeduction += $missingHours * $hourlyRate;
+                $totalDeduction += (8 - $workedHours) * $hourlyRate;
             }
         }
 
         return round($totalDeduction, 2);
     }
+
+    // ✅ CORRECT relationship (NO ROLE FILTER HERE)
     public function employee(): BelongsTo
     {
-        return $this->belongsTo(User::class)->role('coach');
+        return $this->belongsTo(User::class, 'employee_id');
     }
 }
