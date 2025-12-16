@@ -26,6 +26,7 @@ return new class extends Migration
             $table->decimal('total_deductions')->default(0);
             $table->decimal('net_pay')->default(0);
             $table->index(['user_id', 'period_start', 'period_end']);
+            $table->timestamps();
         });
     }
 
