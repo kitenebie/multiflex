@@ -27,6 +27,22 @@ class Payslip extends Model
         'net_pay',
     ];
 
+    protected $casts = [
+        'period_start' => 'date',
+        'period_end' => 'date',
+        'basic_salary' => 'decimal:2',
+        'days_attended' => 'integer',
+        'total_salary' => 'decimal:2',
+        'allowances' => 'decimal:2',
+        'overtime_pay' => 'decimal:2',
+        'tax' => 'decimal:2',
+        'sss' => 'decimal:2',
+        'philhealth' => 'decimal:2',
+        'pagibig' => 'decimal:2',
+        'total_deductions' => 'decimal:2',
+        'net_pay' => 'decimal:2',
+    ];
+
     // ✅ CORRECT relationship (NO ROLE FILTER HERE)
     public function employee(): BelongsTo
     {

@@ -66,12 +66,12 @@ class PayslipInfolist
 
                 TextEntry::make('period_start')
                     ->label('Pay Period Start:')
-                    ->date('F j, Y')
+                    ->getStateUsing(fn($record) => $record->period_start->format('F j, Y'))
                     ->extraAttributes(['class' => 'font-semibold']),
-                    
+
                 TextEntry::make('period_end')
                     ->label('Pay Period End:')
-                    ->date('F j, Y')
+                    ->getStateUsing(fn($record) => $record->period_end->format('F j, Y'))
                     ->extraAttributes(['class' => 'font-semibold']),
                     
                 TextEntry::make('days_attended')

@@ -26,7 +26,9 @@ class PayslipsTable
                 // Pay Period
                 TextColumn::make('period')
                     ->label('Pay Period')
-                    ->getStateUsing(fn($record) => $record->period_start->format('M j') . ' - ' . $record->period_end->format('M j, Y'))
+                    ->getStateUsing(function ($record) {
+                        return $record->period_start->format('M j') . ' - ' . $record->period_end->format('M j, Y');
+                    })
                     ->searchable(),
                 
                 // Attendance
