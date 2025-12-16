@@ -8,36 +8,39 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Payslip extends Model
 {
     protected $fillable = [
-        'user_id',
+        'employee_id',
         'period_start',
         'period_end',
         'basic_salary',
-        'overtime_hours',
-        'overtime_rate',
-        'overtime_amount',
-        'deductions',
-        'gross_amount',
-        'net_amount',
-        'status',
-        'notes',
+        'allowances',
+        'overtime_pay',
+        'tax',
+        'sss',
+        'philhealth',
+        'pagibig',
+        'total_deductions',
+        'net_pay',
     ];
 
-    protected $casts = [
-        'period_start' => 'date',
-        'period_end' => 'date',
-        'basic_salary' => 'decimal:2',
-        'overtime_rate' => 'decimal:2',
-        'overtime_amount' => 'decimal:2',
-        'deductions' => 'decimal:2',
-        'gross_amount' => 'decimal:2',
-        'net_amount' => 'decimal:2',
-    ];
-
-    /**
-     * Get the user that owns the payslip.
-     */
-    public function user(): BelongsTo
+    protected static function booted()
     {
-        return $this->belongsTo(User::class)->role('coach');
+        static::saving(function ($payslip) {
+            $payslip->total_deductions =
+                $payslip->tax +
+                $payslip->sss +
+                $payslip->philhealth +
+                $payslip->pagibig;
+
+            $payslip->net_pay =
+                ($payslip->basic_salary +
+                $payslip->allowances +
+                $payslip->overtime_pay) -
+                $payslip->total_deductions;
+        });
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(User::class);
     }
 }
