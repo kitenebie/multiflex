@@ -40,6 +40,7 @@ class ListPayslips extends ListRecords
                             $suffix = $this->getOrdinalSuffix($day);
                             return [$day => $day . $suffix];
                         })->toArray())
+                        ->default($this->getCutoffData()['first_cutoff_day'] ?? null)
                         ->required()
                         ->live()
                         ->afterStateUpdated(fn() => $this->dispatch('$refresh'))
@@ -52,6 +53,7 @@ class ListPayslips extends ListRecords
                             }
                             return $this->getSecondCutoffOptions($firstCutoff);
                         })
+                        ->default($this->getDefaultSecondCutoff())
                         ->required()
                         ->helperText('Select the cutoff day for the second pay period. Options will update based on your first cutoff selection.')
                 ]),
@@ -68,6 +70,7 @@ class ListPayslips extends ListRecords
         $data = [
             'first_cutoff_day' => $firstCutoff,
             'second_cutoff_day' => $secondCutoff,
+            'second_cutoff_type' => $this->getSecondCutoffType($secondCutoff, $firstCutoff),
             'updated_at' => now()->toISOString(),
             'updated_by' => Auth::user()?->name ?? 'System'
         ];
@@ -125,5 +128,55 @@ class ListPayslips extends ListRecords
         }
 
         return null;
+    }
+
+    protected function getCutoffData(): array
+    {
+        $filePath = base_path('cutoff-bases.json');
+        
+        if (!File::exists($filePath)) {
+            return [
+                'first_cutoff_day' => null,
+                'second_cutoff_day' => null,
+                'second_cutoff_type' => 'same_month'
+            ];
+        }
+
+        $jsonData = File::get($filePath);
+        $data = json_decode($jsonData, true);
+        
+        return [
+            'first_cutoff_day' => $data['first_cutoff_day'] ?? null,
+            'second_cutoff_day' => $data['second_cutoff_day'] ?? null,
+            'second_cutoff_type' => $data['second_cutoff_type'] ?? 'same_month'
+        ];
+    }
+
+    protected function getDefaultSecondCutoff(): ?string
+    {
+        $cutoffData = $this->getCutoffData();
+        $secondCutoffDay = $cutoffData['second_cutoff_day'] ?? null;
+        $secondCutoffType = $cutoffData['second_cutoff_type'] ?? 'same_month';
+        
+        if (!$secondCutoffDay) {
+            return null;
+        }
+
+        return "{$secondCutoffType}_{$secondCutoffDay}";
+    }
+
+    protected function getSecondCutoffType(?int $secondCutoffDay, ?int $firstCutoffDay): string
+    {
+        if (!$secondCutoffDay || !$firstCutoffDay) {
+            return 'same_month';
+        }
+
+        // If second cutoff is after first cutoff in the same month
+        if ($secondCutoffDay > $firstCutoffDay && $secondCutoffDay <= 28) {
+            return 'same_month';
+        }
+
+        // Otherwise it's in the next month
+        return 'next_month';
     }
 }
