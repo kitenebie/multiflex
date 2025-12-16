@@ -25,7 +25,7 @@
                 title: "Subscription Expiration Warning",
                 text: data.message,
                 showConfirmButton: false,
-                timer: 2000
+                timer: 4300
             });
         });
     </script>
