@@ -124,6 +124,7 @@ protected function getYearOptions(): array
                     'label' => $offer->name,
                     'data' => $monthlyData,
                     'backgroundColor' => $colors[$index % count($colors)],
+                    'borderColor' => $colors[$index % count($colors)],
                 ];
             }
     
