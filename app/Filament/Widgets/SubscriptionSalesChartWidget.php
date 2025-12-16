@@ -17,6 +17,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
 
     protected ?string $heading = 'Subscription Sales by Fitness Offer';
     protected int|string|array $columnSpan = 1;
+    protected ?string $height = '300px';
 
     public ?CarbonImmutable $startDate = null;
     public ?CarbonImmutable $endDate = null;
@@ -46,6 +47,19 @@ class SubscriptionSalesChartWidget extends ChartWidget
                 ->default(now()->year)
                 ->reactive()
                 ->afterStateUpdated(fn ($state) => $this->applyFilters()),
+
+            Actions::make([
+                Action::make('applyFilters')
+                    ->label('Apply')
+                    ->action('applyFilters')
+                    ->icon('heroicon-o-funnel')
+                    ->color('primary'),
+                Action::make('resetFilters')
+                    ->label('Reset')
+                    ->color('danger')
+                    ->action('resetFilters')
+                    ->icon('heroicon-o-arrow-path'),
+            ])->fullWidth(),
         ]);
     }
 

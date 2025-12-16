@@ -86,12 +86,15 @@ class SubscriptionForm
                             Select::make('user_id')
                                 ->label('Member Name')
                                 ->options(User::where('role', 'member')->pluck('name', 'id'))
+                                ->required(fn($context) => $context === 'create') // only required on create
+                                ->disabled(fn($context) => $context === 'edit') // hide when editing
                                 ->required(),
                             // Subscription fields
                             Select::make('fitness_offer_id')
                                 ->label('Fitness Offer')
                                 ->options(FitnessOffer::pluck('name', 'id'))
-                                ->required()
+                                ->required(fn($context) => $context === 'create') // only required on create
+                                ->disabled(fn($context) => $context === 'edit') // hide when editing
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set) {
                                     $offer = FitnessOffer::find($state);
@@ -106,7 +109,8 @@ class SubscriptionForm
                                 ->default(0)
                                 ->minValue(1)
                                 ->maxValue(120)
-                                ->required()
+                                ->required(fn($context) => $context === 'create') // only required on create
+                                ->hidden(fn($context) => $context === 'edit') // hide when editing
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                     $startDate = $get('start_date');
@@ -114,14 +118,16 @@ class SubscriptionForm
                                         $set('end_date', \Carbon\Carbon::parse($startDate)->addMonths($state)->toDateString());
                                     }
                                 }),
+
                             Select::make('coach_id')
                                 ->label('Coach')
-                                ->options(User::where('role', 'coach')->pluck('name', 'id'))
+                                ->options(User::where('role', 'coach')->where('status', 'active')->pluck('name', 'id'))
                                 ->required(),
                             DatePicker::make('start_date')
                                 ->displayFormat('d F Y')
                                 ->default(now())
-                                ->required()
+                                ->required(fn($context) => $context === 'create') // only required on create
+                                ->disabled(fn($context) => $context === 'edit') // hide when editing
                                 ->live()
                                 ->native(false)
                                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
@@ -134,13 +140,13 @@ class SubscriptionForm
                                 ->native(false)
                                 ->displayFormat('d F Y')
                                 ->disabled()
-
-                                ->required(),
+                                ->required(fn($context) => $context === 'create') // only required on create
+                                ->hidden(fn($context) => $context === 'edit'), // hide when editing,
                             // Transaction fields
                             TextInput::make('amount')
                                 ->numeric()
                                 ->hidden()
-                                ->required()
+                                ->required(fn($context) => $context === 'create') // only required on create
                                 ->prefix('PHP'),
                             Select::make('payment_method')
                                 ->options([
@@ -148,14 +154,17 @@ class SubscriptionForm
                                     'upload' => 'Upload',
                                     'others' => 'Others',
                                 ])
-                                ->required(),
-                            TextInput::make('reference_no'),
+                                ->required(fn($context) => $context === 'create') // only required on create
+                                ->hidden(fn($context) => $context === 'edit'), // hide when editing,
+                            TextInput::make('reference_no')
+                                ->hidden(fn($context) => $context === 'edit'), // hide when editing,
                             FileUpload::make('proof_of_payment')
+                                ->hidden(fn($context) => $context === 'edit') // hide when editing
                                 ->image()->columnSpanFull()
                                 ->directory('proofs'),
                             DateTimePicker::make('paid_at')
                                 ->default(now())->hidden()
-                                ->required(),
+                                ->required(fn($context) => $context === 'create') // only required on create
                         ])->columns(2)
                     ])->columns(2),
             ]);

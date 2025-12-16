@@ -23,7 +23,7 @@ class MyQRCode extends Page
         }
 
         // allow ONLY if user has role 'member'
-        return $user->roles()->where('name', 'member')->exists();
+        return !$user->roles()->where('name', 'admin')->exists();
     }
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
     protected string $view = 'filament.pages.my-q-r-code';

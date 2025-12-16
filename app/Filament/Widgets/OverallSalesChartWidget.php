@@ -17,6 +17,7 @@ class OverallSalesChartWidget extends ChartWidget
     use HasFiltersSchema;
 
     protected ?string $heading = 'Overall Total Sales';
+    protected ?string $height = '300px';
 
     protected int | string | array $columnSpan = 1;
 
@@ -100,35 +101,47 @@ class OverallSalesChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $startDate = $this->startDate?->format('Y-m-d') ?: now()->startOfYear()->format('Y-m-d');
-        $endDate = $this->endDate?->format('Y-m-d') ?: now()->endOfYear()->format('Y-m-d');
+        $year = $this->year ?? now()->year;
 
+        // Create full months array (Jan → Dec)
+        $months = collect(range(1, 12))->mapWithKeys(function ($m) use ($year) {
+            return [
+                sprintf('%04d-%02d', $year, $m) => 0, // default 0 sales
+            ];
+        });
+
+        // Query actual sales
         $query = SubscriptionTransaction::query()
             ->select(
                 DB::raw('DATE_FORMAT(paid_at, "%Y-%m") as month'),
                 DB::raw('SUM(amount) as total_sales')
             )
-            ->whereBetween('paid_at', [$startDate, $endDate . ' 23:59:59'])
+            ->whereYear('paid_at', $year)
             ->groupBy('month')
-            ->orderBy('month');
+            ->orderBy('month')
+            ->get();
 
-        $data = $query->get();
+        // Merge: replace defaults with actual values
+        foreach ($query as $row) {
+            $months[$row->month] = $row->total_sales;
+        }
 
         return [
             'datasets' => [
                 [
                     'label' => 'Total Sales',
-                    'data' => $data->pluck('total_sales')->toArray(),
+                    'data' => array_values($months->toArray()),
                     'borderColor' => '#3b82f6',
                     'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
                     'fill' => true,
                 ],
             ],
-            'labels' => $data->pluck('month')->map(function ($month) {
-                return date('M Y', strtotime($month . '-01'));
+            'labels' => $months->keys()->map(function ($month) {
+                return date('M', strtotime($month . '-01')); // Jan, Feb, ...
             })->toArray(),
         ];
     }
+
 
     protected function getType(): string
     {
