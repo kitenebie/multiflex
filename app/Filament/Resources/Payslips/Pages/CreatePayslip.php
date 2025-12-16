@@ -78,7 +78,7 @@ class CreatePayslip extends CreateRecord
         $cutoffData = $this->getCutoffData();
 
         // 🔥 ALL COACHES SELECTED
-        $coaches = User::role('coach')->get();
+        $coaches = User::roles()->where('name', 'coach')->get();
 
         foreach ($coaches as $coach) {
             Payslip::create([
