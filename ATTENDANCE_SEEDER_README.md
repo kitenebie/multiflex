@@ -9,7 +9,7 @@ This seeder creates users with attendance logs showing 7-8 hours of attendance d
 The seeder creates 8 sample users with different roles:
 - **Members**: John Doe, Jane Smith, David Brown, Tom Wilson
 - **Coaches**: Mike Johnson, Lisa Davis  
-- **Instructors**: Sarah Williams, Emma Garcia
+- **Admins**: Sarah Williams, Emma Garcia
 
 ### Attendance Logs
 - **Time Period**: Past 30 days (excluding weekends)
@@ -48,11 +48,11 @@ All users have the password: `password`
 | John Doe | john.doe@example.com | member |
 | Jane Smith | jane.smith@example.com | member |
 | Mike Johnson | mike.johnson@example.com | coach |
-| Sarah Williams | sarah.williams@example.com | instructor |
+| Sarah Williams | sarah.williams@example.com | admin |
 | David Brown | david.brown@example.com | member |
 | Lisa Davis | lisa.davis@example.com | coach |
 | Tom Wilson | tom.wilson@example.com | member |
-| Emma Garcia | emma.garcia@example.com | instructor |
+| Emma Garcia | emma.garcia@example.com | admin |
 
 ## Files Modified/Created
 
@@ -60,14 +60,31 @@ All users have the password: `password`
 2. **database/seeders/DatabaseSeeder.php** - Updated to call AttendanceLogSeeder
 3. **database/migrations/2025_12_16_145938_add_total_salary_to_payslips_table.php** - Added total_salary column
 4. **app/Models/Payslip.php** - Updated to include total_salary in calculations
+5. **app/Filament/Resources/Payslips/Pages/CreatePayslip.php** - Applied total_salary computation logic
 
 ## Total Salary Column
 Added `total_salary` column to payslips table that represents gross pay (basic salary + allowances + overtime) before deductions.
+
+## Total Salary Computation Logic
+The `total_salary` field is calculated as:
+```
+total_salary = (basic_salary - attendance_deductions) + allowances + overtime_pay
+```
+
+This represents the total earnings before any mandatory deductions (SSS, PhilHealth, PAG-IBIG, tax).
 
 ## Database Schema Impact
 - ✅ Users table: No changes (uses existing structure)
 - ✅ Attendance_logs table: No changes (uses existing structure)  
 - ✅ Payslips table: Added `total_salary` column (decimal, 10, 2)
+
+## Important: Role Constraint Fix
+The users table has an ENUM constraint for the `role` column with only these allowed values:
+- `admin`
+- `coach` 
+- `member`
+
+The seeder has been updated to only use these valid roles. Original attempt to use `instructor` role failed with "Data truncated for column 'role'" error.
 
 ## Testing
 To verify the seeder worked correctly:
@@ -81,3 +98,31 @@ AttendanceLog::count() // Should return ~160+ (8 users × ~20 working days)
 
 # View sample attendance data
 AttendanceLog::with('user')->take(5)->get();
+
+# Test total_salary calculation
+Payslip::with('employee')->take(3)->get();
+```
+
+## Implementation Details
+
+### AttendanceLogSeeder
+- Creates 8 diverse users with different roles (using only valid ENUM values)
+- Generates realistic attendance patterns for 30 working days
+- Skips weekends automatically
+- Includes status variations (present, late, left_early)
+
+### Payslip Integration
+- **Model Level**: `app/Models/Payslip.php` - Boot method calculates total_salary
+- **Controller Level**: `CreatePayslip.php` - Manual calculation during payslip creation
+- Both approaches ensure consistent total_salary computation
+
+### Migration
+- `total_salary` column added with proper decimal precision (10, 2)
+- Default value of 0 for existing records
+- Positioned after `basic_salary` column for logical grouping
+
+## Troubleshooting
+If you encounter "Data truncated for column 'role'" error:
+1. Ensure the `role` column in users table accepts: 'admin', 'coach', or 'member'
+2. Check database migration: `2025_11_29_062325_add_role_and_status_to_users_table.php`
+3. Verify ENUM values match the seeder data

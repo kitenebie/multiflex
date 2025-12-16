@@ -65,7 +65,7 @@ class AttendanceLogSeeder extends Seeder
             [
                 'name' => 'Sarah Williams',
                 'email' => 'sarah.williams@example.com',
-                'role' => 'instructor',
+                'role' => 'admin',
                 'status' => 'active',
                 'password' => bcrypt('password'),
             ],
@@ -93,7 +93,7 @@ class AttendanceLogSeeder extends Seeder
             [
                 'name' => 'Emma Garcia',
                 'email' => 'emma.garcia@example.com',
-                'role' => 'instructor',
+                'role' => 'admin',
                 'status' => 'active',
                 'password' => bcrypt('password'),
             ],
