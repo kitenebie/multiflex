@@ -82,10 +82,11 @@ class CreatePayslip extends CreateRecord
 
             $adjustedBasic = max(0, $basicSalary - $attendanceDeduction);
 
-            // 2️⃣ Gross Pay
-            $gross = $adjustedBasic
-                + ($data['allowances'] ?? 0)
-                + ($data['overtime_pay'] ?? 0);
+            // 2️⃣ Gross Pay (total salary before deductions)
+            $gross = $adjustedBasic + ($data['allowances'] ?? 0) + ($data['overtime_pay'] ?? 0);
+            
+            // Set total salary (gross pay before deductions)
+            $totalSalary = $gross;
 
             // 3️⃣ Mandatory Deductions
             $sss = $cutoff['sss_rate'] ?? 0;
@@ -107,6 +108,7 @@ class CreatePayslip extends CreateRecord
                 'period_start' => $dates['start']->format('Y-m-d'),
                 'period_end' => $dates['end']->format('Y-m-d'),
                 'basic_salary' => $basicSalary,
+                'total_salary' => round($totalSalary, 2),
                 'allowances' => $data['allowances'] ?? 0,
                 'overtime_pay' => $data['overtime_pay'] ?? 0,
                 'tax' => round($tax, 2),

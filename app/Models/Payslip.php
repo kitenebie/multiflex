@@ -15,6 +15,7 @@ class Payslip extends Model
         'period_start',
         'period_end',
         'basic_salary',
+        'total_salary',
         'allowances',
         'overtime_pay',
         'tax',
@@ -38,11 +39,11 @@ class Payslip extends Model
                 $payslip->basic_salary - $attendanceDeduction
             );
 
-            // 2️⃣ Gross pay
-            $gross =
-                $adjustedBasicSalary +
-                $payslip->allowances +
-                $payslip->overtime_pay;
+            // 2️⃣ Gross pay (total salary before deductions)
+            $gross = $adjustedBasicSalary + $payslip->allowances + $payslip->overtime_pay;
+            
+            // Set total salary (gross pay before deductions)
+            $payslip->total_salary = $gross;
 
             // 3️⃣ Taxable income
             $taxable = $gross
