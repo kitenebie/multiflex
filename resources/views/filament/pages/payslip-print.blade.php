@@ -60,11 +60,13 @@
                             {{ strtoupper($PaySlip->employee->role) }}</p>
                     </div>
                     <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Pay Period</label>
-                        <p id="pay-period" class="text-lg font-medium text-gray-900 mt-1">{{ $PaySlip->period_start->format('M d, Y') }} -
+                        <p id="pay-period" class="text-lg font-medium text-gray-900 mt-1">
+                            {{ $PaySlip->period_start->format('M d, Y') }} -
                             {{ $PaySlip->period_end->format('M d, Y') }}</p>
                     </div>
                     <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Payment Date</label>
-                        <p id="pay-date" class="text-lg font-medium text-gray-900 mt-1">{{ $PaySlip->created_at->format('M d, Y') }}</p>
+                        <p id="pay-date" class="text-lg font-medium text-gray-900 mt-1">
+                            {{ $PaySlip->created_at->format('M d, Y') }}</p>
                     </div>
                 </div>
             </div><!-- Earnings and Deductions -->
@@ -74,14 +76,17 @@
                         <h3 class="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-green-500">Earnings</h3>
                         <div class="space-y-3">
                             <div class="flex justify-between"><span class="text-gray-700">Daily Basic Salary</span>
-                                <span class="font-semibold text-gray-900">PHP {{ number_format($PaySlip->basic_salary, 2) }}</span>
+                                <span class="font-semibold text-gray-900">PHP
+                                    {{ number_format($PaySlip->basic_salary, 2) }}</span>
                             </div>
                             <div class="flex justify-between"><span class="text-gray-700">Monthly Basic Salary</span>
-                                <span class="font-semibold text-gray-900">PHP {{ number_format($PaySlip->total_salary, 2) }}</span>
+                                <span class="font-semibold text-gray-900">PHP
+                                    {{ number_format($PaySlip->total_salary, 2) }}</span>
                             </div>
                             <div class="flex justify-between pt-3 border-t-2 border-gray-200"><span
                                     class="font-bold text-gray-900">Total Earnings</span> <span
-                                    class="font-bold text-green-600 text-lg">PHP {{ number_format($PaySlip->total_salary, 2) }}</span>
+                                    class="font-bold text-green-600 text-lg">PHP
+                                    {{ number_format($PaySlip->total_salary, 2) }}</span>
                             </div>
                         </div>
                     </div><!-- Deductions -->
@@ -92,17 +97,21 @@
                                     class="font-semibold text-gray-900">PHP {{ number_format($PaySlip->tax, 2) }}</span>
                             </div>
                             <div class="flex justify-between"><span class="text-gray-700">SSS</span> <span
-                                    class="font-semibold text-gray-900">PHP {{ number_format($PaySlip->sss, 2) }}</span>
+                                    class="font-semibold text-gray-900">PHP
+                                    {{ number_format($PaySlip->sss, 2) }}</span>
                             </div>
                             <div class="flex justify-between"><span class="text-gray-700">PhilHealth</span> <span
-                                    class="font-semibold text-gray-900">PHP {{ number_format($PaySlip->philhealth, 2) }}</span>
+                                    class="font-semibold text-gray-900">PHP
+                                    {{ number_format($PaySlip->philhealth, 2) }}</span>
                             </div>
                             <div class="flex justify-between"><span class="text-gray-700">Pag-Ibig</span> <span
-                                    class="font-semibold text-gray-900">PHP {{ number_format($PaySlip->pagibig, 2) }}</span>
+                                    class="font-semibold text-gray-900">PHP
+                                    {{ number_format($PaySlip->pagibig, 2) }}</span>
                             </div>
                             <div class="flex justify-between pt-3 border-t-2 border-gray-200"><span
                                     class="font-bold text-gray-900">Total Deductions</span> <span
-                                    class="font-bold text-red-600 text-lg">PHP {{ number_format($PaySlip->total_deductions, 2) }}</span>
+                                    class="font-bold text-red-600 text-lg">PHP
+                                    {{ number_format($PaySlip->total_deductions, 2) }}</span>
                             </div>
                         </div>
                     </div>
@@ -127,12 +136,15 @@
             </div>
         </div>
     </div>
-    <script>
+    @if (auth()->user()->role === 'coach')
+        <script>
             html2canvas(document.querySelector('.max-w-4xl')).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'payslip-screenshot.png';
                 link.href = canvas.toDataURL();
                 link.click();
             });
-    </script>
+        </script>
+    @endif
+
 </html>
