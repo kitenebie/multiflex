@@ -157,7 +157,9 @@
                     @elseif ($activeSubscription)
                         Active Subscription
                     @else
-                        No Subscription
+                        @if (auth()->user()->role == 'member')
+                            No Subscription
+                        @endif
                     @endif
                 </h3>
                 @if ($activeSubscription)
@@ -176,18 +178,19 @@
                         </p>
                     </div>
                 @else
-                @if(auth()->user()->role == 'member')
-                    <div>
-                        <p class="info-item"><strong>Fitness Offer:</strong>
-                            {{ $activeSubscription->fitnessOffer->name ?? 'N/A' }}</p>
-                        <p class="info-item"><strong>Coach:</strong> {{ $activeSubscription->coach->name ?? 'N/A' }}
-                        </p>
-                        <p class="info-item"><strong>Registered Date:</strong>
-                            {{ 'N/A' }}</p>
-                        <p class="info-item"><strong>Expire On:</strong>
-                            {{ 'N/A' }}</p>
-                    </div>
-                @endif
+                    @if (auth()->user()->role == 'member')
+                        <div>
+                            <p class="info-item"><strong>Fitness Offer:</strong>
+                                {{ $activeSubscription->fitnessOffer->name ?? 'N/A' }}</p>
+                            <p class="info-item"><strong>Coach:</strong>
+                                {{ $activeSubscription->coach->name ?? 'N/A' }}
+                            </p>
+                            <p class="info-item"><strong>Registered Date:</strong>
+                                {{ 'N/A' }}</p>
+                            <p class="info-item"><strong>Expire On:</strong>
+                                {{ 'N/A' }}</p>
+                        </div>
+                    @endif
                 @endif
             </div>
 
