@@ -136,7 +136,12 @@
 
                         {!! QrCode::size(250)->generate($payload) !!}
                     @else
+                        @if (auth()->user()->role == 'member')
                         {!! QrCode::size(250)->generate('This member has no active subscription') !!}
+                        @else
+                        {!! QrCode::size(250)->generate(auth()->user()->qr_code) !!}
+
+                    @endif
                     @endif
                 </div>
             </div>
