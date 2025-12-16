@@ -18,7 +18,6 @@ class QRScannerController extends Controller
     {
         $request->validate([
             'qr_code' => 'required',
-            'attendance_type' => 'required|in:0,1',
         ]);
 
         $qrCode = $request->qr_code;
