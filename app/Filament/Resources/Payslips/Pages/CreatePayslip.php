@@ -73,7 +73,7 @@ class CreatePayslip extends CreateRecord
             $basicSalary = $coach->daily_basic_salary ?? 0;
 
             // 1️⃣ Attendance deduction & days worked
-            $attendance = $this->calculateAttendance($coach->id, $basicSalary, $dates['start'], $dates['end']);
+            $attendance = $this->calculateAttendance($coach->id, $basicSalary, Carbon::create($data['period_start']), Carbon::create($data['period_end']));
             $daysWorked = $attendance['days_worked'];
             $attendanceDeduction = $attendance['deduction'];
 
