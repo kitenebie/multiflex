@@ -39,6 +39,7 @@ class User extends Authenticatable implements HasAvatar
         'gender',
         'is_admin',
         'profile_picture',
+        'daily_basic_salary',
     ];
 
     /**
