@@ -1,6 +1,6 @@
 {
-    "first_cutoff_day": null,
-    "second_cutoff_day": null,
-    "updated_at": null,
-    "updated_by": null
+    "first_cutoff_day": 7,
+    "second_cutoff_day": 23,
+    "updated_at": "2025-12-16T07:28:28.870646Z",
+    "updated_by": "MultiFlex Admin"
 }
