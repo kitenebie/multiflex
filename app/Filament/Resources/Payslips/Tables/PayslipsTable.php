@@ -20,23 +20,25 @@ class PayslipsTable
 {
     public static function configure(Table $table): Table
     {
-        $query = Auth::user()->role === 'coach'
-            ? Payslip::where('user_id', Auth::id())
+        $user = Auth::user();
+        
+        $query = $user && $user->role === 'coach'
+            ? Payslip::query()->where('user_id', $user->id)
             : Payslip::query();
-        return $table->query($query)
+        return $table->query($query->orderByDesc('id'))
             ->columns([
                 // Employee Information
                 TextColumn::make('employee.name')
                     ->label('Employee Name')
                     ->searchable()
                     ->weight(FontWeight::Bold)
-                    ->description(fn($record) => $record->employee->email ?? ''),
+                    ->description(fn($record) => $record->employee?->email ?? ''),
                 
                 // Pay Period
                 TextColumn::make('period')
                     ->label('Pay Period')
                     ->getStateUsing(function ($record) {
-                        return $record->period_start->format('M j') . ' - ' . $record->period_end->format('M j, Y');
+                        return ($record->period_start?->format('M j') ?? 'N/A') . ' - ' . ($record->period_end?->format('M j, Y') ?? 'N/A');
                     })
                     ->searchable(),
                 
