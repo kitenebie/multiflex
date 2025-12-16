@@ -97,7 +97,9 @@ class CreatePayslip extends CreateRecord
             // 6️⃣ Totals
             $totalDeductions = $attendanceDeduction + $tax + $sss + $philhealth + $pagibig;
             $netPay = $gross - ($tax + $sss + $philhealth + $pagibig);
-            if ($daysWorked < 0) {
+
+            // Only create payslip if coach worked at least 1 day
+            if ($daysWorked > 0) {
                 Payslip::updateOrCreate([
                     'user_id' => $coach->id,
                     'period_start' => $dates['start']->format('Y-m-d'),
@@ -118,8 +120,15 @@ class CreatePayslip extends CreateRecord
             }
         }
 
+        // Ensure at least one payslip was created
+        $latestPayslip = Payslip::latest()->first();
+        
+        if (!$latestPayslip) {
+            throw new \Exception('No payslips were created. At least one coach must have worked during the pay period.');
+        }
+
         // Filament requires one model return
-        return Payslip::latest()->first();
+        return $latestPayslip;
     }
 
     /* ---------------------------------------------
