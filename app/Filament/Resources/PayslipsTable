@@ -169,32 +169,38 @@ class PayslipsTable
                         TextInput::make('allowances')
                             ->label('Allowances')
                             ->numeric()
-                            ->prefix('₱'),
+                            ->prefix('₱')
+                            ->default(0),
                         
                         TextInput::make('overtime_pay')
                             ->label('Overtime Pay')
                             ->numeric()
-                            ->prefix('₱'),
+                            ->prefix('₱')
+                            ->default(0),
                         
                         TextInput::make('sss')
                             ->label('SSS')
                             ->numeric()
-                            ->prefix('₱'),
+                            ->prefix('₱')
+                            ->default(0),
                         
                         TextInput::make('philhealth')
                             ->label('PhilHealth')
                             ->numeric()
-                            ->prefix('₱'),
+                            ->prefix('₱')
+                            ->default(0),
                         
                         TextInput::make('pagibig')
                             ->label('PAG-IBIG')
                             ->numeric()
-                            ->prefix('₱'),
+                            ->prefix('₱')
+                            ->default(0),
                         
                         TextInput::make('tax')
                             ->label('Tax')
                             ->numeric()
-                            ->prefix('₱'),
+                            ->prefix('₱')
+                            ->default(0),
                         
                         TextInput::make('total_deductions')
                             ->label('Total Deductions')
@@ -209,7 +215,8 @@ class PayslipsTable
                             ->required(),
                         
                         Toggle::make('is_submit')
-                            ->label('Submit Status'),
+                            ->label('Submit Status')
+                            ->default(false),
                     ]),
             ])
             ->toolbarActions([
