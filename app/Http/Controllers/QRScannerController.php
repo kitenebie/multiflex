@@ -36,8 +36,8 @@ class QRScannerController extends Controller
                 'message' => 'User not found',
             ]);
         }
-        
-        if ($user->role ==='member') {
+
+        if ($user->role === 'member') {
             $subscription = Subscription::where('user_id', $user->id)
                 ->where('status', 'active')
                 ->where('end_date', '>=', today())
@@ -99,11 +99,13 @@ class QRScannerController extends Controller
                     ->where('status', 'active')
                     ->where('end_date', '>=', today())
                     ->first();
-                
+
                 if ($subscription) {
                     $daysUntilExpiration = now()->diffInDays($subscription->end_date, false);
                     if ($daysUntilExpiration <= 7 && $daysUntilExpiration >= 0) {
-                        event(new sendRemainingDaysNotification("Your subscription will expire in {(int) floor($daysUntilExpiration)} day(s) on " . $subscription->end_date->format('M j, Y')));
+                        event(new sendRemainingDaysNotification(
+                            "Your subscription will expire in " . (int) floor($daysUntilExpiration) . " day(s) on " . $subscription->end_date->format('M j, Y')
+                        ));
                     }
                 }
             }
@@ -153,7 +155,7 @@ class QRScannerController extends Controller
                     ->where('status', 'active')
                     ->where('end_date', '>=', today())
                     ->first();
-                
+
                 if ($subscription) {
                     $daysUntilExpiration = now()->diffInDays($subscription->end_date, false);
                     if ($daysUntilExpiration <= 7 && $daysUntilExpiration >= 0) {
