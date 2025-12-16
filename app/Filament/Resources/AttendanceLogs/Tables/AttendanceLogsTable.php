@@ -26,9 +26,7 @@ class AttendanceLogsTable implements HasFilamentTablePresets
         //     });
         // }
         // if (Auth::user()->roles()->where('name', 'member')->exists()) {
-            $query->where('user_id', Auth::user()->id)->whereHas('user.subscriptions', function ($q) {
-                $q->where('is_extendable', false);
-            });
+            $query->where('user_id', Auth::user()->id);
         // }
         return $table
             ->query($query->orderByDesc('id'))
