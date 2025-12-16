@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class Payslip extends Model
 {
     protected $fillable = [
-        'employee_id',
+        'user_id',
         'period_start',
         'period_end',
         'basic_salary',
@@ -116,6 +116,6 @@ class Payslip extends Model
     // ✅ CORRECT relationship (NO ROLE FILTER HERE)
     public function employee(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'employee_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

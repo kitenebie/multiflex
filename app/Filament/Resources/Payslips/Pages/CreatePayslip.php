@@ -82,7 +82,7 @@ class CreatePayslip extends CreateRecord
 
         foreach ($coaches as $coach) {
             Payslip::create([
-                'employee_id'  => $coach->id,
+                'user_id'  => $coach->id,
                 'period_start' => $periodDates['start'],
                 'period_end'   => $periodDates['end'],
                 'basic_salary' => $coach->daily_basic_salary ?? 0, // using daily_basic_salary field
