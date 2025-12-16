@@ -29,8 +29,8 @@
     <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-8">
      <div class="flex items-center justify-between">
       <div>
-       <h1 id="company-name" class="text-3xl font-bold mb-2">Acme Corporation</h1>
-       <p id="company-address" class="text-indigo-100">123 Business Street, New York, NY 10001</p>
+       <h1 id="company-name" class="text-3xl font-bold mb-2">GMS Fitness Center</h1>
+       <p id="company-address" class="text-indigo-100">Manila, Philippines</p>
       </div>
       <div class="text-right">
        <div class="text-4xl mb-2">
