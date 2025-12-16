@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Payslips\Schemas;
 
-use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -17,7 +16,7 @@ class PayslipForm
     protected static function getCutoffData(): array
     {
         $filePath = base_path('cutoff-bases.json');
-        
+
         if (!File::exists($filePath)) {
             return [
                 'first_cutoff_day' => 15,
@@ -32,7 +31,7 @@ class PayslipForm
 
         $jsonData = File::get($filePath);
         $data = json_decode($jsonData, true);
-        
+
         return [
             'first_cutoff_day' => $data['first_cutoff_day'] ?? 15,
             'second_cutoff_day' => $data['second_cutoff_day'] ?? 30,
@@ -49,12 +48,12 @@ class PayslipForm
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
-        
+
         $now = Carbon::now();
         $currentYear = $now->year;
         $currentMonth = $now->month;
         $nextMonth = $now->copy()->addMonth();
-        
+
         if ($period === 'first') {
             // First Period: first_cutoff_day to (second_cutoff_day - 1)
             $periodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff);
@@ -64,7 +63,7 @@ class PayslipForm
             $periodStart = Carbon::create($currentYear, $currentMonth, $secondCutoff);
             $periodEnd = Carbon::create($nextMonth->year, $nextMonth->month, $firstCutoff - 1);
         }
-        
+
         return [
             'start' => $periodStart->format('Y-m-d'),
             'end' => $periodEnd->format('Y-m-d')
@@ -76,23 +75,23 @@ class PayslipForm
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
-        
+
         $now = Carbon::now();
         $currentYear = $now->year;
         $currentMonth = $now->month;
         $nextMonth = $now->copy()->addMonth();
-        
+
         // Create Carbon instances for better date formatting
         $firstPeriodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff);
         $firstPeriodEnd = Carbon::create($currentYear, $currentMonth, $secondCutoff - 1);
         $secondPeriodStart = Carbon::create($currentYear, $currentMonth, $secondCutoff);
         $secondPeriodEnd = Carbon::create($nextMonth->year, $nextMonth->month, $firstCutoff - 1);
-        
+
         $options = [
             'first' => "First Period (" . $firstPeriodStart->format('M j Y') . " - " . $firstPeriodEnd->format('M j Y') . ")",
             'second' => "Second Period (" . $secondPeriodStart->format('M j Y') . " - " . $secondPeriodEnd->format('M j Y') . ")",
         ];
-        
+
         return $options;
     }
 
@@ -101,16 +100,16 @@ class PayslipForm
         $cutoffData = self::getCutoffData();
         $firstCutoff = $cutoffData['first_cutoff_day'];
         $secondCutoff = $cutoffData['second_cutoff_day'];
-        
+
         $now = Carbon::now();
         $currentYear = $now->year;
         $currentMonth = $now->month;
         $daysInCurrentMonth = Carbon::create($currentYear, $currentMonth)->daysInMonth;
         $nextMonth = $now->copy()->addMonth();
         $daysInNextMonth = Carbon::create($nextMonth->year, $nextMonth->month)->daysInMonth;
-        
+
         $disabledDates = [];
-        
+
         if ($field === 'period_start') {
             if ($period === 'first') {
                 // For first period start: only first_cutoff_day should be enabled
@@ -146,7 +145,7 @@ class PayslipForm
                 }
             }
         }
-        
+
         return $disabledDates;
     }
 
@@ -156,7 +155,7 @@ class PayslipForm
         $payPeriodOptions = self::getPayPeriodOptions();
         $firstPeriod = self::getPayPeriodDates('first');
         $secondPeriod = self::getPayPeriodDates('second');
-        
+
         return $schema
             ->components([
                 Select::make('pay_period')
@@ -166,7 +165,7 @@ class PayslipForm
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) {
                         $periodDates = self::getPayPeriodDates($state);
-                        
+
                         $set('period_start', $periodDates['start']);
                         $set('period_end', $periodDates['end']);
                     })
@@ -182,17 +181,19 @@ class PayslipForm
                 DatePicker::make('period_start')
                     ->label('Period Start')
                     ->default($firstPeriod['start'])
-                    ->disabledDates(fn ($get) => $get('pay_period') === 'first' 
-                        ? self::getDisabledDates('period_start', 'first')
-                        : self::getDisabledDates('period_start', 'second')
+                    ->disabledDates(
+                        fn($get) => $get('pay_period') === 'first'
+                            ? self::getDisabledDates('period_start', 'first')
+                            : self::getDisabledDates('period_start', 'second')
                     )->hidden()
                     ->required(),
                 DatePicker::make('period_end')
                     ->label('Period End')
                     ->default($firstPeriod['end'])
-                    ->disabledDates(fn ($get) => $get('pay_period') === 'first' 
-                        ? self::getDisabledDates('period_end', 'first')
-                        : self::getDisabledDates('period_end', 'second')
+                    ->disabledDates(
+                        fn($get) => $get('pay_period') === 'first'
+                            ? self::getDisabledDates('period_end', 'first')
+                            : self::getDisabledDates('period_end', 'second')
                     )->hidden()
                     ->required(),
                 TextInput::make('sss')
