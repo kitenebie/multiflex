@@ -65,28 +65,23 @@ class CreatePayslip extends CreateRecord
         $dates = $this->calculatePayPeriodDates($payPeriod);
         $cutoff = $this->getCutoffData();
 
-        // ✅ Get all coaches (Spatie-safe if needed later)
+        // ✅ Get all coaches
         $coaches = User::where('role', 'coach')->get();
 
         foreach ($coaches as $coach) {
 
             $basicSalary = $coach->daily_basic_salary ?? 0;
 
-            // 1️⃣ Attendance Deduction
-            $attendanceDeduction = $this->calculateAttendanceDeduction(
-                $coach->id,
-                $basicSalary,
-                $dates['start'],
-                $dates['end']
-            );
+            // 1️⃣ Attendance deduction & days worked
+            $attendance = $this->calculateAttendance($coach->id, $basicSalary, $dates['start'], $dates['end']);
+            $daysWorked = $attendance['days_worked'];
+            $attendanceDeduction = $attendance['deduction'];
 
-            $adjustedBasic = max(0, $basicSalary - $attendanceDeduction);
+            // Total basic pay based on days worked minus undertime deduction
+            $adjustedBasic = max(0, ($basicSalary * $daysWorked) - $attendanceDeduction);
 
-            // 2️⃣ Gross Pay (total salary before deductions)
+            // 2️⃣ Gross pay
             $gross = $adjustedBasic + ($data['allowances'] ?? 0) + ($data['overtime_pay'] ?? 0);
-            
-            // Set total salary (gross pay before deductions)
-            $totalSalary = $gross;
 
             // 3️⃣ Mandatory Deductions
             $sss = $cutoff['sss_rate'] ?? 0;
@@ -108,7 +103,8 @@ class CreatePayslip extends CreateRecord
                 'period_start' => $dates['start']->format('Y-m-d'),
                 'period_end' => $dates['end']->format('Y-m-d'),
                 'basic_salary' => $basicSalary,
-                'total_salary' => round($totalSalary, 2),
+                'days_worked' => $daysWorked, // optional column in DB
+                'total_salary' => round($gross, 2),
                 'allowances' => $data['allowances'] ?? 0,
                 'overtime_pay' => $data['overtime_pay'] ?? 0,
                 'tax' => round($tax, 2),
@@ -139,14 +135,14 @@ class CreatePayslip extends CreateRecord
     }
 
     /* ---------------------------------------------
-     |  ATTENDANCE DEDUCTION
+     |  ATTENDANCE CALCULATION
      | --------------------------------------------- */
-    protected function calculateAttendanceDeduction(
+    protected function calculateAttendance(
         int $userId,
         float $dailyRate,
         Carbon $start,
         Carbon $end
-    ): float {
+    ): array {
         $hourlyRate = $dailyRate / 8;
 
         $logs = AttendanceLog::where('user_id', $userId)
@@ -154,21 +150,28 @@ class CreatePayslip extends CreateRecord
             ->get();
 
         $deduction = 0;
+        $daysWorked = 0;
 
         foreach ($logs as $log) {
             if (!$log->time_in || !$log->time_out) {
+                // No record = no pay for the day
                 $deduction += $dailyRate;
                 continue;
             }
 
-            $hours = Carbon::parse($log->time_in)
+            $workedHours = Carbon::parse($log->time_in)
                 ->diffInMinutes(Carbon::parse($log->time_out)) / 60;
 
-            if ($hours < 8) {
-                $deduction += (8 - $hours) * $hourlyRate;
+            $daysWorked++; // count as attended day
+
+            if ($workedHours < 8) {
+                $deduction += (8 - $workedHours) * $hourlyRate;
             }
         }
 
-        return round($deduction, 2);
+        return [
+            'deduction' => round($deduction, 2),
+            'days_worked' => $daysWorked,
+        ];
     }
 }
