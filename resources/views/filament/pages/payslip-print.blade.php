@@ -72,7 +72,7 @@
                         <td>Overtime Pay</td>
                         <td>₱{{ number_format($record->overtime_pay ?? 0, 2) }}</td>
                     </tr>
-                    <tr class="payslip-total-row payslip-total-deductions">
+                    <tr>
                         <td><strong>TOTAL EARNINGS</strong></td>
                         <td><strong>₱{{ number_format(($record->basic_salary ?? 0) + ($record->allowances ?? 0) + ($record->overtime_pay ?? 0), 2) }}</strong></td>
                     </tr>
