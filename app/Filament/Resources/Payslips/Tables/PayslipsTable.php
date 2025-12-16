@@ -127,9 +127,7 @@ class PayslipsTable
             ->filters([
                 // Add filters for date range and employee if needed
             ])->recordActions([
-                ViewAction::make()->url(function($record){
-                    return redirect('/payslips/view/'.$record->id);
-                }),
+                ViewAction::make()->url(fn($record)=> '/payslips/view/'.$record->id),
             ])
             ->defaultSort('created_at', 'desc');
     }
