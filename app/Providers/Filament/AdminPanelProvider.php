@@ -28,7 +28,7 @@ use Ymsoft\FilamentTablePresets\FilamentTablePresetPlugin;
 use Filament\Support\Facades\FilamentColor;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-
+use TheThunderTurner\FilamentLatex\FilamentLatexPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -59,6 +59,7 @@ class AdminPanelProvider extends PanelProvider
                 //     // ->authorize(fn() => Auth::user()->role === 'admin')
                 //     ->navigationGroup('Developers Support')
                 //     ->navigationSort(10),
+                FilamentLatexPlugin::make(),
                 FilamentTablePresetPlugin::make(),
             ])
             ->middleware([

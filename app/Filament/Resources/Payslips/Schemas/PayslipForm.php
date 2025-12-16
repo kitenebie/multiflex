@@ -164,16 +164,18 @@ class PayslipForm
                 DatePicker::make('selected_month')
                     ->label('Select Month for Payslip Generation')
                     ->default(Carbon::now()->startOfMonth())
+                    ->format('d/m/Y')
                     ->displayFormat('F Y')
                     ->reactive()
+                    ->native(false)
                     ->afterStateUpdated(function ($state, Set $set) {
                         // Convert selected month to Carbon instance
                         $selectedMonth = Carbon::parse($state)->startOfMonth();
-                        
+
                         // Update pay period options based on selected month
                         $payPeriodOptions = self::getPayPeriodOptions($selectedMonth);
                         $set('pay_period_options', $payPeriodOptions);
-                        
+
                         // Update period dates based on selected month
                         $periodDates = self::getPayPeriodDates('first', $selectedMonth);
                         $set('period_start', $periodDates['start']);
@@ -193,7 +195,7 @@ class PayslipForm
                         $selectedMonth = $get('selected_month')
                             ? Carbon::parse($get('selected_month'))->startOfMonth()
                             : Carbon::now()->startOfMonth();
-                        
+
                         $periodDates = self::getPayPeriodDates($state, $selectedMonth);
 
                         $set('period_start', $periodDates['start']);
