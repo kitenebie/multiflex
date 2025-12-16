@@ -197,15 +197,15 @@ class PayslipForm
                     ->required(),
                 TextInput::make('sss')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default($cutoffData['sss_rate']),
                 TextInput::make('philhealth')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default($cutoffData['philhealth_rate']),
                 TextInput::make('pagibig')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default($cutoffData['pagibig_rate']),
             ]);
     }
