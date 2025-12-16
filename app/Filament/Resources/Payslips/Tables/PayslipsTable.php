@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Payslips\Tables;
 
+use App\Models\Payslip;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -10,12 +11,16 @@ use Filament\Actions\ViewAction;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class PayslipsTable
 {
     public static function configure(Table $table): Table
     {
-        return $table
+        $query = Auth::user()->role === 'coach'
+            ? Payslip::where('user_id', Auth::id())
+            : Payslip::query();
+        return $table->query($query)
             ->columns([
                 // Employee Information
                 TextColumn::make('employee.name')
