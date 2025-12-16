@@ -20,16 +20,16 @@ class AttendanceLogsTable implements HasFilamentTablePresets
     public static function configure(Table $table): Table
     {
         $query = AttendanceLog::query();
-        if (Auth::user()->roles()->where('name', 'coach')->exists()) {
-            $query->whereHas('user.subscriptions', function ($q) {
-                $q->where('coach_id', Auth::user()->id)->where('is_extendable', false);
-            });
-        }
-        if (Auth::user()->roles()->where('name', 'member')->exists()) {
+        // if (Auth::user()->roles()->where('name', 'coach')->exists()) {
+        //     $query->whereHas('user.subscriptions', function ($q) {
+        //         $q->where('coach_id', Auth::user()->id)->where('is_extendable', false);
+        //     });
+        // }
+        // if (Auth::user()->roles()->where('name', 'member')->exists()) {
             $query->where('user_id', Auth::user()->id)->whereHas('user.subscriptions', function ($q) {
                 $q->where('is_extendable', false);
             });
-        }
+        // }
         return $table
             ->query($query->orderByDesc('id'))
             ->columns([
