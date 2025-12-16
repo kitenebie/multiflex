@@ -21,7 +21,7 @@ class ListPayslips extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()->createAnother(false),
             Action::make('date_cutoff_info')
                 ->label('Date Cutoff Information')
                 ->modalHeading('Payslip Date Cutoff Information')
