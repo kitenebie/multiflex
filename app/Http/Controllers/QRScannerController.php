@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ExpiredNotification;
 use App\Events\scannedNotification;
+use App\Events\sendRemainingDaysNotification;
 use App\Models\AttendanceLog;
 use App\Models\Subscription;
 use App\Models\User;
@@ -102,11 +103,7 @@ class QRScannerController extends Controller
                 if ($subscription) {
                     $daysUntilExpiration = now()->diffInDays($subscription->end_date, false);
                     if ($daysUntilExpiration <= 7 && $daysUntilExpiration >= 0) {
-                        $subscriptionExpirationAlert = [
-                            'message' => "Your subscription will expire in {$daysUntilExpiration} day(s) on " . $subscription->end_date->format('M j, Y'),
-                            'days_remaining' => $daysUntilExpiration,
-                            'expiration_date' => $subscription->end_date->format('M j, Y')
-                        ];
+                        event(new sendRemainingDaysNotification("Your subscription will expire in {$daysUntilExpiration} day(s) on " . $subscription->end_date->format('M j, Y')));
                     }
                 }
             }
@@ -116,7 +113,6 @@ class QRScannerController extends Controller
                 'user' => $user,
                 'attendance_at' => $attendance->time_in?->format('h:i:s A') ?? $attendance->time_in,
                 'action' => 'time-in',
-                'subscription_expiration_alert' => $subscriptionExpirationAlert,
             ]);
         }
 
@@ -175,7 +171,6 @@ class QRScannerController extends Controller
                 'user' => $user,
                 'attendance_at' => $attendance->time_out?->format('h:i:s A') ?? $attendance->time_out,
                 'action' => 'time-out',
-                'subscription_expiration_alert' => $subscriptionExpirationAlert,
             ]);
         }
 
