@@ -1,9 +1,10 @@
 <style>
     .qr-container {
-        width: 100%;
+        min-width: 100%;
         height: 100%;
+        max-width: 300px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 2px;
     }
 
     .qr-grid {
