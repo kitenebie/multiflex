@@ -115,32 +115,31 @@
         <div class="qr-grid">
             <div class="qr-column qr-code-section">
                 <div class="qr-code-container">
+                    @php
+                        $secret = env('QR_SECRET', 'gms_secret_key_2024');
+
+                        $data = [
+                            'qr_code' => auth()->user()->qr_code,
+                        ];
+
+                        $json = json_encode($data);
+                        $signature = hash('sha256', $json . $secret);
+
+                        $payload = base64_encode(
+                            json_encode([
+                                'data' => $json,
+                                'signature' => $signature,
+                            ]),
+                        );
+                    @endphp
                     @if ($activeSubscription)
-                        @php
-                            $secret = env('QR_SECRET', 'gms_secret_key_2024');
-
-                            $data = [
-                                'qr_code' => auth()->user()->qr_code,
-                            ];
-
-                            $json = json_encode($data);
-                            $signature = hash('sha256', $json . $secret);
-
-                            $payload = base64_encode(
-                                json_encode([
-                                    'data' => $json,
-                                    'signature' => $signature,
-                                ]),
-                            );
-                        @endphp
-
                         {!! QrCode::size(250)->generate($payload) !!}
                     @else
                         @if (auth()->user()->role == 'member')
-                        {!! QrCode::size(250)->generate('This member has no active subscription') !!}
+                            {!! QrCode::size(250)->generate('This member has no active subscription') !!}
                         @else
-                        {!! QrCode::size(250)->generate(auth()->user()->qr_code) !!}
-                    @endif
+                            {!! QrCode::size(250)->generate($payload) !!}
+                        @endif
                     @endif
                 </div>
             </div>
