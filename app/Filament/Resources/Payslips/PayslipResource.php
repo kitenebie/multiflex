@@ -50,9 +50,6 @@ class PayslipResource extends Resource
     {
         return [
             'index' => ListPayslips::route('/'),
-            'create' => CreatePayslip::route('/create'),
-            'view' => ViewPayslip::route('/{record}'),
-            'edit' => EditPayslip::route('/{record}/edit'),
         ];
     }
 }

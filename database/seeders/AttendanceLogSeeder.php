@@ -38,7 +38,7 @@ class AttendanceLogSeeder extends Seeder
     /**
      * Create users if they don't exist
      */
-    private function createUsersIfNeeded(): \Illuminate\Database\Eloquent\Collection
+    private function createUsersIfNeeded(): \Illuminate\Support\Collection
     {
         $userData = [
             [
