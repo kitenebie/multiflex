@@ -15,7 +15,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
 {
     use HasFiltersSchema;
 
-    protected ?string $heading = 'Subscribers by Fitness Offer';
+    protected ?string $heading = 'Subscribers by Month';
     protected int|string|array $columnSpan = 1;
     protected ?string $height = '300px';
 
@@ -98,29 +98,29 @@ protected function getYearOptions(): array
 
     protected function getData(): array
     {
-        $startDate = $this->startDate?->format('Y-m-d') ?: now()->startOfYear()->format('Y-m-d');
-        $endDate = $this->endDate?->format('Y-m-d') ?: now()->endOfYear()->format('Y-m-d');
+        $year = $this->year ?: now()->year;
 
-        $query = SubscriptionTransaction::query()
-            ->join('subscriptions', 'subscription_transactions.subscription_id', '=', 'subscriptions.id')
-            ->join('fitness_offers', 'subscriptions.fitness_offer_id', '=', 'fitness_offers.id')
-            ->select('fitness_offers.name', DB::raw('COUNT(DISTINCT subscriptions.user_id) as total_subscribers'))
-            ->where('subscription_transactions.paid_at', '>=', $startDate)
-            ->where('subscriptions.status', 'active')
-            ->where('subscription_transactions.paid_at', '<=', $endDate . ' 23:59:59')
-            ->groupBy('fitness_offers.id', 'fitness_offers.name');
-
-        $data = $query->get();
+        $monthlyData = [];
+        for ($month = 1; $month <= 12; $month++) {
+            $count = SubscriptionTransaction::query()
+                ->join('subscriptions', 'subscription_transactions.subscription_id', '=', 'subscriptions.id')
+                ->where('subscriptions.status', 'active')
+                ->whereYear('subscription_transactions.paid_at', $year)
+                ->whereMonth('subscription_transactions.paid_at', $month)
+                ->distinct('subscriptions.user_id')
+                ->count('subscriptions.user_id');
+            $monthlyData[] = $count;
+        }
 
         return [
             'datasets' => [
                 [
                     'label' => 'Total Subscribers',
-                    'data' => $data->pluck('total_subscribers')->toArray(),
+                    'data' => $monthlyData,
                     'backgroundColor' => '#f59e0b',
                 ],
             ],
-            'labels' => $data->pluck('name')->toArray(),
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         ];
     }
 
@@ -136,7 +136,7 @@ protected function getYearOptions(): array
                 'x' => [
                     'title' => [
                         'display' => true,
-                        'text' => 'Fitness Offer',
+                        'text' => 'Month',
                     ],
                 ],
                 'y' => [
