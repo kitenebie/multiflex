@@ -98,7 +98,7 @@ class CreatePayslip extends CreateRecord
             $totalDeductions = $attendanceDeduction + $tax + $sss + $philhealth + $pagibig;
             $netPay = $gross - ($tax + $sss + $philhealth + $pagibig);
 
-            Payslip::create([
+            Payslip::updateOrCreate([
                 'user_id' => $coach->id,
                 'period_start' => $dates['start']->format('Y-m-d'),
                 'period_end' => $dates['end']->format('Y-m-d'),
