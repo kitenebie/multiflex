@@ -66,7 +66,7 @@ class PayslipForm
                     ->default(0.0),
                 TextInput::make('overtime_pay')
                     ->required()
-                    ->disabled()
+                    ->hidden()
                     ->default(0.0),
                 TextInput::make('sss')
                     ->required()
@@ -82,11 +82,11 @@ class PayslipForm
                     ->default($cutoffData['pagibig_rate']),
                 TextInput::make('total_deductions')
                     ->required()
-                    ->disabled()
+                    ->hidden()
                     ->default(0.0),
                 TextInput::make('net_pay')
                     ->required()
-                    ->disabled()
+                    ->hidden()
                     ->default(0.0),
             ]);
     }
