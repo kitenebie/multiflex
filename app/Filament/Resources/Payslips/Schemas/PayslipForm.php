@@ -164,7 +164,7 @@ class PayslipForm
                 DatePicker::make('selected_month')
                     ->label('Select Month for Payslip Generation')
                     ->default(Carbon::now()->startOfMonth())
-                    ->format('d/m/Y')
+                    ->format('m/d/Y')
                     ->displayFormat('F Y')
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) {
