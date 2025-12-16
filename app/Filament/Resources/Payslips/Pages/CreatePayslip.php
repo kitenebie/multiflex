@@ -103,7 +103,6 @@ class CreatePayslip extends CreateRecord
                 'period_start' => $dates['start']->format('Y-m-d'),
                 'period_end' => $dates['end']->format('Y-m-d'),
                 'basic_salary' => $basicSalary,
-                'days_worked' => $daysWorked, // optional column in DB
                 'total_salary' => round($gross, 2),
                 'allowances' => $data['allowances'] ?? 0,
                 'overtime_pay' => $data['overtime_pay'] ?? 0,
@@ -113,6 +112,7 @@ class CreatePayslip extends CreateRecord
                 'pagibig' => $pagibig,
                 'total_deductions' => round($totalDeductions, 2),
                 'net_pay' => round($netPay, 2),
+                'days_attended' => $daysWorked,
             ]);
         }
 
@@ -172,6 +172,7 @@ class CreatePayslip extends CreateRecord
         return [
             'deduction' => round($deduction, 2),
             'days_worked' => $daysWorked,
+            'days_present' => $daysWorked, // for compatibility
         ];
     }
 }
