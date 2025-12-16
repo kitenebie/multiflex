@@ -12,6 +12,9 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
+use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
+use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
 
 class PayslipsTable
 {
@@ -125,6 +128,11 @@ class PayslipsTable
                     ->label('View')
                     ->icon('heroicon-o-eye')
                     ->url(fn($record) => '/payslips/view/'.$record->id),
+            ])
+            ->toolbarActions([
+                ManageTablePresetAction::make()->label(' ')
+                    ->button()
+                    ->tooltip('manage table'),
             ])
             ->defaultSort('created_at', 'desc');
     }
