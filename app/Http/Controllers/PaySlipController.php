@@ -14,10 +14,12 @@ class PaySlipController extends Controller
         if ($user->role !== 'member') {
             if ($user->role === 'coach' && $PaySlip->user_id === $user->id) {
                 return view('filament.pages.payslip-print', compact('PaySlip'));
+            } elseif ($user->role === 'admin') {
+                return view('filament.pages.payslip-print', compact('PaySlip'));
             } else {
                 abort(403, 'Unauthorized action.');
             }
         }
-                abort(403, 'Unauthorized action.');
+        abort(403, 'Unauthorized action.');
     }
 }
