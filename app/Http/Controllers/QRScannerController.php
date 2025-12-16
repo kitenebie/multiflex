@@ -103,7 +103,7 @@ class QRScannerController extends Controller
                 if ($subscription) {
                     $daysUntilExpiration = now()->diffInDays($subscription->end_date, false);
                     if ($daysUntilExpiration <= 7 && $daysUntilExpiration >= 0) {
-                        event(new sendRemainingDaysNotification("Your subscription will expire in {$daysUntilExpiration} day(s) on " . $subscription->end_date->format('M j, Y')));
+                        event(new sendRemainingDaysNotification("Your subscription will expire in {(int) floor($daysUntilExpiration)} day(s) on " . $subscription->end_date->format('M j, Y')));
                     }
                 }
             }
