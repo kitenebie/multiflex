@@ -17,18 +17,15 @@ return new class extends Migration
             $table->date('period_start');
             $table->date('period_end');
             $table->decimal('basic_salary', 10, 2);
-            $table->decimal('overtime_hours', 5, 2)->default(0);
-            $table->decimal('overtime_rate', 8, 2)->default(0);
-            $table->decimal('overtime_amount', 10, 2)->default(0);
-            $table->decimal('deductions', 10, 2)->default(0);
-            $table->decimal('gross_amount', 10, 2);
-            $table->decimal('net_amount', 10, 2);
-            $table->string('status')->default('pending');
-            $table->text('notes')->nullable();
-            $table->timestamps();
-            
+            $table->decimal('allowances', 10, 2)->default(0);
+            $table->decimal('overtime_pay', 10, 2)->default(0);
+            $table->decimal('tax', 10, 2)->default(0);
+            $table->decimal('sss', 10, 2)->default(0);
+            $table->decimal('philhealth', 10, 2);
+            $table->decimal('pagibig', 10, 2);
+            $table->decimal('total_deductions')->default(0);
+            $table->decimal('net_pay')->default(0);
             $table->index(['user_id', 'period_start', 'period_end']);
-            $table->index('status');
         });
     }
 
