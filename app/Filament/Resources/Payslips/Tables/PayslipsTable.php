@@ -130,6 +130,7 @@ class PayslipsTable
                     ->label('View')
                     ->icon('heroicon-o-eye')
                     ->url(fn($record) => '/payslips/view/'.$record->id),
+                EditAction::make(),
             ])
             ->toolbarActions([
                 ManageTablePresetAction::make()->label(' ')
