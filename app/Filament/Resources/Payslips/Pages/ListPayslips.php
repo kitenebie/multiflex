@@ -81,7 +81,7 @@ class ListPayslips extends ListRecords
                         ->helperText('Enter PhilHealth contribution rate as percentage (e.g., 3.0 for 3.0%)'),
                     TextInput::make('Tax')
                         ->label('Tax Rate (%)')
-                        ->numeric()
+                        ->hidden()
                         ->default($this->getCutoffData()['tax_rate'] ?? 0)
                         ->helperText('Enter tax rate as percentage (e.g., 5.0 for 5.0%)'),
                 ]),

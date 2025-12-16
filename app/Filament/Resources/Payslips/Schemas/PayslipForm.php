@@ -59,38 +59,34 @@ class PayslipForm
                     ->required(),
                 TextInput::make('basic_salary')
                     ->required()
-                    ->numeric(),
+                    ->disabled(),
                 TextInput::make('allowances')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default(0.0),
                 TextInput::make('overtime_pay')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default(0.0),
-                TextInput::make('tax')
-                    ->required()
-                    ->numeric()
-                    ->default($cutoffData['tax_rate']),
                 TextInput::make('sss')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default($cutoffData['sss_rate']),
                 TextInput::make('philhealth')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default($cutoffData['philhealth_rate']),
                 TextInput::make('pagibig')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default($cutoffData['pagibig_rate']),
                 TextInput::make('total_deductions')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default(0.0),
                 TextInput::make('net_pay')
                     ->required()
-                    ->numeric()
+                    ->disabled()
                     ->default(0.0),
             ]);
     }
