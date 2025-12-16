@@ -11,9 +11,13 @@ class PaySlipController extends Controller
     {
         $user = Auth::user();
         $PaySlip = \App\Models\Payslip::findOrFail($PaySlipId);
-        if($PaySlip->user_id !== $user->id || $user->role == 'admin'){
-            abort(403, 'Unauthorized action.');
+        if ($user->role === 'admin') {
+            if ($user->role === 'coach' && $PaySlip->user_id !== $user->id) {
+                abort(403, 'Unauthorized action.');
+            } else {
+                return view('filament.pages.payslip-print', compact('PaySlip'));
+            }
         }
-        return view('filament.pages.payslip-print', compact('PaySlip'));
+                abort(403, 'Unauthorized action.');
     }
 }
