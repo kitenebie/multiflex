@@ -20,8 +20,7 @@ class PayslipForm
                 Select::make('user_id')
                     ->relationship('user', 'name')
                     ->label('Coach')
-                    ->searchable()
-                    ->live()
+                    ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) {
                         logger('Selected user ID:', [$state]); // DEBUG
                         $salary = User::whereKey($state)->value('daily_basic_salary');
