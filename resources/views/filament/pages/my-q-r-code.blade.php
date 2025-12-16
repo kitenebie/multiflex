@@ -10,6 +10,7 @@
             isolation: isolate;
             background-color: #fff;
             padding: 6rem 1.5rem;
+            width: 100%;
         }
 
         @media (min-width: 640px) {
