@@ -129,6 +129,20 @@
     .dark label {
         color: #fff;
     }
+
+    /* SweetAlert2 Custom Styling */
+    .subscription-alert-popup {
+        font-size: 16px;
+    }
+
+    .subscription-alert-popup .swal2-title {
+        color: #856404;
+        font-weight: bold;
+    }
+
+    .subscription-alert-popup .swal2-content {
+        color: #856404;
+    }
 </style>
 <div class="qr-container">
     <div class="qr-scanner-container">
@@ -154,6 +168,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     const qrSecret = "{{ env('QR_SECRET', 'gms_secret_key_2024') }}";
@@ -183,6 +198,24 @@
                     document.getElementById("user-address").textContent = data.user.address;
                     document.getElementById("user-email").textContent = data.user.email;
                     document.getElementById("attendance-at").textContent = data.attendance_at;
+
+                    // Check for subscription expiration alert
+                    if (data.subscription_expiration_alert) {
+                        const alert = data.subscription_expiration_alert;
+                        Swal.fire({
+                            title: 'Subscription Expiration Notice',
+                            text: alert.message,
+                            icon: 'warning',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#3085d6',
+                            timer: null, // Don't auto close
+                            timerProgressBar: false,
+                            showCloseButton: true,
+                            customClass: {
+                                popup: 'subscription-alert-popup'
+                            }
+                        });
+                    }
                 });
         }
 

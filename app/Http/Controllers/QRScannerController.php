@@ -91,12 +91,32 @@ class QRScannerController extends Controller
             Log::info('Time-in recorded', ['user_id' => $user->id, 'attendance_id' => $attendance->id, 'time_in' => $attendance->time_in]);
             event(new scannedNotification($user->id, 'Time-in recorded successfully.'));
 
+            // Check subscription expiration for members
+            $subscriptionExpirationAlert = null;
+            if ($user->role === 'member') {
+                $subscription = Subscription::where('user_id', $user->id)
+                    ->where('status', 'active')
+                    ->where('end_date', '>=', today())
+                    ->first();
+                
+                if ($subscription) {
+                    $daysUntilExpiration = now()->diffInDays($subscription->end_date, false);
+                    if ($daysUntilExpiration <= 7 && $daysUntilExpiration >= 0) {
+                        $subscriptionExpirationAlert = [
+                            'message' => "Your subscription will expire in {$daysUntilExpiration} day(s) on " . $subscription->end_date->format('M j, Y'),
+                            'days_remaining' => $daysUntilExpiration,
+                            'expiration_date' => $subscription->end_date->format('M j, Y')
+                        ];
+                    }
+                }
+            }
 
             return response()->json([
                 'success' => true,
                 'user' => $user,
                 'attendance_at' => $attendance->time_in?->format('h:i:s A') ?? $attendance->time_in,
                 'action' => 'time-in',
+                'subscription_expiration_alert' => $subscriptionExpirationAlert,
             ]);
         }
 
@@ -130,11 +150,32 @@ class QRScannerController extends Controller
             Log::info('Time-out recorded', ['user_id' => $user->id, 'attendance_id' => $attendance->id, 'time_out' => $attendance->time_out]);
             event(new scannedNotification($user->id, 'Time-out recorded successfully.'));
 
+            // Check subscription expiration for members
+            $subscriptionExpirationAlert = null;
+            if ($user->role === 'member') {
+                $subscription = Subscription::where('user_id', $user->id)
+                    ->where('status', 'active')
+                    ->where('end_date', '>=', today())
+                    ->first();
+                
+                if ($subscription) {
+                    $daysUntilExpiration = now()->diffInDays($subscription->end_date, false);
+                    if ($daysUntilExpiration <= 7 && $daysUntilExpiration >= 0) {
+                        $subscriptionExpirationAlert = [
+                            'message' => "Your subscription will expire in {$daysUntilExpiration} day(s) on " . $subscription->end_date->format('M j, Y'),
+                            'days_remaining' => $daysUntilExpiration,
+                            'expiration_date' => $subscription->end_date->format('M j, Y')
+                        ];
+                    }
+                }
+            }
+
             return response()->json([
                 'success' => true,
                 'user' => $user,
                 'attendance_at' => $attendance->time_out?->format('h:i:s A') ?? $attendance->time_out,
                 'action' => 'time-out',
+                'subscription_expiration_alert' => $subscriptionExpirationAlert,
             ]);
         }
 
