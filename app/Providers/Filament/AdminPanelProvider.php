@@ -59,7 +59,7 @@ class AdminPanelProvider extends PanelProvider
                 //     // ->authorize(fn() => Auth::user()->role === 'admin')
                 //     ->navigationGroup('Developers Support')
                 //     ->navigationSort(10),
-                FilamentLatexPlugin::make(),
+                // FilamentLatexPlugin::make(),
                 FilamentTablePresetPlugin::make(),
             ])
             ->middleware([

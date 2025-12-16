@@ -1,0 +1,190 @@
+/* Payslip Custom Styles */
+.payslip-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.payslip-header {
+    text-align: center;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.payslip-company-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2563eb;
+    margin-bottom: 8px;
+}
+
+.payslip-company-info {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.payslip-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #374151;
+    text-align: center;
+    margin: 30px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.payslip-section {
+    margin-bottom: 25px;
+}
+
+.payslip-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #374151;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.payslip-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.payslip-info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.payslip-info-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.payslip-info-value {
+    color: #6b7280;
+}
+
+.payslip-earnings-table,
+.payslip-deductions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.payslip-earnings-table th,
+.payslip-earnings-table td,
+.payslip-deductions-table th,
+.payslip-deductions-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.payslip-earnings-table th,
+.payslip-deductions-table th {
+    background-color: #f9fafb;
+    font-weight: bold;
+    color: #374151;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.payslip-total-row {
+    background-color: #f3f4f6;
+    font-weight: bold;
+}
+
+.payslip-total-earnings {
+    background-color: #dcfce7;
+    color: #166534;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.payslip-total-deductions {
+    background-color: #fee2e2;
+    color: #991b1b;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.payslip-net-pay {
+    text-align: center;
+    background-color: #dcfce7;
+    color: #166534;
+    font-size: 32px;
+    font-weight: bold;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 30px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.payslip-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.payslip-note {
+    font-style: italic;
+    margin-top: 10px;
+}
+
+/* Print Styles */
+@media print {
+    .payslip-container {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+        padding: 15px;
+    }
+    
+    .payslip-net-pay {
+        font-size: 28px;
+    }
+    
+    .payslip-title {
+        font-size: 20px;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .payslip-container {
+        padding: 15px;
+        margin: 10px;
+    }
+    
+    .payslip-company-name {
+        font-size: 24px;
+    }
+    
+    .payslip-title {
+        font-size: 20px;
+    }
+    
+    .payslip-info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .payslip-net-pay {
+        font-size: 24px;
+    }
+}
