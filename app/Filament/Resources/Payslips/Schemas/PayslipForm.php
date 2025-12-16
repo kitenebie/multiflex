@@ -6,7 +6,6 @@ use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
@@ -17,12 +16,12 @@ class PayslipForm
     {
         return $schema
             ->components([
-                Select::make('user_id')
-                    ->relationship('user', 'name')
+                Select::make('employee_id')
+                    ->relationship('employee', 'name')
                     ->label('Coach')
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) {
-                        logger('Selected user ID:', [$state]); // DEBUG
+                        logger('Selected employee ID:', [$state]); // DEBUG
                         $salary = User::whereKey($state)->value('daily_basic_salary');
                         $set('basic_salary', $salary ?? 0);
                     })
@@ -34,34 +33,38 @@ class PayslipForm
                 TextInput::make('basic_salary')
                     ->required()
                     ->numeric(),
-                TextInput::make('overtime_hours')
+                TextInput::make('allowances')
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                TextInput::make('overtime_rate')
+                TextInput::make('overtime_pay')
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                TextInput::make('overtime_amount')
+                TextInput::make('tax')
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                TextInput::make('deductions')
+                TextInput::make('sss')
                     ->required()
                     ->numeric()
                     ->default(0.0),
-                TextInput::make('gross_amount')
+                TextInput::make('philhealth')
                     ->required()
-                    ->numeric(),
-                TextInput::make('net_amount')
+                    ->numeric()
+                    ->default(0.0),
+                TextInput::make('pagibig')
                     ->required()
-                    ->numeric(),
-                TextInput::make('status')
+                    ->numeric()
+                    ->default(0.0),
+                TextInput::make('total_deductions')
                     ->required()
-                    ->default('pending'),
-                Textarea::make('notes')
-                    ->default(null)
-                    ->columnSpanFull(),
+                    ->numeric()
+                    ->default(0.0),
+                TextInput::make('net_pay')
+                    ->required()
+                    ->numeric()
+                    ->default(0.0),
             ]);
     }
 }
