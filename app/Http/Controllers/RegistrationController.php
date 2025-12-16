@@ -73,7 +73,7 @@ class RegistrationController extends Controller
             Filament::auth()->login($user);
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'coach') {
                 if (Auth::user()->role === 'coach') {
-                    return redirect('/app/QR%20Code%20Scanner');
+                    return redirect('/app/My%20QR%20Code');
                 }
                 return redirect('/app');
             }
