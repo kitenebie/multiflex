@@ -6,6 +6,7 @@ use App\Filament\Resources\Payslips\PayslipResource;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Auth;
@@ -27,11 +28,18 @@ class ListPayslips extends ListRecords
                 ->modalWidth('md')
                 ->action(function (array $data) {
                     $secondCutoff = $this->parseSecondCutoff($data['Second_Cutoff'] ?? null);
-                    $this->saveCutoffData($data['First_Cutoff'] ?? null, $secondCutoff);
+                    $this->saveCutoffData(
+                        $data['First_Cutoff'] ?? null, 
+                        $secondCutoff,
+                        $data['SSS'] ?? 0,
+                        $data['PagIbig'] ?? 0,
+                        $data['PhilHealth'] ?? 0,
+                        $data['Tax'] ?? 0
+                    );
                     $this->dispatch('close-modal');
                     $this->dispatch('notify', [
                         'type' => 'success',
-                        'message' => 'Cutoff days saved successfully!'
+                        'message' => 'Cutoff days and deduction rates saved successfully!'
                     ]);
                 })
                 ->schema([
@@ -55,14 +63,34 @@ class ListPayslips extends ListRecords
                         })
                         ->default($this->getDefaultSecondCutoff())
                         ->required()
-                        ->helperText('Select the cutoff day for the second pay period. Options will update based on your first cutoff selection.')
+                        ->helperText('Select the cutoff day for the second pay period. Options will update based on your first cutoff selection.'),
+                    TextInput::make('SSS')
+                        ->label('SSS Rate (%)')
+                        ->numeric()
+                        ->default($this->getCutoffData()['sss_rate'] ?? 0)
+                        ->helperText('Enter SSS contribution rate as percentage (e.g., 4.5 for 4.5%)'),
+                    TextInput::make('PagIbig')
+                        ->label('Pag-IBIG Rate (%)')
+                        ->numeric()
+                        ->default($this->getCutoffData()['pagibig_rate'] ?? 0)
+                        ->helperText('Enter Pag-IBIG contribution rate as percentage (e.g., 2.0 for 2.0%)'),
+                    TextInput::make('PhilHealth')
+                        ->label('PhilHealth Rate (%)')
+                        ->numeric()
+                        ->default($this->getCutoffData()['philhealth_rate'] ?? 0)
+                        ->helperText('Enter PhilHealth contribution rate as percentage (e.g., 3.0 for 3.0%)'),
+                    TextInput::make('Tax')
+                        ->label('Tax Rate (%)')
+                        ->numeric()
+                        ->default($this->getCutoffData()['tax_rate'] ?? 0)
+                        ->helperText('Enter tax rate as percentage (e.g., 5.0 for 5.0%)'),
                 ]),
         ];
     }
 
-    protected function saveCutoffData(?int $firstCutoff, ?int $secondCutoff): void
+    protected function saveCutoffData(?int $firstCutoff, ?int $secondCutoff, float $sssRate = 0, float $pagibigRate = 0, float $philhealthRate = 0, float $taxRate = 0): void
     {
-        if ($firstCutoff === null && $secondCutoff === null) {
+        if ($firstCutoff === null && $secondCutoff === null && $sssRate === 0 && $pagibigRate === 0 && $philhealthRate === 0 && $taxRate === 0) {
             return;
         }
 
@@ -71,6 +99,10 @@ class ListPayslips extends ListRecords
             'first_cutoff_day' => $firstCutoff,
             'second_cutoff_day' => $secondCutoff,
             'second_cutoff_type' => $this->getSecondCutoffType($secondCutoff, $firstCutoff),
+            'sss_rate' => $sssRate,
+            'pagibig_rate' => $pagibigRate,
+            'philhealth_rate' => $philhealthRate,
+            'tax_rate' => $taxRate,
             'updated_at' => now()->toISOString(),
             'updated_by' => Auth::user()?->name ?? 'System'
         ];
@@ -138,7 +170,11 @@ class ListPayslips extends ListRecords
             return [
                 'first_cutoff_day' => null,
                 'second_cutoff_day' => null,
-                'second_cutoff_type' => 'same_month'
+                'second_cutoff_type' => 'same_month',
+                'sss_rate' => 0,
+                'pagibig_rate' => 0,
+                'philhealth_rate' => 0,
+                'tax_rate' => 0
             ];
         }
 
@@ -148,7 +184,11 @@ class ListPayslips extends ListRecords
         return [
             'first_cutoff_day' => $data['first_cutoff_day'] ?? null,
             'second_cutoff_day' => $data['second_cutoff_day'] ?? null,
-            'second_cutoff_type' => $data['second_cutoff_type'] ?? 'same_month'
+            'second_cutoff_type' => $data['second_cutoff_type'] ?? 'same_month',
+            'sss_rate' => $data['sss_rate'] ?? 0,
+            'pagibig_rate' => $data['pagibig_rate'] ?? 0,
+            'philhealth_rate' => $data['philhealth_rate'] ?? 0,
+            'tax_rate' => $data['tax_rate'] ?? 0
         ];
     }
 
