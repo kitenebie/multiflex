@@ -7,6 +7,7 @@
     <title>Payslip</title>
     <script src="/_sdk/element_sdk.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         body {
             box-sizing: border-box;
@@ -30,6 +31,9 @@
 </head>
 
 <body class="h-full">
+    <div class="no-print p-4 text-center">
+        <button onclick="captureScreenshot()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Screenshot</button>
+    </div>
     <div class="w-full h-full overflow-auto bg-gradient-to-br from-slate-100 to-slate-200 p-4 sm:p-8">
         <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden"><!-- Header -->
             <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sm:p-8">
@@ -126,4 +130,14 @@
             </div>
         </div>
     </div>
+    <script>
+        function captureScreenshot() {
+            html2canvas(document.querySelector('.max-w-4xl')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'payslip-screenshot.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
 </html>
