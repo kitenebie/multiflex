@@ -44,7 +44,7 @@
         width: 100%;
         height: 100%;
         background: #FFFFFFFF;
-        padding: 2px;
+        padding: 10px;
     }
 
     .qr-code-container svg {
