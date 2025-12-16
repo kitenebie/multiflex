@@ -36,6 +36,7 @@ class QRScannerController extends Controller
                 'message' => 'User not found',
             ]);
         }
+        
         if ($user->roles()->where('name', 'member')->exists()) {
             $subscription = Subscription::where('user_id', $user->id)
                 ->where('coach_id', Auth::user()->id)

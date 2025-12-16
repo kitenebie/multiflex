@@ -101,7 +101,7 @@ class RegistrationController extends Controller
                 ]);
                 $user->save();
                 if (Auth::user()->role === 'coach') {
-                    return redirect('/app/QR%20Code%20Scanner');
+                    return redirect('/app/My%20QR%20Code');
                 }
                 if (Auth::user()->role === 'member') {
                     return redirect('/app/My%20QR%20Code');
