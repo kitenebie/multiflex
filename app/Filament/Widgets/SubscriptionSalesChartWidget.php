@@ -15,7 +15,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
 {
     use HasFiltersSchema;
 
-    protected ?string $heading = 'Subscription Sales by Fitness Offer';
+    protected ?string $heading = 'Subscribers by Fitness Offer';
     protected int|string|array $columnSpan = 1;
     protected ?string $height = '300px';
 
@@ -104,7 +104,7 @@ protected function getYearOptions(): array
         $query = SubscriptionTransaction::query()
             ->join('subscriptions', 'subscription_transactions.subscription_id', '=', 'subscriptions.id')
             ->join('fitness_offers', 'subscriptions.fitness_offer_id', '=', 'fitness_offers.id')
-            ->select('fitness_offers.name', DB::raw('SUM(subscription_transactions.amount) as total_sales'))
+            ->select('fitness_offers.name', DB::raw('COUNT(DISTINCT subscriptions.user_id) as total_subscribers'))
             ->where('subscription_transactions.paid_at', '>=', $startDate)
             ->where('subscriptions.status', 'active')
             ->where('subscription_transactions.paid_at', '<=', $endDate . ' 23:59:59')
@@ -115,8 +115,8 @@ protected function getYearOptions(): array
         return [
             'datasets' => [
                 [
-                    'label' => 'Total Sales',
-                    'data' => $data->pluck('total_sales')->toArray(),
+                    'label' => 'Total Subscribers',
+                    'data' => $data->pluck('total_subscribers')->toArray(),
                     'backgroundColor' => '#f59e0b',
                 ],
             ],
@@ -142,7 +142,7 @@ protected function getYearOptions(): array
                 'y' => [
                     'title' => [
                         'display' => true,
-                        'text' => 'Total Sales',
+                        'text' => 'Total Subscribers',
                     ],
                 ],
             ],
