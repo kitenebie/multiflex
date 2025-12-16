@@ -74,7 +74,7 @@
                     </tr>
                     <tr class="payslip-total-row payslip-total-earnings">
                         <td><strong>TOTAL EARNINGS</strong></td>
-                        <td><strong>₱{{ number_format(($record->basic_salary ?? 0) + ($record->allowances ?? 0) + ($record->overtime_pay ?? 0), 2) }}</strong></td>
+                        <td><strong style="color: #166534;">₱{{ number_format(($record->basic_salary ?? 0) + ($record->allowances ?? 0) + ($record->overtime_pay ?? 0), 2) }}</strong></td>
                     </tr>
                 </tbody>
             </table>
