@@ -42,6 +42,10 @@
                     <span class="payslip-info-label">Days Attended:</span>
                     <span class="payslip-info-value">{{ $record->days_attended ?? 0 }} days</span>
                 </div>
+                <div class="payslip-info-item">
+                    <span class="payslip-info-label">Status:</span>
+                    <span class="payslip-info-value">{{ $record->is_submit ? 'Submitted' : 'Draft' }}</span>
+                </div>
             </div>
         </div>
 

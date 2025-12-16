@@ -102,7 +102,15 @@ class PayslipsTable
                     ->sortable()
                     ->weight(FontWeight::Bold)
                     ->color('success'),
-                
+
+                // Status
+                TextColumn::make('is_submit')
+                    ->label('Status')
+                    ->badge()
+                    ->getStateUsing(fn($record) => $record->is_submit ? 'Submitted' : 'Draft')
+                    ->color(fn($record) => $record->is_submit ? 'success' : 'warning')
+                    ->sortable(),
+
                 // Actions and Timestamps
                 TextColumn::make('created_at')
                     ->label('Created')

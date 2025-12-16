@@ -80,6 +80,11 @@ class PayslipInfolist
                     ->suffix(' days')
                     ->extraAttributes(['class' => 'font-semibold']),
 
+                TextEntry::make('is_submit')
+                    ->label('Status:')
+                    ->getStateUsing(fn($record) => $record->is_submit ? 'Submitted' : 'Draft')
+                    ->extraAttributes(['class' => 'font-semibold']),
+
                 // Earnings Section
                 TextEntry::make('earnings_section')
                     ->label('EARNINGS')

@@ -25,6 +25,7 @@ class Payslip extends Model
         'pagibig',
         'total_deductions',
         'net_pay',
+        'is_submit',
     ];
 
     protected $casts = [
@@ -41,6 +42,7 @@ class Payslip extends Model
         'pagibig' => 'decimal:2',
         'total_deductions' => 'decimal:2',
         'net_pay' => 'decimal:2',
+        'is_submit' => 'boolean',
     ];
 
     // ✅ CORRECT relationship (NO ROLE FILTER HERE)
