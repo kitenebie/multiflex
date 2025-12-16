@@ -15,7 +15,7 @@ class PayslipsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('employee.name')
                     ->searchable(),
                 TextColumn::make('period_start')
                     ->date()
@@ -25,27 +25,32 @@ class PayslipsTable
                     ->sortable(),
                 TextColumn::make('basic_salary')
                     ->numeric()
+                    ->money('PHP')
                     ->sortable(),
-                TextColumn::make('overtime_hours')
+                TextColumn::make('net_pay')
                     ->numeric()
+                    ->money('PHP')
                     ->sortable(),
-                TextColumn::make('overtime_rate')
+                TextColumn::make('total_deductions')
                     ->numeric()
+                    ->money('PHP')
                     ->sortable(),
-                TextColumn::make('overtime_amount')
+                TextColumn::make('pagibig')
                     ->numeric()
+                    ->money('PHP')
                     ->sortable(),
-                TextColumn::make('deductions')
+                TextColumn::make('philhealth')
                     ->numeric()
+                    ->money('PHP')
                     ->sortable(),
-                TextColumn::make('gross_amount')
+                TextColumn::make('sss')
                     ->numeric()
+                    ->money('PHP')
                     ->sortable(),
-                TextColumn::make('net_amount')
+                TextColumn::make('tax')
                     ->numeric()
+                    ->money('PHP')
                     ->sortable(),
-                TextColumn::make('status')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
