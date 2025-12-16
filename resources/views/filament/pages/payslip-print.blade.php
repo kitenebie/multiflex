@@ -30,21 +30,21 @@
 </head>
 
 <body class="h-full">
-    <div class="w-full h-full overflow-auto bg-gradient-to-br from-slate-100 to-slate-200 p-8">
+    <div class="w-full h-full overflow-auto bg-gradient-to-br from-slate-100 to-slate-200 p-4 sm:p-8">
         <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden"><!-- Header -->
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-8">
-                <div class="flex items-center justify-between">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 id="company-name" class="text-3xl font-bold mb-2">Multiflex Fitness Gym</h1>
+                        <h1 id="company-name" class="text-2xl sm:text-3xl font-bold mb-2">Multiflex Fitness Gym</h1>
                         <p id="company-address" class="text-indigo-100">Zone 6, Bulan, Sorsogon</p>
                     </div>
-                    <div class="text-right">
-                        <h2 class="text-xl font-semibold">PAYSLIP</h2>
+                    <div class="text-left sm:text-right mt-4 sm:mt-0">
+                        <h2 class="text-lg sm:text-xl font-semibold">PAYSLIP</h2>
                     </div>
                 </div>
             </div><!-- Employee Info -->
-            <div class="p-8 border-b-2 border-indigo-100">
-                <div class="grid grid-cols-2 gap-6">
+            <div class="p-4 sm:p-8 border-b-2 border-indigo-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div><label class="text-sm font-semibold text-gray-600 uppercase tracking-wide">Employee
                             Name</label>
                         <p id="employee-name" class="text-lg font-medium text-gray-900 mt-1">
@@ -67,8 +67,8 @@
                     </div>
                 </div>
             </div><!-- Earnings and Deductions -->
-            <div class="p-8">
-                <div class="grid grid-cols-2 gap-8"><!-- Earnings -->
+            <div class="p-4 sm:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><!-- Earnings -->
                     <div>
                         <h3 class="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-green-500">Earnings</h3>
                         <div class="space-y-3">
@@ -107,19 +107,19 @@
                     </div>
                 </div>
             </div><!-- Net Pay -->
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-8">
-                <div class="flex justify-between items-center">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                     <div>
                         <p class="text-indigo-100 text-sm uppercase tracking-wide mb-1">Net Pay Amount</p>
-                        <p class="text-4xl font-bold">PHP {{ number_format($PaySlip->net_pay, 2) }}</p>
+                        <p class="text-3xl sm:text-4xl font-bold">PHP {{ number_format($PaySlip->net_pay, 2) }}</p>
                     </div>
-                    <div class="text-right">
+                    <div class="text-left sm:text-right mt-4 sm:mt-0">
                         <p class="text-indigo-100 text-sm">Amount in Words</p>
                         <p class="text-sm font-semibold">{{ numberToWords($PaySlip->net_pay) }}</p>
                     </div>
                 </div>
             </div><!-- Footer -->
-            <div class="bg-gray-50 p-6 text-center border-t">
+            <div class="bg-gray-50 p-4 sm:p-6 text-center border-t">
                 <p class="text-sm text-gray-600">This is a computer-generated payslip and does not require a signature.
                 </p>
                 <p class="text-xs text-gray-500 mt-2">For queries, please contact HR Department</p>
