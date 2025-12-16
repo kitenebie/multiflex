@@ -36,24 +36,25 @@ class QRScannerController extends Controller
                 'message' => 'User not found',
             ]);
         }
-
-        $subscription = Subscription::where('user_id', $user->id)
-            ->where('coach_id', Auth::user()->id)
-            ->where('status', 'active')
-            ->where('end_date', '>=', today())
-            ->first();
-        if (!$subscription) {
-            Log::warning('No valid subscription', ['user_id' => $user->id, 'coach_id' => Auth::user()->id]);
-            $ExSubscription = Subscription::where('user_id', $user->id)
-                ->where('coach_id', Auth::user()->id)->first();
-            if ($ExSubscription) {
-                Log::info('Expired subscription event triggered', ['user_id' => $user->id]);
-                event(new ExpiredNotification($user->id, 'Your subscription has expired.'));
+        if ($user->roles()->where('name', 'member')->exists()) {
+            $subscription = Subscription::where('user_id', $user->id)
+                ->where('coach_id', Auth::user()->id)
+                ->where('status', 'active')
+                ->where('end_date', '>=', today())
+                ->first();
+            if (!$subscription) {
+                Log::warning('No valid subscription', ['user_id' => $user->id, 'coach_id' => Auth::user()->id]);
+                $ExSubscription = Subscription::where('user_id', $user->id)
+                    ->where('coach_id', Auth::user()->id)->first();
+                if ($ExSubscription) {
+                    Log::info('Expired subscription event triggered', ['user_id' => $user->id]);
+                    event(new ExpiredNotification($user->id, 'Your subscription has expired.'));
+                }
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User does not have a valid active subscription with this coach.',
+                ]);
             }
-            return response()->json([
-                'success' => false,
-                'message' => 'User does not have a valid active subscription with this coach.',
-            ]);
         }
 
         Cache::put('last_scanned_user', $user->id, 60);
