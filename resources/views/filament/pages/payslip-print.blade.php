@@ -123,10 +123,6 @@
                 <p class="text-sm text-gray-600">This is a computer-generated payslip and does not require a signature.
                 </p>
                 <p class="text-xs text-gray-500 mt-2">For queries, please contact HR Department</p>
-            </div><!-- Save Button -->
-            <div class="p-6 no-print text-center"><button onclick="Save()"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105">
-                    Save Payslip </button>
             </div>
         </div>
     </div>

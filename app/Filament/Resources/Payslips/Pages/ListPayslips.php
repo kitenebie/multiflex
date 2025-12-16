@@ -21,10 +21,10 @@ class ListPayslips extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->createAnother(false),
+            CreateAction::make()->label('Generate Payslip')->createAnother(false),
             Action::make('date_cutoff_info')
-                ->label('Date Cutoff Information')
-                ->modalHeading('Payslip Date Cutoff Information')
+                ->label('Settings')
+                ->modalHeading('Payslip Settings Information')
                 ->modalContent(fn() => new HtmlString("Payslips are generated based on a monthly cutoff period, typically from the 1st to the last day of each month. Ensure that all work hours, overtime, and deductions are accurately recorded within this period to reflect in the payslip. For any discrepancies or adjustments, please contact the HR department before the end of the month."))
                 ->modalWidth('5xl')
                 ->action(function (array $data) {
