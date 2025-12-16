@@ -180,7 +180,7 @@ class PayslipForm
                         $set('period_start', $periodDates['start']);
                         $set('period_end', $periodDates['end']);
                     })
-                    ->required()->columnSpanFull(),
+                    ->required(),
                 Select::make('pay_period')
                     ->label('Pay Period')
                     ->options(function ($get) use ($payPeriodOptions) {
@@ -188,7 +188,7 @@ class PayslipForm
                         return $get('pay_period_options') ?? $payPeriodOptions;
                     })
                     ->default('first')
-                    ->reactive()
+                    ->live()
                     ->afterStateUpdated(function ($state, Set $set, $get) {
                         // Get selected month or use current month
                         $selectedMonth = $get('selected_month')
@@ -200,7 +200,7 @@ class PayslipForm
                         $set('period_start', $periodDates['start']);
                         $set('period_end', $periodDates['end']);
                     })
-                    ->required()->columnSpanFull(),
+                    ->required(),
                 Select::make('employee_id')
                     ->options([
                         'all' => 'All Coaches'
@@ -216,7 +216,7 @@ class PayslipForm
                         fn($get) => $get('pay_period') === 'first'
                             ? self::getDisabledDates('period_start', 'first', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
                             : self::getDisabledDates('period_start', 'second', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
-                    )->hidden()
+                    )->hidden(false)
                     ->required(),
                 DatePicker::make('period_end')
                     ->label('Period End')
@@ -225,7 +225,7 @@ class PayslipForm
                         fn($get) => $get('pay_period') === 'first'
                             ? self::getDisabledDates('period_end', 'first', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
                             : self::getDisabledDates('period_end', 'second', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
-                    )->hidden()
+                    )->hidden(false)
                     ->required(),
                 TextInput::make('sss')
                     ->required()
