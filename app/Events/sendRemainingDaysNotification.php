@@ -23,7 +23,7 @@ class SendRemainingDaysNotification implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return ['my-channel'];
+        return ['admin-channel'];
     }
 
     public function broadcastAs()
