@@ -6,6 +6,7 @@ use App\Filament\Resources\Payslips\PayslipResource;
 use Filament\Resources\Pages\CreateRecord;
 use App\Models\Payslip;
 use App\Models\User;
+use App\Models\AttendanceLog;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 
@@ -13,89 +14,159 @@ class CreatePayslip extends CreateRecord
 {
     protected static string $resource = PayslipResource::class;
 
+    /* ---------------------------------------------
+     |  CUT-OFF CONFIG
+     | --------------------------------------------- */
     protected function getCutoffData(): array
     {
         $filePath = base_path('cutoff-bases.json');
-        
+
         if (!File::exists($filePath)) {
             return [
                 'first_cutoff_day' => 15,
                 'second_cutoff_day' => 30,
-                'second_cutoff_type' => 'same_month',
                 'sss_rate' => 0,
                 'pagibig_rate' => 0,
                 'philhealth_rate' => 0,
-                'tax_rate' => 0
             ];
         }
 
-        $jsonData = File::get($filePath);
-        $data = json_decode($jsonData, true);
-        
-        return [
-            'first_cutoff_day' => $data['first_cutoff_day'] ?? 15,
-            'second_cutoff_day' => $data['second_cutoff_day'] ?? 30,
-            'second_cutoff_type' => $data['second_cutoff_type'] ?? 'same_month',
-            'sss_rate' => $data['sss_rate'] ?? 0,
-            'pagibig_rate' => $data['pagibig_rate'] ?? 0,
-            'philhealth_rate' => $data['philhealth_rate'] ?? 0,
-            'tax_rate' => $data['tax_rate'] ?? 0
-        ];
+        return json_decode(File::get($filePath), true);
     }
 
-    protected function calculatePayPeriodDates(string $period = 'first'): array
+    /* ---------------------------------------------
+     |  PAY PERIOD DATES
+     | --------------------------------------------- */
+    protected function calculatePayPeriodDates(string $period): array
     {
-        $cutoffData = $this->getCutoffData();
-        $firstCutoff = $cutoffData['first_cutoff_day'];
-        $secondCutoff = $cutoffData['second_cutoff_day'];
-        
+        $cutoff = $this->getCutoffData();
         $now = Carbon::now();
-        $currentYear = $now->year;
-        $currentMonth = $now->month;
-        $nextMonth = $now->copy()->addMonth();
-        
-        if ($period === 'first') {
-            // First Period: first_cutoff_day to (second_cutoff_day - 1)
-            $periodStart = Carbon::create($currentYear, $currentMonth, $firstCutoff);
-            $periodEnd = Carbon::create($currentYear, $currentMonth, $secondCutoff - 1);
+
+        if ($period === 'second') {
+            $start = Carbon::create($now->year, $now->month, $cutoff['second_cutoff_day']);
+            $end = $start->copy()->addMonth()->day($cutoff['first_cutoff_day'] - 1);
         } else {
-            // Second Period: second_cutoff_day to (first_cutoff_day - 1 of next month)
-            $periodStart = Carbon::create($currentYear, $currentMonth, $secondCutoff);
-            $periodEnd = Carbon::create($nextMonth->year, $nextMonth->month, $firstCutoff - 1);
+            $start = Carbon::create($now->year, $now->month, $cutoff['first_cutoff_day']);
+            $end = Carbon::create($now->year, $now->month, $cutoff['second_cutoff_day'] - 1);
         }
-        
+
         return [
-            'start' => $periodStart->format('Y-m-d'),
-            'end' => $periodEnd->format('Y-m-d')
+            'start' => $start,
+            'end' => $end,
         ];
     }
 
+    /* ---------------------------------------------
+     |  MAIN RECORD CREATION
+     | --------------------------------------------- */
     protected function handleRecordCreation(array $data): Payslip
     {
-        // Get cutoff data and calculate dates based on pay_period
         $payPeriod = $data['pay_period'] ?? 'first';
-        $periodDates = $this->calculatePayPeriodDates($payPeriod);
-        $cutoffData = $this->getCutoffData();
+        $dates = $this->calculatePayPeriodDates($payPeriod);
+        $cutoff = $this->getCutoffData();
 
-        // 🔥 ALL COACHES SELECTED
+        // ✅ Get all coaches (Spatie-safe if needed later)
         $coaches = User::where('role', 'coach')->get();
 
         foreach ($coaches as $coach) {
+
+            $basicSalary = $coach->daily_basic_salary ?? 0;
+
+            // 1️⃣ Attendance Deduction
+            $attendanceDeduction = $this->calculateAttendanceDeduction(
+                $coach->id,
+                $basicSalary,
+                $dates['start'],
+                $dates['end']
+            );
+
+            $adjustedBasic = max(0, $basicSalary - $attendanceDeduction);
+
+            // 2️⃣ Gross Pay
+            $gross = $adjustedBasic
+                + ($data['allowances'] ?? 0)
+                + ($data['overtime_pay'] ?? 0);
+
+            // 3️⃣ Mandatory Deductions
+            $sss = $cutoff['sss_rate'] ?? 0;
+            $philhealth = $cutoff['philhealth_rate'] ?? 0;
+            $pagibig = $cutoff['pagibig_rate'] ?? 0;
+
+            // 4️⃣ Taxable Income
+            $taxable = $gross - ($sss + $philhealth + $pagibig);
+
+            // 5️⃣ Tax
+            $tax = $this->computePhTax($taxable);
+
+            // 6️⃣ Totals
+            $totalDeductions = $attendanceDeduction + $tax + $sss + $philhealth + $pagibig;
+            $netPay = $gross - ($tax + $sss + $philhealth + $pagibig);
+
             Payslip::create([
-                'user_id'  => $coach->id,
-                'period_start' => $periodDates['start'],
-                'period_end'   => $periodDates['end'],
-                'basic_salary' => $coach->daily_basic_salary ?? 0, // using daily_basic_salary field
-                'allowances'   => $data['allowances'] ?? 0,
+                'user_id' => $coach->id,
+                'period_start' => $dates['start']->format('Y-m-d'),
+                'period_end' => $dates['end']->format('Y-m-d'),
+                'basic_salary' => $basicSalary,
+                'allowances' => $data['allowances'] ?? 0,
                 'overtime_pay' => $data['overtime_pay'] ?? 0,
-                'tax'          => $data['tax'] ?? $cutoffData['tax_rate'],
-                'sss'          => $data['sss'] ?? $cutoffData['sss_rate'],
-                'philhealth'   => $data['philhealth'] ?? $cutoffData['philhealth_rate'],
-                'pagibig'      => $data['pagibig'] ?? $cutoffData['pagibig_rate'],
+                'tax' => round($tax, 2),
+                'sss' => $sss,
+                'philhealth' => $philhealth,
+                'pagibig' => $pagibig,
+                'total_deductions' => round($totalDeductions, 2),
+                'net_pay' => round($netPay, 2),
             ]);
         }
 
-        // Filament requires one model returned
+        // Filament requires one model return
         return Payslip::latest()->first();
+    }
+
+    /* ---------------------------------------------
+     |  PH TAX (TRAIN LAW)
+     | --------------------------------------------- */
+    protected function computePhTax(float $income): float
+    {
+        if ($income <= 20833) return 0;
+        if ($income <= 33332) return ($income - 20833) * 0.15;
+        if ($income <= 66666) return 1875 + (($income - 33333) * 0.20);
+        if ($income <= 166666) return 8541.80 + (($income - 66667) * 0.25);
+        if ($income <= 666666) return 33541.80 + (($income - 166667) * 0.30);
+
+        return 183541.80 + (($income - 666667) * 0.35);
+    }
+
+    /* ---------------------------------------------
+     |  ATTENDANCE DEDUCTION
+     | --------------------------------------------- */
+    protected function calculateAttendanceDeduction(
+        int $userId,
+        float $dailyRate,
+        Carbon $start,
+        Carbon $end
+    ): float {
+        $hourlyRate = $dailyRate / 8;
+
+        $logs = AttendanceLog::where('user_id', $userId)
+            ->whereBetween('date', [$start, $end])
+            ->get();
+
+        $deduction = 0;
+
+        foreach ($logs as $log) {
+            if (!$log->time_in || !$log->time_out) {
+                $deduction += $dailyRate;
+                continue;
+            }
+
+            $hours = Carbon::parse($log->time_in)
+                ->diffInMinutes(Carbon::parse($log->time_out)) / 60;
+
+            if ($hours < 8) {
+                $deduction += (8 - $hours) * $hourlyRate;
+            }
+        }
+
+        return round($deduction, 2);
     }
 }
