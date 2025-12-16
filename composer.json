@@ -19,6 +19,7 @@
         "maatwebsite/excel": "*",
         "pusher/pusher-php-server": "*",
         "simplesoftwareio/simple-qrcode": "*",
+        "thethunderturner/filament-latex": "*",
         "ymsoft/filament-table-presets": "*"
     },
     "require-dev": {
