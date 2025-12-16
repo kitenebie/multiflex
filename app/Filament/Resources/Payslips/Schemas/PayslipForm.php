@@ -159,14 +159,6 @@ class PayslipForm
         
         return $schema
             ->components([
-                Select::make('employee_id')
-                    ->options([
-                        'all' => 'All Coaches'
-                    ])
-                    ->label('Coach')
-                    ->disabled()
-                    ->default('all')
-                    ->required(),
                 Select::make('pay_period')
                     ->label('Pay Period')
                     ->options($payPeriodOptions)
@@ -178,6 +170,14 @@ class PayslipForm
                         $set('period_start', $periodDates['start']);
                         $set('period_end', $periodDates['end']);
                     })
+                    ->required()->columnSpanFull(),
+                Select::make('employee_id')
+                    ->options([
+                        'all' => 'All Coaches'
+                    ])
+                    ->label('Coach')
+                    ->disabled()
+                    ->default('all')
                     ->required(),
                 DatePicker::make('period_start')
                     ->label('Period Start')
