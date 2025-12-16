@@ -37,16 +37,13 @@ class QRScannerController extends Controller
         }
         
         if ($user->role ==='member') {
-            dd('member scanned');
             $subscription = Subscription::where('user_id', $user->id)
-                ->where('coach_id', Auth::user()->id)
                 ->where('status', 'active')
                 ->where('end_date', '>=', today())
                 ->first();
             if (!$subscription) {
                 Log::warning('No valid subscription', ['user_id' => $user->id, 'coach_id' => Auth::user()->id]);
-                $ExSubscription = Subscription::where('user_id', $user->id)
-                    ->where('coach_id', Auth::user()->id)->first();
+                $ExSubscription = Subscription::where('user_id', $user->id)->first();
                 if ($ExSubscription) {
                     Log::info('Expired subscription event triggered', ['user_id' => $user->id]);
                     event(new ExpiredNotification($user->id, 'Your subscription has expired.'));
