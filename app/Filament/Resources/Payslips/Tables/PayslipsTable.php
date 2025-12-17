@@ -216,9 +216,6 @@ class PayslipsTable
                     ]),
             ])
             ->toolbarActions([
-                ManageTablePresetAction::make()->label(' ')
-                    ->button()
-                    ->tooltip('manage table'),
             ])
             ->defaultSort('created_at', 'desc');
     }
