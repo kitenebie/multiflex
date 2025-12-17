@@ -28,7 +28,7 @@ class ListPayslips extends ListRecords
                 ->hidden(FacadesAuth::user()->role !== 'admin')
                 ->label('Settings')
                 ->modalHeading('Payslip Settings Information')
-                ->modalContent(fn() => new HtmlString("Payslips are generated based on a monthly cutoff period, typically from the 1st to the last day of each month. Ensure that all work hours, overtime, and deductions are accurately recorded within this period to reflect in the payslip. For any discrepancies or adjustments, please contact the HR department before the end of the month."))
+                ->modalContent(fn() => new HtmlString("Payslips are generated based on a monthly cutoff period, typically from the 1st to the last day of each month. Ensure that all work hours, and deductions are accurately recorded within this period to reflect in the payslip. For any discrepancies or adjustments"))
                 ->modalWidth('5xl')
                 ->action(function (array $data) {
                     $secondCutoff = $this->parseSecondCutoff($data['Second_Cutoff'] ?? null);
