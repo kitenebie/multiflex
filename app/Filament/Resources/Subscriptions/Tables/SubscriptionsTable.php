@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Mail;
 use Ymsoft\FilamentTablePresets\Filament\Actions\ManageTablePresetAction;
 use Ymsoft\FilamentTablePresets\Filament\Pages\HasFilamentTablePresets;
 use Ymsoft\FilamentTablePresets\Filament\Pages\WithFilamentTablePresets;
+use Filament\Forms\Components\DatePicker;
 
 class SubscriptionsTable
 {
@@ -154,8 +155,14 @@ class SubscriptionsTable
                     ->color('danger')
                     ->requiresConfirmation()
                     ->icon('heroicon-o-x-circle')
-                    ->action(function ($record) {
-                        $record->end_date = Carbon::yesterday();
+                    ->schema([
+                        DatePicker::make('end_date')
+                            ->label('End Date')
+                            ->default(Carbon::now())
+                            ->required(),
+                    ])
+                    ->action(function ($record, $data) {
+                        $record->end_date = $data['end_date'];
                         $record->save();
                         Notification::make()
                             ->title('Subscription expired successfully')
