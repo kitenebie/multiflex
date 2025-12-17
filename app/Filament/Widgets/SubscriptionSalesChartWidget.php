@@ -15,7 +15,7 @@ class SubscriptionSalesChartWidget extends ChartWidget
 {
     use HasFiltersSchema;
 
-    protected ?string $heading = 'Subscribers by Fitness Offer by Month';
+    protected ?string $heading = 'Subscribers by Fitness Offer by Month in ';
     protected int|string|array $columnSpan = 1;
     protected ?string $height = '300px';
 
