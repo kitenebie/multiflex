@@ -154,6 +154,7 @@ class PayslipsTable
                 EditAction::make()
                     ->hiddenLabel()
                     ->color('warning')
+                    ->button()
                     ->schema([
                         Grid::make()->schema([
                             Select::make('user_id')
