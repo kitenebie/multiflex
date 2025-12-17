@@ -140,7 +140,7 @@ class PayslipsTable
                     ->dateTime('M j, Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])->columnManager(3)
+            ])->columnManagerColumns(3)
             ->filters([
                 // Add filters for date range and employee if needed
             ])->recordActions([
