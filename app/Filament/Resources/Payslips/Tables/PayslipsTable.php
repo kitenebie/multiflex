@@ -79,6 +79,7 @@ class PayslipsTable
                 TextColumn::make('total_salary')
                     ->label('Monthly Basic')
                     ->numeric()
+                    ->color('primary')
                     ->money('PHP')
                     ->sortable(),
 
@@ -109,6 +110,7 @@ class PayslipsTable
 
                 TextColumn::make('total_deductions')
                     ->label('Total Deductions')
+                    ->color('warning')
                     ->numeric()
                     ->money('PHP')
                     ->sortable(),
