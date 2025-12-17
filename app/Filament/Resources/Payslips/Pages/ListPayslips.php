@@ -71,22 +71,22 @@ class ListPayslips extends ListRecords
                                 ->required()
                                 ->helperText('Select the cutoff day for the second pay period. Options will update based on your first cutoff selection.'),
                             TextInput::make('SSS')
-                                ->label('SSS Rate (%)')
+                                ->label('SSS Rate (php)')
                                 ->numeric()
                                 ->default($this->getCutoffData()['sss_rate'] ?? 0)
-                                ->helperText('Enter SSS contribution rate as percentage (e.g., 4.5 for 4.5%)'),
+                                ->helperText('Enter SSS contribution'),
                             TextInput::make('PagIbig')
-                                ->label('Pag-IBIG Rate (%)')
+                                ->label('Pag-IBIG Rate (php)')
                                 ->numeric()
                                 ->default($this->getCutoffData()['pagibig_rate'] ?? 0)
-                                ->helperText('Enter Pag-IBIG contribution rate as percentage (e.g., 2.0 for 2.0%)'),
+                                ->helperText('Enter Pag-IBIG contribution'),
                             TextInput::make('PhilHealth')
-                                ->label('PhilHealth Rate (%)')
+                                ->label('PhilHealth Rate (php)')
                                 ->numeric()
                                 ->default($this->getCutoffData()['philhealth_rate'] ?? 0)
-                                ->helperText('Enter PhilHealth contribution rate as percentage (e.g., 3.0 for 3.0%)'),
+                                ->helperText('Enter PhilHealth contribution'),
                             TextInput::make('Tax')
-                                ->label('Tax Rate (%)')
+                                ->label('Tax Rate (php)')
                                 ->hidden()
                                 ->default($this->getCutoffData()['tax_rate'] ?? 0)
                                 ->helperText('Enter tax rate as percentage (e.g., 5.0 for 5.0%)'),
