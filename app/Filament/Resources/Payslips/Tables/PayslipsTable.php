@@ -146,6 +146,7 @@ class PayslipsTable
             ])->recordActions([
                 Action::make('view')
                     ->label('View')
+                    ->tooltip('view')
                     ->button()
                     ->color('info')
                     ->hiddenLabel()
@@ -153,6 +154,7 @@ class PayslipsTable
                     ->url(fn($record) => '/payslips/view/' . $record->id),
                 EditAction::make()
                     ->hiddenLabel()
+                    ->tooltip('edit')
                     ->color('warning')
                     ->button()
                     ->schema([
