@@ -165,6 +165,7 @@ class PayslipForm
                     ->label('Select Month for Payslip Generation')
                     ->default(Carbon::now()->startOfMonth())
                     ->format('m/d/Y')
+                    ->native(false)
                     ->displayFormat('F Y')
                     ->reactive()
                     ->afterStateUpdated(function ($state, Set $set) {
@@ -213,6 +214,7 @@ class PayslipForm
                     ->label('Period Start')
                     ->default($firstPeriod['start'])
                     ->format('m/d/Y')
+                    ->native(false)
                     ->displayFormat('d F Y')
                     ->disabledDates(
                         fn($get) => $get('pay_period') === 'first'
@@ -223,6 +225,7 @@ class PayslipForm
                 DatePicker::make('period_end')
                     ->label('Period End')
                     ->format('m/d/Y')
+                    ->native(false)
                     ->displayFormat('d F Y')
                     ->default($firstPeriod['end'])
                     ->disabledDates(
