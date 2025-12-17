@@ -40,15 +40,6 @@ class PayslipsTable
                     ->getStateUsing(fn($record) => $record->is_submit ? 'Submitted' : 'Draft')
                     ->color(fn($record) => $record->is_submit ? 'success' : 'warning')
                     ->sortable(),
-                // Net Pay
-                TextColumn::make('net_pay')
-                    ->label('Net Pay')
-                    ->numeric()
-                    ->toggleable()
-                    ->money('PHP')
-                    ->sortable()
-                    ->weight(FontWeight::Bold)
-                    ->color('success'),
                 // Employee Information
                 TextColumn::make('employee.name')
                     ->label('Employee Name')
@@ -87,9 +78,18 @@ class PayslipsTable
                     ->numeric()
                     ->color('primary')
                     ->weight(FontWeight::Bold)
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable()
                     ->money('PHP')
                     ->sortable(),
+                // Net Pay
+                TextColumn::make('net_pay')
+                    ->label('Net Pay')
+                    ->numeric()
+                    ->toggleable()
+                    ->money('PHP')
+                    ->sortable()
+                    ->weight(FontWeight::Bold)
+                    ->color('success'),
 
                 // Deductions Section
                 TextColumn::make('sss')
