@@ -146,9 +146,14 @@ class PayslipsTable
             ])->recordActions([
                 Action::make('view')
                     ->label('View')
+                    ->button()
+                    ->color('info')
+                    ->hiddenLabel()
                     ->icon('heroicon-o-eye')
                     ->url(fn($record) => '/payslips/view/' . $record->id),
                 EditAction::make()
+                    ->hiddenLabel()
+                    ->color('warning')
                     ->schema([
                         Grid::make()->schema([
                             Select::make('user_id')
