@@ -213,6 +213,7 @@ class PayslipForm
                     ->label('Period Start')
                     ->default($firstPeriod['start'])
                     ->format('m/d/Y')
+                    ->displayFormat('d F Y')
                     ->disabledDates(
                         fn($get) => $get('pay_period') === 'first'
                             ? self::getDisabledDates('period_start', 'first', $get('selected_month') ? Carbon::parse($get('selected_month'))->startOfMonth() : null)
@@ -222,6 +223,7 @@ class PayslipForm
                 DatePicker::make('period_end')
                     ->label('Period End')
                     ->format('m/d/Y')
+                    ->displayFormat('d F Y')
                     ->default($firstPeriod['end'])
                     ->disabledDates(
                         fn($get) => $get('pay_period') === 'first'
