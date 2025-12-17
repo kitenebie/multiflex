@@ -36,6 +36,7 @@ class PayslipsTable
                 TextColumn::make('is_submit')
                     ->label('Status')
                     ->badge()
+                    ->toggleable()
                     ->getStateUsing(fn($record) => $record->is_submit ? 'Submitted' : 'Draft')
                     ->color(fn($record) => $record->is_submit ? 'success' : 'warning')
                     ->sortable(),
@@ -43,6 +44,7 @@ class PayslipsTable
                 TextColumn::make('net_pay')
                     ->label('Net Pay')
                     ->numeric()
+                    ->toggleable()
                     ->money('PHP')
                     ->sortable()
                     ->weight(FontWeight::Bold)
@@ -51,6 +53,7 @@ class PayslipsTable
                 TextColumn::make('employee.name')
                     ->label('Employee Name')
                     ->searchable()
+                    ->toggleable()
                     ->weight(FontWeight::Bold)
                     ->description(fn($record) => $record->employee?->email ?? ''),
 
@@ -60,12 +63,14 @@ class PayslipsTable
                     ->getStateUsing(function ($record) {
                         return ($record->period_start?->format('M j') ?? 'N/A') . ' - ' . ($record->period_end?->format('M j, Y') ?? 'N/A');
                     })
+                    ->toggleable()
                     ->searchable(),
 
                 // Attendance
                 TextColumn::make('days_attended')
                     ->label('Days Attended')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->suffix(' days'),
 
@@ -73,6 +78,7 @@ class PayslipsTable
                 TextColumn::make('basic_salary')
                     ->label('Basic Salary')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->money('PHP')
                     ->sortable(),
 
@@ -81,6 +87,7 @@ class PayslipsTable
                     ->numeric()
                     ->color('primary')
                     ->weight(FontWeight::Bold)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->money('PHP')
                     ->sortable(),
 
@@ -88,24 +95,28 @@ class PayslipsTable
                 TextColumn::make('sss')
                     ->label('SSS')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->money('PHP')
                     ->sortable(),
 
                 TextColumn::make('philhealth')
                     ->label('PhilHealth')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->money('PHP')
                     ->sortable(),
 
                 TextColumn::make('pagibig')
                     ->label('PAG-IBIG')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->money('PHP')
                     ->sortable(),
 
                 TextColumn::make('tax')
                     ->label('Tax')
                     ->numeric()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->money('PHP')
                     ->sortable(),
 
